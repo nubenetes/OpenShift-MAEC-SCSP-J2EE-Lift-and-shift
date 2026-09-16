@@ -49,8 +49,8 @@ graph TB
     Pod2 -->|JDBC TDS| DBService
     DBService --> DBEndpoints
     DBEndpoints -->|Red SARA| SQLServer
-    Egress -.->|Filtro OVS| Pod1
-    Egress -.->|Filtro OVS| Pod2
-    ArgoCD -->|Reconcile| WorkloadNS
-    Quay -->|Pull Images| AppPods
-    Nexus -->|Fetch War & Driver| AppPods
+    Egress -.->|Filtrado OVS<br/>en veth| Pod1
+    Egress -.->|Filtrado OVS<br/>en veth| Pod2
+    ArgoCD --->|Reconciliación<br/>GitOps| WorkloadNS
+    Quay --->|Pull de imágenes<br/>base| AppPods
+    Nexus --->|Inyección de binarios<br/>en build| AppPods

@@ -144,7 +144,7 @@ Este repositorio sirve como plantilla directa de implementación en sectores alt
 Este repositorio no impone una única forma de operar, sino que ofrece a los equipos de arquitectura corporativa un **itinerario evolutivo maduro**:
 
 ```mermaid
-graph LR
+flowchart LR
     subgraph Fase1["Fase 1: Migración Táctica Rápida"]
         SolB["Solución B: S2I Binario CLI<br/>• Sin dependencias de Nexus o ArgoCD<br/>• Validación en horas de Tomcat 9 + Infinispan<br/>• Estabilización del monolito en OCP"]
     end
@@ -153,7 +153,7 @@ graph LR
         SolA["Solución A: GitOps (ArgoCD + Nexus)<br/>• Git como Fuente Única de Verdad (SSOT)<br/>• Binarios gobernados con hashes en Nexus<br/>• Despliegues automáticos sin ClickOps<br/>• Destrucción limpia con recursos en cascada"]
     end
 
-    SolB -->|Evolución progresiva sin reescribir la app| SolA
+    SolB ===>|Evolución progresiva<br/>sin reescribir la app| SolA
 ```
 
 ---
@@ -233,16 +233,16 @@ graph TB
     Service --> Pod2
     Pod1 -.->|HotRod TCP 11222| Infinispan1
     Pod2 -.->|HotRod TCP 11222| Infinispan2
-    Infinispan1 <-->|Replicación JGroups| Infinispan2
+    Infinispan1 <-->|Replicación<br/>JGroups| Infinispan2
     Pod1 -->|JDBC TDS| DBService
     Pod2 -->|JDBC TDS| DBService
     DBService --> DBEndpoints
     DBEndpoints -->|Ruta Red SARA| SQLServer
-    Egress -.->|Filtrado OVS en veth| Pod1
-    Egress -.->|Filtrado OVS en veth| Pod2
-    ArgoCD -->|Reconciliación GitOps| WorkloadNS
-    Quay -->|Pull de Imágenes Base| AppPods
-    Nexus -->|Inyección de Binarios en Build| AppPods
+    Egress -.->|Filtrado OVS<br/>en veth| Pod1
+    Egress -.->|Filtrado OVS<br/>en veth| Pod2
+    ArgoCD --->|Reconciliación<br/>GitOps| WorkloadNS
+    Quay --->|Pull de imágenes<br/>base| AppPods
+    Nexus --->|Inyección de binarios<br/>en build| AppPods
 ```
 
 ---
