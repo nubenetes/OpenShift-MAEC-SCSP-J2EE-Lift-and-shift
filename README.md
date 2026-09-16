@@ -38,33 +38,58 @@
 
 ## 📑 Tabla de Contenidos
 
-1. [🌐 El Patrón Arquitectónico Universal: Casos de Uso Empresariales para Apps de Legado](#-el-patrón-arquitectónico-universal-casos-de-uso-empresariales-para-apps-de-legado)
-   - [1.1. La Realidad del Software de Legado en el Tejido Empresarial](#1-la-realidad-del-software-de-legado-en-el-tejido-empresarial)
-   - [1.2. Los 5 Bloqueantes Universales que este Patrón Resuelve](#2-los-5-bloqueantes-universales-que-este-patrón-resuelve-en-cualquier-organización)
-   - [1.3. Escenarios de Aplicación Comunes en Grandes Industrias](#3-escenarios-de-aplicación-comunes-en-grandes-industrias)
-   - [1.4. La Hoja de Ruta de Transición: De la Migración Rápida al Estado Meta](#4-la-hoja-de-ruta-de-transición-de-la-migración-rápida-al-estado-meta)
-   - [1.5. Pragmatismo vs Sobre-Ingeniería: Por Qué Rechazar Pipelines de Microservicios (Tekton)](#pragmatismo-vs-tekton)
-2. [📌 Contexto Específico del Proyecto Real: MAEC y Cliente Ligero SCSP](#-contexto-específico-del-proyecto-real-maec-y-cliente-ligero-scsp)
-   - [2.1. El Rol de SUGICYR y el Ecosistema Tecnológico del MAEC](#21-el-rol-de-sugicyr-y-el-ecosistema-tecnológico-del-maec)
-   - [2.2. El Desafío del Software Heredado (Monolito J2EE)](#22-el-desafío-del-software-heredado-monolito-j2ee)
-   - [2.3. El Escenario de Ejecución: NubeSARA Air-Gapped](#23-el-escenario-de-ejecución-nubesara-air-gapped)
-   - [2.4. Crónica de una Migración Interrumpida: Rigor Técnico vs. Atajos Cosméticos y Ética en Fondos Públicos (Next-Gen EU)](#gobernanza-fondos-publicos)
-3. [🏛️ Diagrama Global de la Arquitectura](#️-diagrama-global-de-la-arquitectura)
-4. [⚖️ Comparativa de Soluciones: GitOps vs S2I Binario Directo](#️-comparativa-de-soluciones-gitops-vs-s2i-binario-directo)
-5. [🏆 ¿Cuál de las Dos Soluciones es la Más Recomendable?](#-cuál-de-las-dos-soluciones-es-la-más-recomendable)
-6. [🧩 Retos de Ingeniería y Patrones de Implementación](#-retos-de-ingeniería-y-patrones-de-implementación)
-   - [6.1. Espejado Air-Gapped Determinista con `oc-mirror v2`](#61-espejado-air-gapped-determinista-con-oc-mirror-v2)
-   - [6.2. Erradicación del Antipatrón Sticky Sessions con Red Hat Data Grid](#62-erradicación-del-antipatrón-sticky-sessions-con-red-hat-data-grid)
-   - [6.3. Abstracción Topológica de Base de Datos Externa (Service + Endpoints)](#63-abstracción-topológica-de-base-de-datos-externa-service--endpoints)
-   - [6.4. Confinamiento de Red Egress (SUGICYR en OVN-Kubernetes)](#64-confinamiento-de-red-egress-sugicyr-en-ovn-kubernetes)
-   - [6.5. Parametrización Porcentual de Memoria JVM Java 8 en cgroups](#65-parametrización-porcentual-de-memoria-jvm-java-8-en-cgroups)
-   - [6.6. Calibración de Sondas de Resiliencia (Zero-Downtime Probes)](#66-calibración-de-sondas-de-resiliencia-zero-downtime-probes)
-7. [🚀 Guía Rápida de Despliegue](#-guía-rápida-de-despliegue)
-   - [Opción A: Despliegue mediante GitOps (ArgoCD + Nexus)](#opción-a-despliegue-mediante-gitops-argocd--nexus)
-   - [Opción B: Despliegue mediante S2I Binario Directo por CLI](#opción-b-despliegue-mediante-s2i-binario-directo-por-cli)
-8. [📂 Estructura del Repositorio](#-estructura-del-repositorio)
-9. [📚 Documentación Detallada de Referencia](#-documentación-detallada-de-referencia)
-10. [📄 Licencia y Créditos](#-licencia-y-créditos)
+1. [🌐 El Patrón Arquitectónico Universal: Casos de Uso Empresariales para Apps de Legado](#patron-arquitectonico-universal)
+   - [1.1. La Realidad del Software de Legado en el Tejido Empresarial](#realidad-software-legado)
+     - [El Dilema de la Modernización Corporativa](#dilema-modernizacion-corporativa)
+   - [1.2. Los 5 Bloqueantes Universales que este Patrón Resuelve en Cualquier Organización](#bloqueantes-universales-legado)
+   - [1.3. Escenarios de Aplicación Comunes en Grandes Industrias](#escenarios-industrias)
+     - [A. Sector Bancario y Servicios Financieros (Fintech & Core Banking)](#sector-bancario)
+     - [B. Sector Asegurador (Insurtech)](#sector-asegurador)
+     - [C. Sector Sanitario y Farmacéutico (HealthTech & Hospitales)](#sector-sanitario)
+     - [D. Telecomunicaciones y Utilities (Energía, Agua, Gas)](#sector-telecomunicaciones)
+     - [E. Administraciones Públicas Generales (CCAA, Ayuntamientos, Ministerios)](#sector-administraciones-publicas)
+   - [1.4. La Hoja de Ruta de Transición: De la Migración Rápida al Estado Meta](#hoja-de-ruta-transicion)
+   - [1.5. Pragmatismo vs Sobre-Ingeniería: Rechazo de Pipelines Complejos (Tekton)](#pragmatismo-vs-tekton)
+     - [Anatomía y Desglose del Stack Tecnológico del Framework DOPE (Minsait)](#dope-framework-minsait)
+     - [¿Por qué estas soluciones aceleran la migración frente a Tekton y DOPE?](#aceleracion-migracion-vs-dope)
+2. [📌 Contexto Específico del Proyecto Real: MAEC y Cliente Ligero SCSP](#contexto-especifico-maec)
+   - [Marco Temporal y Contexto Organizativo: La Transición Contractual en el MAEC (2026)](#transicion-contractual-maec)
+     - [Inventario Público de Contratación TIC: Empresas, Pliegos, Lotes y Presupuestos](#inventario-contratacion-maec)
+     - [¿Por qué este monolito de 20 años era tan crítico para el Ministerio?](#criticidad-monolito-scsp)
+     - [La Paradoja de la Migración a OpenShift y la Gestión del Riesgo (El "Plan B")](#paradoja-plan-b)
+   - [2.1. El Rol de SUGICYR y el Ecosistema Tecnológico del MAEC](#rol-sugicyr-maec)
+     - [Gobernanza CI/CD, Alerta de Obsolescencia y Soporte Extraordinario de Red Hat](#gobernanza-obsolescencia-redhat)
+   - [2.2. El Desafío del Software Heredado (Monolito J2EE)](#desafio-software-heredado)
+   - [2.3. El Escenario de Ejecución: NubeSARA Air-Gapped](#escenario-nubesara-airgapped)
+   - [2.4. Crónica de una Migración Interrumpida: Rigor Técnico vs. Atajos Cosméticos y Ética en Fondos Públicos](#gobernanza-fondos-publicos)
+     - [2.4.1. La Interrupción de la Fase 1: Arquitectura Real vs. Falsa Apariencia](#interrupcion-fase-1)
+     - [2.4.2. Rechazo Frontal al Enfrentamiento entre Profesionales y el Despilfarro](#rechazo-enfrentamiento-profesional)
+     - [2.4.3. Honestidad Técnica vs. Retórica Comercial (Hechos vs. Apariencia)](#honestidad-tecnica-vs-comercial)
+     - [2.4.4. La Doble Mirada: Esfuerzo Fiscal Ciudadano y Calidad del Empleo TIC](#doble-mirada-fiscal-laboral)
+     - [2.4.5. Un Año Después: El Caso IndraMind, la Interconexión del Sector y la Soberanía Técnica](#caso-indramind-interconexion)
+     - [2.4.6. El Sentido y Legitimidad de este Repositorio](#sentido-legitimidad-repositorio)
+3. [🏛️ Diagrama Global de la Arquitectura](#diagrama-arquitectura)
+4. [⚖️ Comparativa de Soluciones: GitOps vs S2I Binario Directo](#comparativa-soluciones)
+5. [🏆 ¿Cuál de las Dos Soluciones es la Más Recomendable?](#recomendacion-arquitectonica)
+   - [Veredicto: La Solución A (GitOps + Nexus) es la Más Recomendable](#veredicto-solucion-a)
+     - [Justificación Técnica y de Gobierno](#justificacion-tecnica-gobierno)
+     - [¿Cuándo debe utilizarse la Solución B?](#cuando-utilizar-solucion-b)
+   - [Síntesis de Aplicabilidad Empresarial](#aplicabilidad-empresas)
+6. [🧩 Retos de Ingeniería y Patrones de Implementación](#retos-ingenieria)
+   - [6.1. Espejado Air-Gapped Determinista con `oc-mirror v2`](#espejado-airgapped-oc-mirror)
+   - [6.2. Erradicación del Antipatrón Sticky Sessions con Red Hat Data Grid](#erradicacion-sticky-sessions)
+   - [6.3. Abstracción Topológica de Base de Datos Externa (Service + Endpoints)](#abstraccion-bd-externa)
+   - [6.4. Confinamiento de Red Egress (SUGICYR en OVN-Kubernetes)](#confinamiento-red-egress)
+   - [6.5. Parametrización Porcentual de Memoria JVM Java 8 en cgroups](#parametrizacion-jvm-cgroups)
+   - [6.6. Calibración de Sondas de Resiliencia (Zero-Downtime Probes)](#calibracion-sondas-resiliencia)
+7. [🚀 Guía Rápida de Despliegue](#guia-despliegue)
+   - [Opción A: Despliegue mediante GitOps (ArgoCD + Nexus)](#despliegue-opcion-a-gitops)
+   - [Opción B: Despliegue mediante S2I Binario Directo por CLI](#despliegue-opcion-b-s2i)
+8. [📂 Estructura del Repositorio](#estructura-repositorio)
+9. [📚 Documentación Detallada de Referencia](#documentacion-referencia)
+   - [Publicación Técnica Original de Referencia (LinkedIn Newsletter)](#publicacion-referencia-linkedin)
+   - [Documentos Monográficos de Arquitectura (01 al 06)](#documentos-monograficos-arquitectura)
+10. [📄 Licencia y Créditos](#licencia-creditos)
 
 ---
 
@@ -73,6 +98,7 @@
 
 Más allá de la experiencia de proyecto específica en el **Ministerio de Asuntos Exteriores (MAEC)** con el **Cliente Ligero SCSP**, este repositorio materializa un **patrón de diseño arquitectónico de referencia ("Golden Path Archetype") universalmente aplicable a miles de empresas e instituciones** que enfrentan el desafío de migrar aplicaciones críticas monolíticas de legado hacia **Red Hat OpenShift / Kubernetes**.
 
+<a id="realidad-software-legado"></a>
 ### 1. La Realidad del Software de Legado en el Tejido Empresarial
 
 En grandes corporaciones bancarias, aseguradoras, empresas de telecomunicaciones, hospitales y sector público, **más del 70% de las operaciones de negocio nucleares continúan ejecutándose sobre sistemas Java heredados (Java 6, 7 y 8; Spring 2/3/4; Struts 1/2; JSF; Servlets; EJBs)**. 
@@ -81,6 +107,7 @@ Estas aplicaciones fueron diseñadas para una era estática de servidores de apl
 - **Middleware tradicional:** IBM WebSphere Application Server (WAS), Oracle WebLogic Server, Red Hat JBoss EAP 6.x o instancias físicas de Apache Tomcat.
 - **Topología de infraestructura:** Granjas de máquinas virtuales (VMware vSphere, Nutanix, Hyper-V) asociadas a balanceadores de red hardware (F5 BIG-IP, Citrix NetScaler) con reglas estrictas de persistencia de sesión por cookie (*Sticky Sessions*).
 
+<a id="dilema-modernizacion-corporativa"></a>
 #### El Dilema de la Modernización Corporativa
 | Estrategia | Ventajas | Inconvenientes en el Mundo Real |
 | :--- | :--- | :--- |
@@ -90,6 +117,7 @@ Estas aplicaciones fueron diseñadas para una era estática de servidores de apl
 
 ---
 
+<a id="bloqueantes-universales-legado"></a>
 ### 2. Los 5 Bloqueantes Universales que este Patrón Resuelve en Cualquier Organización
 
 Cualquier arquitecto o ingeniero cloud que intente contenerizar una aplicación Java de legado se topará con los mismos cinco problemas técnicos fundamentales. Esta referencia aporta la solución estándar probada para cada uno:
@@ -119,10 +147,12 @@ Cualquier arquitecto o ingeniero cloud que intente contenerizar una aplicación 
 
 ---
 
+<a id="escenarios-industrias"></a>
 ### 3. Escenarios de Aplicación Comunes en Grandes Industrias
 
 Este repositorio sirve como plantilla directa de implementación en sectores altamente regulados y complejos:
 
+<a id="sector-bancario"></a>
 #### 🏦 A. Sector Bancario y Servicios Financieros (Fintech & Core Banking)
 - **Casos Típicos:** Sistemas de scoring de riesgo crediticio, tramitación de hipotecas, plataformas de prevención de fraude (AML) y terminales transaccionales de oficina bancaria.
 - **Por qué encaja este patrón:**
@@ -130,22 +160,26 @@ Este repositorio sirve como plantilla directa de implementación en sectores alt
   - **Integración con Mainframes y Oracle RAC:** Las bases de datos DB2 u Oracle de alta disponibilidad residen en redes de centros de datos on-premise que no se migran a contenedores. El patrón `Service` + `Endpoints` permite interconectar los pods sin exponer credenciales ni IPs en el código.
   - **Tolerancia a Fallos sin Abandono de Operación:** Si un cliente está autorizando una transferencia o un préstamo de 50.000 €, la muerte repentina de un pod no puede abortar la sesión; Infinispan transfiere el contexto al pod contiguo de forma imperceptible.
 
+<a id="sector-asegurador"></a>
 #### 🛡️ B. Sector Asegurador (Insurtech)
 - **Casos Típicos:** Motores de tarificación de pólizas (autos, salud, hogar, vida) y portales de gestión pericial de siniestros.
 - **Por qué encaja este patrón:**
   - **Formularios Multi-Paso Extensos (*Wizards*):** La tarificación de un seguro requiere hasta 8 pantallas consecutivas de datos del conductor y vehículo. Tradicionalmente, este árbol de datos se almacena en memoria de sesión Java. Externalizar a Data Grid permite realizar despliegues continuos (*Rolling Updates*) en mitad de la jornada laboral sin expulsar a un solo cliente o corredor de seguros.
 
+<a id="sector-sanitario"></a>
 #### 🏥 C. Sector Sanitario y Farmacéutico (HealthTech & Hospitales)
 - **Casos Típicos:** Estaciones Clínicas Hospitalarias, Sistemas de Información Hospitalaria (HIS), Admisión de Urgencias, Gestión de Camas y Receta Electrónica.
 - **Por qué encaja este patrón:**
   - **Operación Crítica 24/7/365:** Un fallo de servicio en un hospital puede comprometer vidas humanas. La alta disponibilidad de Infinispan con dos o más réplicas y las sondas de *Liveness/Readiness* calibradas garantizan que ningún médico sea redirigido a un pod que aún esté inicializando pools JDBC.
   - **Regulación Estricta de Privacidad (RGPD / HIPAA / ENS):** Redes hospitalarias cerradas donde las imágenes base de OpenShift deben ser auditadas criptográficamente y espejadas mediante `oc-mirror v2`.
 
+<a id="sector-telecomunicaciones"></a>
 #### ⚡ D. Telecomunicaciones y Utilities (Energía, Agua, Gas)
 - **Casos Típicos:** Sistemas OSS/BSS de provisión de líneas fijas/móviles, plataformas de atención a agentes de call center (CRM heredado) y sistemas de facturación periódica.
 - **Por qué encaja este patrón:**
   - **Picos Estacionales Masivos:** Campañas de *Black Friday* o lanzamientos comerciales multiplican el tráfico por diez. Desacoplar la sesión de los pods permite que el Autoescalador Horizontal de Pods (HPA) multiplique los contenedores de Tomcat sin desbalancear las sesiones pegajosas de los usuarios.
 
+<a id="sector-administraciones-publicas"></a>
 #### 🏛️ E. Administraciones Públicas Generales (CCAA, Ayuntamientos, Diputaciones, Ministerios)
 - **Casos Típicos:** Sedes electrónicas ciudadanas, registro telemático de entrada/salida, tramitación de subvenciones y portales tributarios.
 - **Por qué encaja este patrón:**
@@ -153,6 +187,7 @@ Este repositorio sirve como plantilla directa de implementación en sectores alt
 
 ---
 
+<a id="hoja-de-ruta-transicion"></a>
 ### 4. La Hoja de Ruta de Transición: De la Migración Rápida al Estado Meta
 
 Este repositorio no impone una única forma de operar, sino que ofrece a los equipos de arquitectura corporativa un **itinerario evolutivo maduro**:
@@ -184,6 +219,7 @@ En muchas grandes empresas y organismos de la Administración Pública (como ocu
 
 Un ejemplo paradigmático en el propio MAEC es el **"DOPE framework"** desarrollado por **Minsait**: una plataforma interna con una elevada personalización (*customization*), concebida específicamente para gobernar grandes ecosistemas de microservicios como **SINAVI (Sistema de Información Nacional de Visados)** —la aplicación crítica utilizada por la red de consulados en todo el mundo—, que llega a orquestar del orden de **100 microservicios** independientes.
 
+<a id="dope-framework-minsait"></a>
 #### Anatomía y Desglose del Stack Tecnológico del Framework DOPE (Minsait)
 
 El **"DOPE framework"** (acrónimo interno de *DevOps Platform Ecosystem* desarrollado e implantado por **Minsait**) fue concebido como una plataforma integral de CI/CD altamente automatizada para cubrir todo el ciclo de vida del software ministerial moderno (*cloud-native*). Su arquitectura desacopla y articula dos grandes capas de orquestación sobre Kubernetes:
@@ -263,6 +299,7 @@ Intentar embutir a la fuerza una aplicación monolítica heredada como el Client
 └────────────────────────────────┴───────────────────────────────────────┴───────────────────────────────┘
 ```
 
+<a id="aceleracion-migracion-vs-dope"></a>
 #### ¿Por qué estas soluciones aceleran la migración frente a Tekton y frameworks como DOPE?
 
 1. **La realidad del artefacto (Código vs Binario Homologado):**
@@ -289,6 +326,7 @@ Como materialización práctica y prueba de concepto avanzada de este arquetipo,
 
 El proyecto responde a los mandatos de la **Ley 39/2015 del Procedimiento Administrativo Común**, que consagra en su artículo 28 el derecho de la ciudadanía a no aportar documentos ni certificados que ya obren en poder de la Administración Pública. Para hacer efectivo este derecho, la Secretaría General de Administración Digital (SGAD) articuló el estándar **SCSP (Sustitución de Certificados en Soporte Papel)**.
 
+<a id="transicion-contractual-maec"></a>
 #### Marco Temporal y Contexto Organizativo: La Transición Contractual en el MAEC (Segunda Mitad de 2026)
 
 Esta experiencia técnica de ingeniería y caso de uso real se sitúa cronológicamente en la **segunda mitad del año 2026**, en un momento de singular trascendencia organizativa, tecnológica y contractual dentro del Ministerio de Asuntos Exteriores, Unión Europea y Cooperación.
@@ -305,6 +343,7 @@ El entorno tecnológico ministerial se encontraba inmerso en un proceso de **rel
 - **El Complejo Proceso de Traspaso (*Handover*):**  
   Este escenario de relevo implicaba un reto técnico, metodológico y de gestión de primer orden: los equipos de las consultoras entrantes tenían la difícil misión de **hacerse con el conocimiento y el gobierno operativo (*know-how*)** acumulado a lo largo de los cuatro años de contrato por la adjudicataria (en principio) saliente. En este contexto de transición concurrente —caracterizado por la convivencia de múltiples proveedores, la asimilación acelerada de procesos en infraestructuras altamente restringidas (NubeSARA Air-Gapped) y la necesidad imperativa de garantizar la continuidad de servicios consulares críticos— se abordó la modernización hacia OpenShift de aplicaciones clave como el Cliente Ligero SCSP.
 
+<a id="inventario-contratacion-maec"></a>
 ##### Inventario Público de Contratación TIC en el MAEC: Mapa de Empresas Consultoras, Pliegos, Asignación de Lotes y Presupuestos
 
 De conformidad con los principios de publicidad y transparencia activa consagrados en la **Ley 9/2017 de Contratos del Sector Público (LCSP)** y las exigencias de auditoría de los **Fondos Europeos Next-Generation EU**, a continuación se detalla la matriz ampliada de expedientes públicos, empresas consultoras, asignación de lotes y presupuestos oficiales:
@@ -335,6 +374,7 @@ De conformidad con los principios de publicidad y transparencia activa consagrad
 
 
 
+<a id="criticidad-monolito-scsp"></a>
 #### ¿Por qué este monolito de 20 años era tan crítico para el Ministerio?
 El **Cliente Ligero SCSP** es una aplicación con aproximadamente **dos décadas de vida operativa**, concebida en los orígenes de la administración electrónica española. Lejos de ser un sistema prescindible, constituye una **pieza neurálgica, crítica e insustituible** para el funcionamiento diario del MAEC y su red de Embajadas y Consulados en los cinco continentes:
 - **Pasarela Única de Intermediación Estatal:** Es el software que permite a las unidades consulares y diplomáticas interrogar telemáticamente a los organismos emisores del Estado:
@@ -344,12 +384,14 @@ El **Cliente Ligero SCSP** es una aplicación con aproximadamente **dos décadas
   - **Obligaciones Económicas:** Comprobación telemática del estado de pagos ante la Agencia Tributaria (AEAT) y la Tesorería General de la Seguridad Social (TGSS).
 - **Impacto de una Caída en Producción:** La indisponibilidad del Cliente Ligero SCSP paralizaría de forma instantánea la tramitación de miles de visados, expedientes de extranjería, pasaportes y notarías consulares en todo el mundo. Obligaría a exigir a los ciudadanos que aportasen certificados físicos expedidos en España, provocando un colapso administrativo y vulnerando flagrantemente la legislación de procedimiento administrativo común.
 
+<a id="paradoja-plan-b"></a>
 #### La Paradoja de la Migración a OpenShift y la Gestión del Riesgo (El "Plan B")
 El mandato estratégico del MAEC era migrar esta aplicación hacia los clústeres corporativos de **Red Hat OpenShift en NubeSARA**, en el marco del plan ministerial de consolidación cloud. Sin embargo, esta exigencia encerraba una paradoja de alto riesgo técnico y contractual:
 - **Cero Soporte y Vacío Documental del Proveedor para Contenedores:** La empresa adjudicataria responsable del desarrollo y mantenimiento del software **no ofrecía soporte alguno para entornos basados en contenedores, Kubernetes u OpenShift**. Su documentación técnica, matrices de compatibilidad y guías de homologación estaban concebidas única y exclusivamente para entornos tradicionales no contenerizados (máquinas virtuales o servidores físicos con Apache Tomcat tradicional).
 - **La Prudencia Técnica de un DevOps Senior (La Propuesta del "Plan B"):** Ante semejante brecha documental y el riesgo de paralizar un servicio crítico de Estado, el autor de esta arquitectura —desde la experiencia de un perfil **DevOps Senior** acostumbrado a gobernar riesgos en infraestructuras críticas— **sugirió formalmente un "Plan B"**: no descartar y preparar en paralelo una vía de despliegue sobre infraestructura tradicional (máquinas virtuales con Tomcat dedicado) como red de seguridad institucional amparada por el soporte del fabricante. Dicha recomendación preventiva no llegó a implementarse por parte de la gestión, a pesar de que meses atrás otro profesional de **NTT Data** había intentado infructuosamente durante varios meses hacer funcionar el despliegue sin conseguirlo.
 - **La Validación Exitosa de la Fase 1 en una Ventana de 4–5 Semanas Multitarea:** Pese a no contar finalmente con ese respaldo preventivo en paralelo y tras el precedente de meses de intentos fallidos de terceros, la solución de ingeniería de **Fase 1 (S2I Binario CLI con configuración desacoplada)** desarrollada por el autor demostró que la migración a OpenShift era perfectamente factible: el Cliente Ligero SCSP comenzó a funcionar de forma estable y satisfactoria en el primer clúster de pruebas de OpenShift en NubeSARA, desacoplando la configuración y la base de datos externa de Red SARA sin alterar una sola línea del binario entregado por el fabricante. Este logro técnico se materializó en una **estricta ventana temporal de apenas 4 a 5 semanas**, y compatibilizando este esfuerzo con otros cometidos ministeriales de máxima relevancia y criticidad (como el aprendizaje y gobierno del ecosistema CI/CD sin accesos CLI, la alerta por obsolescencia de los clústeres OpenShift y la tramitación del soporte extraordinario con Red Hat).
 
+<a id="rol-sugicyr-maec"></a>
 ### 2.1. El Rol de SUGICYR y el Ecosistema Tecnológico del MAEC
 
 La **SUGICYR (Subdirección General de Informática, Comunicaciones y Redes)** es el órgano directivo del MAEC responsable de la gobernanza de las infraestructuras de telecomunicaciones, centros de proceso de datos, plataformas cloud y ciberseguridad, tanto para los Servicios Centrales como para la red de Embajadas y Consulados de España en el exterior.
@@ -363,6 +405,7 @@ Bajo la supervisión de la SUGICYR en los clústeres de **Red Hat OpenShift en N
 3. **Cliente Ligero SCSP:**  
    La aplicación monolítica J2EE objeto de este repositorio, destinada a la intermediación automatizada de certificados con la Administración General del Estado. A diferencia de SINAVI o e-LINCE, no es una aplicación de microservicios in-house sujeta a compilaciones diarias commit a commit, sino un producto paquetizado entregado por adjudicatarias como un artefacto binario cerrado.
 
+<a id="gobernanza-obsolescencia-redhat"></a>
 #### Asignaciones de Gobernanza CI/CD (sin Acceso CLI), Alerta de Obsolescencia en OpenShift y Soporte Extraordinario de Red Hat
 
 En el marco del nuevo contrato y la entrada de nuevos perfiles de ingeniería, el desempeño técnico en este ecosistema ministerial requirió acometer retos de gobernanza de extraordinaria complejidad técnica y procedimental:
@@ -379,6 +422,7 @@ En el marco del nuevo contrato y la entrada de nuevos perfiles de ingeniería, e
    - Mediante un riguroso procedimiento de recopilación y custodia a través de los circuitos autorizados de exportación, logró extraer y transferir con éxito la información diagnóstica esencial (*must-gather*, métricas de operadores y logs de estado del clúster) para su carga en el portal oficial de soporte de **Red Hat**.
    - Esta aportación diagnóstica permitió a los ingenieros de Red Hat llevar a cabo un primer análisis proactivo integral de compatibilidad y conceder una ventana de **soporte extraordinario del fabricante**, protegiendo la resiliencia y la continuidad operativa del ministerio mientras **Minsait (Indra)**, en calidad de proveedora de infraestructura y plataforma base, gestionaba y planificaba internamente el complejo proyecto de actualización de versiones de OpenShift.
 
+<a id="desafio-software-heredado"></a>
 ### 2.2. El Desafío del Software Heredado (Monolito J2EE)
 Históricamente, el Cliente Ligero SCSP fue construido como un monolito bajo la especificación **Java Enterprise Edition (J2EE)**:
 - **Java 8 (OpenJDK 1.8):** Restricciones estrictas de compilación y librerías heredadas no actualizadas a runtimes modernos (Java 17/21).
@@ -387,6 +431,7 @@ Históricamente, el Cliente Ligero SCSP fue construido como un monolito bajo la 
 - **Base de Datos Externa en Red SARA:** Registro de auditorías, firmas y trazabilidad de intermediaciones persistido en una instancia **Microsoft SQL Server** física/virtualizada en la intranet ministerial (`10.50.25.105:1433`).
 - **Conectores Propietarios Cerrados:** Exige incorporar el controlador JDBC oficial de Microsoft (`mssql-jdbc-8.4.1.jre8.jar`).
 
+<a id="escenario-nubesara-airgapped"></a>
 ### 2.3. El Escenario de Ejecución: NubeSARA Air-Gapped
 El MAEC aloja estas cargas en **NubeSARA**, la infraestructura de nube híbrida gubernamental. Por directrices del **CCN-CERT**, el **Esquema Nacional de Seguridad (ENS - Categoría Alta)** y la **SUGICYR**:
 - **Topología Multi-Clúster por Entorno (QA, PRE, PRO) e Inexistencia de Clúster DEV en NubeSARA:** En NubeSARA, la segregación entre fases no es meramente lógica (namespaces en un mismo clúster), sino que existen **clústeres OpenShift físicos independientes para cada entorno operativo**:
@@ -407,6 +452,7 @@ El MAEC aloja estas cargas en **NubeSARA**, la infraestructura de nube híbrida 
 
 Este repositorio trasciende el ámbito estrictamente técnico: es también un testimonio documentado de una realidad recurrente en la consultoría tecnológica aplicada al sector público y un alegato ético en favor de la transparencia, la honestidad profesional y la buena gobernanza.
 
+<a id="interrupcion-fase-1"></a>
 #### 1. La Interrupción de la Fase 1: Arquitectura Real vs. Falsa Apariencia de Entrega
 Durante la fase de análisis e implantación técnica inicial en el primer clúster de pruebas de **NubeSARA** —enmarcada en la **segunda mitad del año 2026** y en pleno proceso de traspaso de conocimiento entre la adjudicataria saliente (**Minsait**, junto a socios como **Telefónica** y **Altia**) y las nuevas firmas entrantes (**Alten** para DevOps/QA, **NTT Data**, **Teknei**)—, la solución táctica de **Fase 1 (S2I Binario CLI)** estaba siendo desarrollada de forma plenamente satisfactoria y rigurosa por el autor de esta arquitectura. Disponiendo de una **estrecha ventana de apenas 4 a 5 semanas** para alcanzar el despliegue operativo del monolito y compatibilizando esta tarea en paralelo con otros cometidos ministeriales de máxima exigencia (como el aprendizaje y gobernanza del intrincado ecosistema CI/CD sin acceso CLI, la interlocución con los DBAs de NTT Data para la conectividad y la gestión del escalado a Red Hat por la obsolescencia de los clústeres), el profesional logró descifrar las dependencias heredadas, el comportamiento de las sesiones J2EE en Tomcat y las restricciones de red perimetrales hacia la base de datos corporativa Microsoft SQL Server (`10.50.25.105:1433`), superando el precedente de varios meses de intentos infructuosos por parte de otro profesional de **NTT Data** que no había conseguido hacer funcionar el despliegue.
 
@@ -421,16 +467,19 @@ Sin embargo, en el contexto de la presión habitual en los relevos de contratas 
   - **Base de Datos Efímera en Pod vs. Base de Datos Corporativa:** La directriz del cliente ministerial era nítida e incontestable desde el inicio: el requisito arquitectónico mandatorio era **conectar a la base de datos externa Microsoft SQL Server asociada a cada entorno** en la intranet de Red SARA. Para cumplir con esta exigencia real de producción, el autor de esta arquitectura tuvo que investigar a fondo y conseguir, no sin esfuerzo, perseverancia técnica y gestiones de interlocución, los parámetros de red, credenciales y rutas de conectividad hacia dicha base de datos (labor que contó además con la valiosa y profesional colaboración de otras empresas adjudicatarias como **NTT Data**, que ejercían el rol de DBAs corporativos). Frente a esta realidad ineludible, la solución paralela optó por el atajo cosmético de levantar un entorno autocontenido con una base de datos efímera dentro del propio pod en local. Esta vía carecía por completo de sentido: ¿qué justificación técnica tenía malgastar tiempo y recursos en simular una base de datos de juguete en un pod aislado cuando ya se estaba desbrozando y resolviendo la conectividad con el SQL Server real del ministerio? Toda esta dinámica irracional de actuar a espaldas del equipo dinamitó lo que debería haber sido una práctica elemental de ingeniería: sentarse a debatir abiertamente, compartir la información obtenida y alinearse en un diseño conjunto, funcional y homologable.
 - **La Simulación como Maniobra de Conveniencia:** En lugar de evaluar ambas alternativas bajo criterios objetivos de ingeniería de sistemas, esa falsa apariencia de rapidez se utilizó como pretexto para propiciar la salida forzada del profesional con mayor preparación y experiencia técnica contrastada en estas tecnologías (mientras otros perfiles partían de cero). En organizaciones donde la gestión premia la complacencia burocrática por encima de la excelencia, quien defiende un criterio técnico independiente, advierte de los riesgos de diseño y no se presta a simulaciones cosméticas es percibido como un obstáculo ("hacer sombra"), orquestándose su salida mediante maniobras de conveniencia.
 
+<a id="rechazo-enfrentamiento-profesional"></a>
 #### 2. Rechazo Frontal al Antipatrón del Enfrentamiento entre Profesionales y el Despilfarro de Recursos
 Un aspecto medular de esta reflexión es la crítica a un modelo de gestión destructivo e ineficiente:
 - **El Despropósito de los Silos Paralelos y la Falta de Alineación:** Supone una grave falta de profesionalidad y un despilfarro flagrante de recursos públicos y humanos que dos o más personas de un mismo equipo trabajen en paralelo sobre la misma tarea en absoluto aislamiento y sin comunicarse entre sí, compitiendo en una carrera artificial por ver "quién llega antes". En lugar de debatir técnicamente, coordinar esfuerzos y alinear al equipo sobre la información ya recabada (como los accesos a bases de datos y requisitos de red de SARA), esta dinámica viciada premia la primera maqueta que aparenta funcionar en local, aunque sea técnicamente inviable y desaconsejable para producción, aprovechándose de que el interlocutor ministerial suele tener un perfil gestor y administrativo, no técnico de infraestructura.
 - **Cultura de Cooperación y Diálogo Bidireccional:** La verdadera ingeniería de software y la arquitectura cloud crecen sobre la base del aprendizaje mutuo, la mentoría honesta y la puesta en común de conocimiento. Quien suscribe este proyecto se opone frontalmente a competir con sus compañeros; el valor profesional se demuestra colaborando, compartiendo hallazgos y remando juntos hacia el éxito del proyecto. Fomentar rivalidades internas para dirimir cuotas de influencia o tapar carencias formativas degrada el talento y condena a las organizaciones a decisiones técnicas erráticas que tarde o temprano colapsan en producción.
 
+<a id="honestidad-tecnica-vs-comercial"></a>
 #### 3. Honestidad Técnica vs. Retórica Comercial: La Cultura de los Hechos frente a la Apariencia
 - **La Sobre-Venta de Perfiles y la Erosión de la Confianza:** En la consultoría tecnológica es comprensible una actitud de seguridad y proactividad comercial, pero cuando esta actitud se exagera hasta desfigurar la realidad técnica, resulta profundamente incómoda y destructiva. Intentar vender una falsa maestría mediante palabrería técnica conduce con frecuencia a falsear la realidad de lo que realmente se entrega, sembrando desconfianza en el equipo y comprometiendo la viabilidad de la infraestructura.
 - **Humildad Intelectual y Predisposición para Aprender:** Nadie tiene por qué saberlo todo. La solvencia técnica legítima se apoya en la honestidad de reconocer los límites del conocimiento propio, la predisposición constante a aprender y la madurez de dejarse guiar por los profesionales que acreditan mayor experiencia en una tecnología determinada. Resulta profundamente frustrante e injusto que ciertas dinámicas corporativas prioricen perfiles que basan su avance en la fachada comercial, postergando a los profesionales que actúan con rigor y transparencia.
 - **Ingeniería Basada en Hechos, no en Palabrería:** Quien suscribe esta obra cree firmemente en una forma de trabajar: esforzarse al máximo para que la tecnología funcione de la manera más robusta, eficiente y elegante posible, demostrando las soluciones con hechos contrastables, código limpio y sistemas en funcionamiento, y no con artificios retóricos o promesas vacías.
 
+<a id="doble-mirada-fiscal-laboral"></a>
 #### 4. La Doble Mirada: Preocupación Cívica por el Esfuerzo Fiscal Ciudadano y la Calidad del Empleo Tecnológico en la Contratación Pública
 
 Las iniciativas de modernización y transformación digital en los Ministerios de la Administración General del Estado —en gran medida impulsadas y financiadas por los **Fondos Europeos Next-Generation EU (Plan de Recuperación, Transformación y Resiliencia)** y el presupuesto ordinario del Estado— exigen una reflexión ética y social que conecte de manera constructiva dos perspectivas indisociables: **la mirada del ciudadano contribuyente** y **la experiencia directa del profesional de la ingeniería de software**:
@@ -454,51 +503,23 @@ Las iniciativas de modernización y transformación digital en los Ministerios d
      - Se promueva una contratación más justa y directa que dignifique las condiciones del talento tecnológico que moderniza las instituciones públicas.
    - Defender la excelencia técnica en la Administración Pública no es una cuestión meramente informática: es un acto de respeto democrático hacia el contribuyente y una contribución activa a la sostenibilidad de los servicios públicos esenciales.
 
-#### 5. Un Año Después: Lecciones Organizativas y de Ingeniería en Plataformas IDP (El Caso IndraMind)
+<a id="caso-indramind-interconexion"></a>
+#### 5. Un Año Después: El Caso IndraMind, la Interconexión del Sector y la Soberanía Técnica
 
-Transcurrido un año desde la experiencia técnica en NubeSARA, la trayectoria del autor de esta arquitectura como consultor externo le llevó a incorporarse a otra iniciativa de máxima relevancia estratégica e interés técnico dentro del panorama de la consultoría española: **IndraMind**. Esta vivencia posterior ofreció una perspectiva privilegiada para contrastar patrones de ingeniería de plataformas y analizar, desde la sociología de las organizaciones tecnológicas, dinámicas de equipo y gobernanza del talento que merecen una reflexión constructiva y políticamente correcta:
+Transcurrido un año desde la experiencia en NubeSARA, la trayectoria del autor le llevó a incorporarse como consultor externo a otra iniciativa de máxima relevancia estratégica: **IndraMind** (ecosistema integral de IA soberana presentado por el **Grupo Indra** el 12 de marzo de 2025 para infraestructuras críticas y defensa). Este **paso fugaz** —enmarcado en una cobertura coyuntural estival— aportó un valioso contraste arquitectónico y sociológico sobre la realidad de las plataformas en España:
 
-##### 1. ¿Qué es IndraMind? Contexto y Creación
-- **Naturaleza e Iniciativa Estratégica:** **IndraMind** fue presentada oficialmente por el **Grupo Indra** el **12 de marzo de 2025** como uno de los pilares tecnológicos centrales de su plan estratégico corporativo (*Leading the Future*).
-- **Misión y Capacidades:** Concebida como una plataforma y ecosistema integral de **Inteligencia Artificial (IA) soberana** y ciberresiliente, su objetivo es dotar a España y a la Unión Europea de capacidades estratégicas avanzadas para la defensa, la protección de infraestructuras críticas (físicas y digitales), la gestión integral de crisis y emergencias y la respuesta coordinada ante conflictos híbridos, bajo el lema institucional *"Protecting to empower"*.
+- **Arquitectura del IDP (Pragmatismo Cloud vs. Sobre-Ingeniería):** Frente a la hiper-personalización extrema de Tekton en NubeSARA, IndraMind combinó estándares consolidados de código abierto sobre **Red Hat OpenShift on AWS (ROSA)** con **Traefik OSS** (routing perimetral), **Spotify Backstage** (portal CNCF), **Forgejo** (Git soberano), **Tuleap** (trazabilidad ALM), **Keycloak + HashiCorp Vault** (IAM y gestión de secretos), **Jenkins + ArgoCD** (CI/CD GitOps), **Project Quay** (registry OCI) y una suite DevSecOps con **Grype** (en sustitución de Trivy), **OWASP ZAP**, **DefectDojo** e **IA soberana con arquitectura RAG** para soporte técnico contextual.
+- **Iniciativa Documental con IA ante el Vacío Escrito:** Pese a no existir documentación previa por la juventud del proyecto (la transferencia era puramente oral por Teams), el profesional resolvió esta carencia de forma proactiva: generó entre **21 y 23 documentos técnicos exhaustivos en Confluence** enriquecidos con infografías y vídeos explicativos generados con Gemini, y estructuró notas minuciosas en los tickets de **Jira** (formato Jira / MediaWiki) con el soporte del Copilot web corporativo, garantizando un rastro transparente de auditoría y requisitos.
+- **Onboarding, Dinámica de Equipo y Desencuentro Inicial:** Junto a un compañerismo y acogida excelentes con los ingenieros de base, la interacción técnica directa se limitó a **una única conversación inicial** con el referente técnico que había levantado la plataforma en solitario (sin activación de cámara). Este interlocutor actuó asumiendo un rol de mando jerárquico como si fuera el jefe en cliente —sin ostentar dicha condición formal ni haberse comunicado relación de subordinación alguna—, proyectando una urgencia desmedida bajo un cuadro verosímil de *burnout*. La legítima queja formal del profesional ante la dirección —motivada por el rigor y la comprensible inquietud ante la inestabilidad laboral por fricciones injustificadas desde el inicio— permitió reconducir el proyecto: no hubo más contacto con dicho interlocutor y dos compañeros de equipo asumieron con gran solvencia la guía cotidiana.
+- **La Interconexión del Ecosistema TIC y la Inquietud Deontológica:**  
+  Más allá del plano operativo, esta vivencia suscitó una honda reflexión sobre la **alta concentración y estrecha circularidad de la consultoría IT en el ámbito público**. En un entorno donde un selecto grupo de integradoras gestiona las infraestructuras críticas del Estado (desde el MAEC hasta defensa), los canales informales de referencias, los cuadros directivos compartidos y las relaciones corporativas funcionan a menudo como vasos comunicantes. Resulta difícil eludir la perplejidad y la preocupación deontológica al constatar cómo haber mantenido una postura de firmeza ética, rigor técnico y alerta frente a la obsolescencia en un proyecto ministerial el año anterior parece proyectar sutiles ecos o predisposiciones atípicas en iniciativas posteriores vinculadas al mismo ecosistema empresarial. Esto suscita un interrogante ético inevitable: ¿se prioriza el talento y la resolución de problemas, o se condiciona de manera informal a aquellos perfiles que ejercen un criterio técnico independiente y rechazan las narrativas de complacencia?
 
-##### 2. Contraste Tecnológico: Desglose del Stack Tecnológico del IDP de IndraMind
-En el marco de IndraMind, el cometido técnico consistía en participar en el desarrollo, integración y soporte de una **Internal Developer Platform (IDP)** corporativa concebida para dotar de autoservicio a los equipos de ingeniería, acelerar la entrega continua y gobernar el ciclo de vida de los servicios con soberanía y seguridad integral:
-
-- **Desglose Exhaustivo del Stack del IDP de IndraMind:**
-  - **Infraestructura y Plataforma Base:** **Red Hat OpenShift on AWS (ROSA / IaaS)**, proporcionando una base Kubernetes empresarial robusta sobre la nube pública de Amazon Web Services.
-  - **Ingress Controller y Edge Routing:** **Traefik OSS**, actuando como reverse proxy y balanceador de tráfico perimetral ligero, dinámico y de alto rendimiento.
-  - **Portal de Autoservicio / Developer Portal:** **Spotify Backstage** (estándar abierto de facto de la CNCF) como interfaz unificada para el catálogo de software, documentación técnica viva (*TechDocs*) y plantillas de autoservicio (*Software Templates*).
-  - **Control de Versiones y Git Soberano:** **Forgejo** (fork comunitario independiente y libre de Gitea), garantizando la soberanía de los repositorios de código sin dependencias privativas externas.
-  - **Gestión del Ciclo de Vida Aplicativo (ALM) y Trazabilidad:** **Tuleap**, plataforma libre para la gestión ágil de proyectos, seguimiento de requisitos y trazabilidad integral del desarrollo, ampliamente adoptada en sectores críticos de defensa y aeroespacial en Europa.
-  - **Identidad, Autenticación y Autorización (IAM / SSO):** **Keycloak**, gestionando el control de identidades federadas, autenticación OIDC/SAML y control de acceso basado en roles (RBAC).
-  - **Gestión Segura de Secretos:** **HashiCorp Vault**, como almacén centralizado para el cifrado, inyección dinámica y rotación estricta de credenciales y certificados.
-  - **Motor de Integración Continua (CI):** **Jenkins**, sustentando pipelines contrastados y estables para la compilación, empaquetado y testing continuado.
-  - **Motor de Entrega Continua (CD) y GitOps:** **Red Hat OpenShift GitOps (ArgoCD)**, garantizando la inmutabilidad declarativa y reconciliación continua de estados entre Git y el clúster.
-  - **Registro de Imágenes y Artefactos OCI:** **Project Quay / Red Hat Quay**, como registry corporativo seguro para almacenamiento, escaneo y distribución de imágenes de contenedores.
-  - **Ecosistema DevSecOps y Análisis Continuo de Seguridad:**
-    - **Grype (Anchore):** Motor especializado de análisis de vulnerabilidades en imágenes OCI y sistemas de archivos (SBOM), seleccionado específicamente en lugar de Trivy por su precisión y adaptabilidad en el pipeline.
-    - **OWASP ZAP (Zed Attack Proxy):** Pruebas dinámicas de seguridad en aplicaciones web (DAST) automatizadas para la detección temprana de brechas en tiempo de despliegue.
-    - **DefectDojo:** Plataforma central de orquestación y gestión de la postura de seguridad de aplicaciones (ASPM), unificando y correlacionando los informes de escaneos estáticos, dinámicos y de dependencias.
-  - **Inteligencia Artificial y Aceleración Cognitiva:** Integración de capacidades de **IA soberana con arquitectura RAG (Retrieval-Augmented Generation)**, facilitando la consulta semántica contextual sobre documentación técnica interna y asistiendo a los desarrolladores en la resolución ágil de incidencias.
-
-- **Contraste de Arquitectura (DOPE vs. IDP IndraMind):** Mientras que el framework *DOPE* en el MAEC optó por la hiper-personalización extrema sobre CRDs nativos de Tekton en nodos físicos desconectados (Air-Gapped de NubeSARA) —lo cual provocó una severa sobrecarga de mantenimiento y dependencias en obsolescencia—, el IDP de IndraMind apostó por una combinación pragmática de estándares maduros de software libre (Backstage + Jenkins + ArgoCD + Vault + Keycloak + Quay), equilibrando soberanía tecnológica, agilidad cloud (AWS) y cobertura integral DevSecOps (Grype + ZAP + DefectDojo).
-
-##### 3. El Factor Humano: Antipatrones de Liderazgo, Onboarding Coyuntural y Desgaste (*Burnout*)
-A pesar de la coherencia tecnológica de la plataforma, la realidad operativa en el seno del proyecto volvió a evidenciar disfunciones organizativas habituales en la contratación de servicios externos de IT:
-- **Compañerismo y Buena Acogida de Base:** El profesional encontró un trato excelente, respetuoso y colaborativo por parte de los ingenieros y compañeros de base del equipo, compartiendo una visión vocacional del rigor técnico.
-- **La Contratación Coyuntural y Politizada (La Cobertura Estival):** Con el avance de los días se hizo evidente que la incorporación externa respondía a un contexto fuertemente condicionado y politizado: una cobertura circunstancial para solventar el **periodo vacacional / estival**, más que una apuesta estructural de largo recorrido por integrar talento senior en el proyecto.
-- **El Antipatrón del Desencuentro Inicial: Desalineación Jerárquica y Presión sin Rostro:** El primer contacto técnico directo se redujo a **una única conversación** con el referente técnico que había desarrollado la plataforma —a quien ni siquiera se llegó a ver en videollamada interactiva (webcam)—. En dicha interacción inicial, este perfil actuó asumiendo un rol de mando jerárquico como si fuese el responsable directo en cliente, a pesar de no ostentar dicha condición frente a los directivos que realizaron las entrevistas de selección e incorporación, y sin que la organización hubiese trasladado en ningún momento que dicho profesional ostentase una jefatura funcional a la que subordinarse incondicionalmente. En lugar de articular un itinerario formativo equilibrado de transferencia tecnológica (*onboarding*) para asimilar una plataforma amplia y heterogénea, dicho interlocutor proyectó desde el primer contacto una actitud de apremio injustificado, prisas desmedidas y una presión de exigencia inmediata desprovista de empatía.
-- **Carencia de Documentación Escrita y la Iniciativa de Creación Documental con IA (Confluence y Jira):**  
-  Un desafío adicional relevante en el proyecto era la **ausencia total de documentación técnica escrita previa**: todo el conocimiento acumulado sobre la plataforma se transmitía de forma exclusivamente verbal a través de videollamadas en Microsoft Teams (justificando formalmente la capacitación mediante sesiones 1-a-1 o grupales, pero sin soporte documental duradero por escrito ni manuales de procedimiento). Aunque esta carencia resultaba en gran medida comprensible tratándose de una iniciativa joven en fase de construcción inicial, el profesional senior asumió de inmediato la iniciativa proactiva de solucionar esta debilidad mediante una metodología sistemática:
-  - **Base de Conocimiento en Confluence:** Redactó y publicó entre **21 y 23 documentos técnicos exhaustivos** en **Atlassian Confluence**, complementándolos con **resúmenes multimedia interactivos**, **vídeos explicativos** e **infografías y diagramas de arquitectura generados con Gemini**.
-  - **Trazabilidad y Notas Técnicas en Jira:** Documentó minuciosamente cada tarea e incidencia directamente en las notas de **Jira** empleando su sintaxis nativa de marcado (**formato Jira / MediaWiki**). Para acelerar este proceso sin perder rigor, aprovechó de forma metódica el **Copilot web corporativo** (asistente conversacional para procesar resúmenes estructurados mediante copiar y pegar), dejando un **rastro de auditoría transparente y exhaustivo** de cada acción acometida, el desglose de requisitos técnicos y los criterios de validación de cada ticket.
-- **Hipótesis y Percepción Profesional: El Síndrome del *Burnout* y la Captura Apresurada de Conocimiento:**  
-  Si bien se trata de una hipótesis analítica y una percepción personal fundada en los indicios y hechos observados —y no de una certeza documentalmente contrastable—, existen motivos fundados para inferir que dicho líder técnico se encontraba sometido a un profundo cuadro de **desgaste profesional (*burnout*)**: haber tenido que diseñar y levantar prácticamente en solitario una plataforma de semejante envergadura a lo largo de un año continuado de sobrecarga. Su posterior salida de la organización poco tiempo después refuerza la verosimilitud de esta lectura: la contratación acelerada de perfiles externos parecía responder a la urgencia organizativa de capturar y retener el conocimiento técnico acumulado ante su previsible marcha, proyectando involuntariamente esa tensión acumulada en forma de exigencias y apremios desmedidos sobre los recién incorporados.
-- **La Queja Profesional Legítima, la Preocupación Laboral y la Reorientación del Día a Día:** Ante un primer contacto en el que se impone un apremio asfixiante y un trato autoritario desde el minuto uno —impidiendo el tiempo natural de asimilación—, cualquier perfil con dilatada experiencia percibe la señal de alarma ante posibles dinámicas de justificación administrativa o descarte previo. Esta situación generó una honda preocupación humana y profesional: el temor comprensible a afrontar nuevamente una pérdida o inestabilidad laboral ante fricciones artificiales e injustificadas desde el inicio, máxime cuando la dedicación y vocación de entrega del profesional son totales. Ante este escenario, el profesional ejerció su legítimo derecho a **trasladar formalmente su disconformidad ante la dirección**. A raíz de dicha queja formal, **no se volvió a mantener ningún contacto ni conversación con dicho referente técnico**, reconduciéndose la operativa diaria de manera fluida y constructiva gracias al apoyo de **dos compañeros de equipo**, quienes guiaron con empatía, compañerismo y rigor técnico el trabajo cotidiano.
-
+<a id="sentido-legitimidad-repositorio"></a>
 #### 6. El Sentido y Legitimidad de este Repositorio
-Ante la imposibilidad de concluir la implantación en el entorno ministerial por las circunstancias descritas, este repositorio abierto nace como un **acto de restitución profesional, transparencia y aportación comunitaria**: rescatar íntegramente el análisis técnico, implementar con código operativo completo tanto la Fase 1 como la Fase 2, y poner a disposición pública una referencia contrastada y libre de atajos para que cualquier profesional o institución pueda acometer la modernización de monolitos J2EE con honestidad, seguridad y rigor.
+
+Es precisamente este periplo —culminado tras ese revelador y fugaz paso por IndraMind casi un año después de lo acontecido en el MAEC— lo que otorga su pleno sentido ético, técnico y cívico a la publicación de este proyecto:
+
+Cuando los canales corporativos operan con opacidad, circularidad o filtros no técnicos, **el software libre y la publicación abierta se erigen como el espacio supremo de restitución profesional, soberanía técnica y transparencia pública**. Frente a cualquier narrativa de conveniencia o dinámicas de exclusión informal, este repositorio pone a disposición de la comunidad, de las administraciones públicas y de la ingeniería una solución completa, verificable y libre de atajos para la modernización de monolitos J2EE en OpenShift, demostrando que la verdadera valía de un profesional reside en los hechos técnicos, en el código operativo y en el servicio riguroso al bien común.
 
 ---
 
@@ -592,10 +613,12 @@ Este repositorio incluye con código operativo las dos soluciones técnicas anal
 <a id="recomendacion-arquitectonica"></a>
 ## 🏆 ¿Cuál de las Dos Soluciones es la Más Recomendable?
 
+<a id="veredicto-solucion-a"></a>
 ### Veredicto: La Solución A (GitOps + Nexus) es la Más Recomendable
 
 Para cualquier despliegue en **Producción** dentro del MAEC, la Administración General del Estado o entornos corporativos de alta criticidad, **la Solución A es la arquitectura preferente y recomendada**.
 
+<a id="justificacion-tecnica-gobierno"></a>
 #### Justificación Técnica y de Gobierno:
 1. **Cumplimiento Estricto del Esquema Nacional de Seguridad (ENS - Categoría Alta):**
    - El principio de *segregación de funciones* se garantiza: ningún administrador ni desarrollador necesita privilegios de administración directa (`cluster-admin` o `edit`) sobre los namespaces de producción.
@@ -607,6 +630,7 @@ Para cualquier despliegue en **Producción** dentro del MAEC, la Administración
 4. **Destrucción y Limpieza Segura de Recursos (Zero Orphan Waste):**
    - El uso del finalizador `resources-finalizer.argocd.argoproj.io` asegura que, ante la baja de la aplicación, Kubernetes ejecute un borrado en cascada en primer plano (*Foreground Cascading Deletion*), eliminando el clúster de Infinispan, StatefulSets, Services y políticas Egress sin agotar recursos huérfanos de NubeSARA.
 
+<a id="cuando-utilizar-solucion-b"></a>
 #### ¿Cuándo debe utilizarse la Solución B?
 La **Solución B (S2I Binario Directo)** es sumamente valiosa como **escalón intermedio o táctico**:
 - Para validar en pocas horas la compatibilidad de Tomcat 9 y Java 8 con las consultas JDBC de SQL Server en una Prueba de Concepto (PoC).
@@ -618,36 +642,41 @@ La **Solución B (S2I Binario Directo)** es sumamente valiosa como **escalón in
 ## 🌐 Síntesis de Aplicabilidad Empresarial
 
 Para un análisis pormenorizado de los casos de uso arquetípicos en Banca (PCI-DSS), Seguros, Sanidad (HIPAA/RGPD), Telco y Sector Público, consulta la sección inicial:  
-👉 [1. El Patrón Arquitectónico Universal: Casos de Uso Empresariales para Apps de Legado](#-el-patrón-arquitectónico-universal-casos-de-uso-empresariales-para-apps-de-legado).
+👉 [1. El Patrón Arquitectónico Universal: Casos de Uso Empresariales para Apps de Legado](#patron-arquitectonico-universal).
 
 ---
 
 <a id="retos-ingenieria"></a>
 ## 🧩 Retos de Ingeniería y Patrones de Implementación
 
+<a id="espejado-airgapped-oc-mirror"></a>
 ### 6.1. Espejado Air-Gapped Determinista con `oc-mirror v2`
 En entornos desconectados, el antiguo mecanismo `ImageContentSourcePolicy` (ICSP) ha sido sustituido en OpenShift 4.14+ por **`ImageDigestMirrorSet` (IDMS)** e **`ImageTagMirrorSet` (ITMS)**.
 - El manifiesto [`air-gapped/imageset-config.yaml`](air-gapped/imageset-config.yaml) define el conjunto estricto de operadores (Data Grid, JWS, GitOps) y la imagen certificada de JBoss Web Server (`webserver54-openjdk8-tomcat9-openshift-rhel8`).
 - El parámetro `archiveSize: 16` fragmenta el espejado en bloques de 16 GB adecuados para diodos de red y medios extraíbles cifrados.
 - Al aplicar los recursos generados, el **Machine Config Operator (MCO)** reescribe `/etc/containers/registries.conf` en cada nodo del clúster y ejecuta un reinicio controlado.
 
+<a id="erradicacion-sticky-sessions"></a>
 ### 6.2. Erradicación del Antipatrón Sticky Sessions con Red Hat Data Grid
 En lugar de forzar al balanceador de entrada (*OpenShift Ingress*) a recordar a qué pod físico enviar las peticiones:
 - Se despliega un clúster de **Infinispan 8.4.x** de 2 réplicas gestionado por el Data Grid Operator ([`datagrid-infinispan.yaml`](solution-a-gitops/kustomize/base/datagrid-infinispan.yaml)).
 - El descriptor Tomcat [`context.xml`](solution-a-gitops/kustomize/base/configmap-tomcat-context.yaml) activa la clase nativa `org.wildfly.clustering.tomcat.hotrod.HotRodManager`.
 - Cada mutación de sesión se sincroniza de forma asíncrona por protocolo binario HotRod (puerto `11222`). Si un pod es destruido, el siguiente pod atiende la petición sin pérdida de datos para el ciudadano.
 
+<a id="abstraccion-bd-externa"></a>
 ### 6.3. Abstracción Topológica de Base de Datos Externa (Service + Endpoints)
 Para conectar con el SQL Server en Red SARA (`10.50.25.105:1433`) sin codificar la IP en la aplicación:
 - Se declara un `Service` sin selectores emparejado con un objeto `Endpoints` ([`external-db-service.yaml`](solution-a-gitops/kustomize/base/external-db-service.yaml) y [`external-db-endpoints.yaml`](solution-a-gitops/kustomize/base/external-db-endpoints.yaml)).
 - El DNS interno resuelve el alias `scsp-database-gateway`. La cadena JDBC en `context.xml` utiliza este nombre lógico; si el servidor físico cambia de IP, solo se actualiza el objeto `Endpoints`.
 
+<a id="confinamiento-red-egress"></a>
 ### 6.4. Confinamiento de Red Egress (SUGICYR en OVN-Kubernetes)
 Para cumplir con la política perimetral gubernamental:
 - Se despliega una [`EgressNetworkPolicy`](solution-a-gitops/kustomize/base/egress-network-policy.yaml) en OVN-Kubernetes.
 - **Permitido:** Exclusivamente la IP `/32` del servidor SQL Server (`10.50.25.105/32`) y la red de servicios internos del clúster (`172.30.0.0/16` para CoreDNS e Infinispan).
 - **Denegado:** Todo el tráfico restante (`0.0.0.0/0`), impidiendo fugas de datos o saltos laterales.
 
+<a id="parametrizacion-jvm-cgroups"></a>
 ### 6.5. Parametrización Porcentual de Memoria JVM Java 8 en cgroups
 Para evitar que Java 8 ignore las restricciones de cgroups y sea fulminado por el `OOMKiller`:
 - Se configuran límites rígidos en el Deployment: `limits: memory: 3Gi, cpu: 2`.
@@ -655,6 +684,7 @@ Para evitar que Java 8 ignore las restricciones de cgroups y sea fulminado por e
 - La JVM asigna como máximo el 70% (2.1 GB) al Heap, preservando un colchón del 30% (~900 MB) para Metaspace, threads de Tomcat, buffers de HotRod y criptografía de certificados.
 - Se fuerza el Garbage Collector de baja latencia con `-XX:+UseG1GC` y la entropía rápida `-Djava.security.egd=file:/dev/./urandom`.
 
+<a id="calibracion-sondas-resiliencia"></a>
 ### 6.6. Calibración de Sondas de Resiliencia (Zero-Downtime Probes)
 Los monolitos de legado tardan entre 40 y 70 segundos en inicializar descriptores y pools de conexiones.
 - **Readiness Probe:** `initialDelaySeconds: 60`, `periodSeconds: 10`. Asegura que ninguna petición se enrute al pod antes de que el contexto esté totalmente activo.
@@ -665,6 +695,7 @@ Los monolitos de legado tardan entre 40 y 70 segundos en inicializar descriptore
 <a id="guia-despliegue"></a>
 ## 🚀 Guía Rápida de Despliegue
 
+<a id="despliegue-opcion-a-gitops"></a>
 ### Opción A: Despliegue mediante GitOps (ArgoCD + Nexus)
 
 ```bash
@@ -683,6 +714,7 @@ cd OpenShift-MAEC-SCSP-J2EE-Lift-and-shift/solution-a-gitops
 oc get application scsp-production-sync -n openshift-gitops -w
 ```
 
+<a id="despliegue-opcion-b-s2i"></a>
 ### Opción B: Despliegue mediante S2I Binario Directo por CLI
 
 ```bash
@@ -755,10 +787,12 @@ cp /ruta/al/mssql-jdbc-8.4.1.jre8.jar workspace-template/lib/
 <a id="documentacion-referencia"></a>
 ## 📚 Documentación Detallada de Referencia
 
+<a id="publicacion-referencia-linkedin"></a>
 ### 📰 Publicación Técnica Original de Referencia
 - [**Despliegue de SCSP en OpenShift 4.x: Arquitecturas para Entornos Aislados (LinkedIn Newsletter)**](https://www.linkedin.com/pulse/despliegue-de-scsp-en-openshift-4x-arquitecturas-para-i%C3%B1aki-fernandez-hns6e/)  
   *Artículo de análisis técnico y divulgación que sirvió como referencia arquitectónica primaria empleada por Gemini para concebir, estructurar y generar este repositorio de código.*
 
+<a id="documentos-monograficos-arquitectura"></a>
 ### 📑 Documentos Monográficos de Arquitectura
 - [01. Contexto Estratégico y Caso de Uso (MAEC / SCSP)](docs/01-contexto-y-caso-de-uso.md)
 - [02. Análisis Comparativo Profundo y Justificación](docs/02-comparativa-soluciones.md)
