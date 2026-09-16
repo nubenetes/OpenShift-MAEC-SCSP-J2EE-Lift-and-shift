@@ -11,9 +11,10 @@
 2. **Reconciliación Continua y Self-Healing:**
    - **Red Hat OpenShift GitOps (ArgoCD 1.19+)** es el único controlador con privilegios de escritura en el clúster.
    - Cualquier modificación manual efectuada en la consola web de OpenShift o por CLI es detectada como *drift* y revertida de forma inmediata y automática (`selfHeal: true`).
-3. **Topología Multi-Clúster por Entorno (QA, PRE, PRO):**
-   - En NubeSARA / MAEC, los entornos residen en **clústeres OpenShift físicamente segregados**:
-     - **Clúster QA:** Entorno de pruebas técnicas y funcionales (asumía las funciones iniciales al no existir aún clúster dedicado de desarrollo/DEV).
+3. **Topología Multi-Clúster por Entorno (QA, PRE, PRO) e Inexistencia de DEV Local:**
+   - En NubeSARA / MAEC no existía un clúster de desarrollo propio: el entorno DEV pertenecía a la consultora saliente (Minsait), quien lo mantenía alojado en Microsoft Azure para este proyecto (y otros), si bien recomendaba formalmente al MAEC desplegar su propio OCP DEV interno.
+   - Los entornos ministeriales en NubeSARA residen en **clústeres OpenShift físicamente segregados**:
+     - **Clúster QA:** Entorno de pruebas técnicas y funcionales (asumía las funciones iniciales al no existir clúster DEV en NubeSARA).
      - **Clúster PRE:** Entorno de preproducción para pruebas de carga, integración con SCSP de pruebas en Red SARA y validación técnica.
      - **Clúster PRO:** Entorno de producción con alta disponibilidad, confinamiento Egress y auditoría ENS Alta.
    - Variaciones gestionadas mediante Kustomize en `kustomize/overlays/qa/`, `kustomize/overlays/pre/` y `kustomize/overlays/prod/`.

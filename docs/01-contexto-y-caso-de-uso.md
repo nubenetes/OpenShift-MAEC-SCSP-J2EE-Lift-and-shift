@@ -120,6 +120,7 @@ La **Red SARA** (Sistemas de Aplicaciones y Redes para las Administraciones) int
 - **Sin resolución DNS pública:** Prohibición de acceso a registros comerciales como Docker Hub, Quay.io o Red Hat Registry.
 - **Sin acceso saliente general:** Restricción perimetral absoluta del tráfico de red saliente desde los contenedores (normativa SUGICYR).
 - **Prohibición de ClickOps:** Todos los cambios en producción deben ser auditables, trazables y preferiblemente gestionados mediante código declarativo.
+- **Topología Multi-Clúster y Ausencia de Clúster DEV en NubeSARA:** En el perímetro ministerial de NubeSARA no existía un clúster de desarrollo (DEV) propio. Dicho entorno pertenecía a Minsait y estaba alojado en Microsoft Azure para este y otros proyectos, si bien la propia Minsait recomendaba formalmente al MAEC desplegar su propio clúster OCP DEV interno en NubeSARA. Por ello, el clúster de QA asumía en el ministerio el papel de primer banco de pruebas.
 
 ---
 

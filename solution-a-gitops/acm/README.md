@@ -11,7 +11,7 @@
 
 1. **Gestión Centralizada de Flota (*Fleet Management*):**
    - Un clúster Hub central de ACM supervisa y gobierna el ciclo de vida de los tres clústeres spoke de NubeSARA:
-     - `ocp-qa` (entorno de pruebas y validaciones iniciales).
+     - `ocp-qa` (entorno de pruebas y validaciones iniciales; asumía este rol ante la inexistencia de un clúster DEV propio en NubeSARA, el cual pertenecía a Minsait y residía en Azure, si bien dicho proveedor recomendaba al MAEC desplegar su propio OCP DEV).
      - `ocp-pre` (entorno de preproducción y homologación).
      - `ocp-pro` (entorno de producción con confinamiento perimetral).
 
