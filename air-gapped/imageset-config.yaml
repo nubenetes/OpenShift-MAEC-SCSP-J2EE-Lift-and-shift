@@ -1,0 +1,33 @@
+---
+# ==============================================================================
+# ImageSetConfiguration for oc-mirror v2 (OpenShift 4.14 - 4.17 Air-Gapped)
+# Entorno seguro NubeSARA - MAEC Cliente Ligero SCSP
+# ==============================================================================
+kind: ImageSetConfiguration
+apiVersion: mirror.openshift.io/v2alpha1
+archiveSize: 16
+mirror:
+  platform:
+    channels:
+      - name: stable-4.17
+        type: ocp
+  operators:
+    - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.17
+      packages:
+        # Red Hat Data Grid (Infinispan 8.4.x) para replicación distribuida de sesiones
+        - name: datagrid
+          channels:
+            - name: 8.4.x
+        # Red Hat JBoss Web Server (Tomcat 9) Operator
+        - name: jws-operator
+          channels:
+            - name: stable
+        # Red Hat OpenShift GitOps Operator (ArgoCD v1.19+ / gitops-1.19)
+        - name: openshift-gitops-operator
+          channels:
+            - name: gitops-1.19
+  additionalImages:
+    # Imagen certificada JWS 5.4 con OpenJDK 8 y Tomcat 9 sobre RHEL 8
+    - name: registry.redhat.io/jboss-webserver-5/webserver54-openjdk8-tomcat9-openshift-rhel8:latest
+    # Imagen base mínima para tareas auxiliares / init containers
+    - name: registry.redhat.io/ubi8/ubi-minimal:latest

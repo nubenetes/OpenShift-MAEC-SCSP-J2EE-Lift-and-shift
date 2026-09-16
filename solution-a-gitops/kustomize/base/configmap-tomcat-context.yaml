@@ -1,0 +1,32 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: scsp-tomcat-context
+  namespace: maec-scsp-prod
+data:
+  context.xml: |
+    <?xml version="1.0" encoding="UTF-8"?>
+    <Context>
+      <WatchedResource>WEB-INF/web.xml</WatchedResource>
+      <WatchedResource>WEB-INF/tomcat-web.xml</WatchedResource>
+
+      <!-- DataSource hacia MS SQL Server mediante el Service Gateway scsp-database-gateway -->
+      <Resource name="jdbc/SCSPDataSource"
+                auth="Container"
+                type="javax.sql.DataSource"
+                maxTotal="200"
+                maxIdle="50"
+                maxWaitMillis="30000"
+                username="${DB_USERNAME}"
+                password="${DB_PASSWORD}"
+                driverClassName="com.microsoft.sqlserver.jdbc.SQLServerDriver"
+                url="jdbc:sqlserver://scsp-database-gateway:1433;databaseName=${DB_NAME};sendStringParametersAsUnicode=false"
+                validationQuery="SELECT 1"
+                testOnBorrow="true"/>
+
+      <!-- Replicación Distribuida de Sesiones HTTP en Red Hat Data Grid / Infinispan -->
+      <Manager className="org.wildfly.clustering.tomcat.hotrod.HotRodManager"
+               configurationName="scsp-session-cache"
+               hotRodPropertiesFile="/opt/jws-5.4/tomcat/conf/hotrod-client.properties" />
+    </Context>

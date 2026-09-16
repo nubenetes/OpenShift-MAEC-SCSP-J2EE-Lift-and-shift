@@ -1,0 +1,98 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scsp-frontend
+  namespace: maec-scsp-prod
+  labels:
+    app: scsp-frontend
+    app.kubernetes.io/name: scsp-frontend
+    app.kubernetes.io/part-of: maec-scsp
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: scsp-frontend
+  template:
+    metadata:
+      labels:
+        app: scsp-frontend
+    spec:
+      containers:
+        - name: jws-tomcat
+          image: image-registry.openshift-image-registry.svc:5000/maec-scsp-prod/scsp-frontend:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+            - containerPort: 8443
+              name: https
+              protocol: TCP
+          env:
+            # Tuning heurístico porcentual de memoria JVM Java 8 en cgroups
+            - name: JAVA_MAX_MEM_RATIO
+              value: "70.0"
+            - name: JAVA_OPTS_APPEND
+              value: "-XX:+UseG1GC -Djava.security.egd=file:/dev/./urandom -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager"
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: scsp-sql-credentials
+                  key: DB_USERNAME
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: scsp-sql-credentials
+                  key: DB_PASSWORD
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: scsp-sql-credentials
+                  key: DB_NAME
+          resources:
+            requests:
+              memory: "1.5Gi"
+              cpu: "500m"
+            limits:
+              memory: "3Gi"
+              cpu: "2"
+          livenessProbe:
+            httpGet:
+              path: /scsp/management/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 90
+            periodSeconds: 15
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 4
+          readinessProbe:
+            httpGet:
+              path: /scsp/management/ready
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
+          volumeMounts:
+            - name: context-config
+              mountPath: /opt/jws-5.4/tomcat/conf/context.xml
+              subPath: context.xml
+            - name: hotrod-config
+              mountPath: /opt/jws-5.4/tomcat/conf/hotrod-client.properties
+              subPath: hotrod-client.properties
+      volumes:
+        - name: context-config
+          configMap:
+            name: scsp-tomcat-context
+        - name: hotrod-config
+          configMap:
+            name: scsp-hotrod-properties

@@ -1,0 +1,8 @@
+---
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  name: scsp-frontend
+  namespace: maec-scsp-prod
+  labels:
+    app: scsp-frontend

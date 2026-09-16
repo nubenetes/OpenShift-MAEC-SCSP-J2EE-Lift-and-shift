@@ -1,0 +1,30 @@
+---
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: scsp-app-build
+  namespace: maec-scsp-prod
+  labels:
+    app: scsp-frontend
+spec:
+  runPolicy: Serial
+  source:
+    dockerfile: |
+      FROM registry.nubesara.local:8443/jboss-webserver-5/webserver54-openjdk8-tomcat9-openshift-rhel8:latest
+      USER root
+      # Extracción del WAR heredado desde Nexus (Repositorio central de binarios)
+      RUN curl -s -f -u admin:'PassSeguroNubeSARA!' \
+          -o /opt/jws-5.4/tomcat/webapps/ROOT.war \
+          http://nexus.nubesara.local:8081/repository/scsp-raw/scsp.war
+      # Extracción del driver JDBC desde Nexus
+      RUN curl -s -f -u admin:'PassSeguroNubeSARA!' \
+          -o /opt/jws-5.4/tomcat/lib/mssql-jdbc.jar \
+          http://nexus.nubesara.local:8081/repository/scsp-raw/mssql-jdbc-8.4.1.jre8.jar
+      USER 185
+  strategy:
+    dockerStrategy:
+      noCache: true
+  output:
+    to:
+      kind: ImageStreamTag
+      name: scsp-frontend:latest

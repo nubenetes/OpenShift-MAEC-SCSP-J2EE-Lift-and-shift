@@ -1,0 +1,9 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: maec-scsp-s2i
+  labels:
+    app.kubernetes.io/name: maec-scsp
+    app.kubernetes.io/part-of: interoperabilidad-sara
+    environment: s2i-migration

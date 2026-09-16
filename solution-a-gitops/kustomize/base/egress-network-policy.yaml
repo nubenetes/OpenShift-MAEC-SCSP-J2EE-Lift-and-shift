@@ -1,0 +1,17 @@
+---
+apiVersion: network.openshift.io/v1
+kind: EgressNetworkPolicy
+metadata:
+  name: scsp-egress-lockdown
+  namespace: maec-scsp-prod
+spec:
+  egress:
+    - type: Allow
+      to:
+        cidrSelector: 10.50.25.105/32 # Conexión exclusiva a MS SQL Server
+    - type: Allow
+      to:
+        cidrSelector: 172.30.0.0/16 # Rango de Servicios Internos (DNS, Infinispan)
+    - type: Deny
+      to:
+        cidrSelector: 0.0.0.0/0 # Bloqueo estricto del resto de salidas

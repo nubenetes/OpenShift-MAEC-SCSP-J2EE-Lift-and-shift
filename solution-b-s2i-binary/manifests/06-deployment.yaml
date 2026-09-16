@@ -1,0 +1,72 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scsp-frontend
+  namespace: maec-scsp-s2i
+  labels:
+    app: scsp-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: scsp-frontend
+  template:
+    metadata:
+      labels:
+        app: scsp-frontend
+    spec:
+      containers:
+        - name: scsp-frontend
+          image: image-registry.openshift-image-registry.svc:5000/maec-scsp-s2i/scsp-app-core:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              name: http
+          env:
+            - name: JAVA_MAX_MEM_RATIO
+              value: "70.0"
+            - name: JAVA_OPTS_APPEND
+              value: "-XX:+UseG1GC -Djava.security.egd=file:/dev/./urandom -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager"
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: scsp-sql-credentials
+                  key: DB_USERNAME
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: scsp-sql-credentials
+                  key: DB_PASSWORD
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: scsp-sql-credentials
+                  key: DB_NAME
+          resources:
+            requests:
+              memory: "1.5Gi"
+              cpu: "500m"
+            limits:
+              memory: "3Gi"
+              cpu: "2"
+          livenessProbe:
+            httpGet:
+              path: /scsp/management/health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 90
+            periodSeconds: 15
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 4
+          readinessProbe:
+            httpGet:
+              path: /scsp/management/ready
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3

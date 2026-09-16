@@ -1,0 +1,15 @@
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: scsp-frontend
+  namespace: maec-scsp-s2i
+spec:
+  to:
+    kind: Service
+    name: scsp-frontend
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect

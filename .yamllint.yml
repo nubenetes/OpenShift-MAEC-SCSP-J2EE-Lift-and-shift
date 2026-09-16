@@ -1,0 +1,23 @@
+---
+yaml-files:
+  - '*.yaml'
+  - '*.yml'
+
+rules:
+  line-length:
+    max: 200
+    level: warning
+  truthy:
+    level: warning
+  comments:
+    level: warning
+  indentation:
+    spaces: 2
+    indent-sequences: whatever
+  document-start: disable
+  braces:
+    min-spaces-inside: 0
+    max-spaces-inside: 1
+  brackets:
+    min-spaces-inside: 0
+    max-spaces-inside: 1

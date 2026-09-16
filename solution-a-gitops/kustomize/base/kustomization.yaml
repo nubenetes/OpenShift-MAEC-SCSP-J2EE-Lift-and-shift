@@ -1,0 +1,19 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - namespace.yaml
+  - datagrid-subscription.yaml
+  - datagrid-infinispan.yaml
+  - external-db-service.yaml
+  - external-db-endpoints.yaml
+  - egress-network-policy.yaml
+  - configmap-tomcat-context.yaml
+  - configmap-hotrod-props.yaml
+  - secret-sql-credentials.yaml.example
+  - imagestream.yaml
+  - buildconfig.yaml
+  - deployment.yaml
+  - service.yaml
+  - route.yaml

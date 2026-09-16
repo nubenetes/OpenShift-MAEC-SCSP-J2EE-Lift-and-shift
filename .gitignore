@@ -1,0 +1,47 @@
+# Binaries and archives
+*.war
+*.ear
+*.jar
+*.class
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+
+# Logs and runtime files
+*.log
+catalina.out
+hs_err_pid*.log
+
+# Sensitive files / Secrets
+*.key
+*.pem
+*.pfx
+*.jks
+*.cer
+*.crt
+secret-sql-credentials.yaml
+!secret-sql-credentials.yaml.example
+05-secrets.yaml
+!05-secrets.yaml.example
+credentials.env
+.env
+.env.*
+
+# Local / OS / IDE files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+target/
+.project
+.classpath
+.settings/
+
+# oc-mirror workspace
+oc-mirror-workspace/
+results-*/
+cache/

@@ -1,0 +1,13 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: scsp-hotrod-properties
+  namespace: maec-scsp-prod
+data:
+  hotrod-client.properties: |
+    infinispan.client.hotrod.server_list=scsp-session-cache.maec-scsp-prod.svc.cluster.local:11222
+    infinispan.client.hotrod.marshaller=org.infinispan.commons.marshall.JavaSerializationMarshaller
+    infinispan.client.hotrod.client_intelligence=BASIC
+    infinispan.client.hotrod.socket_timeout=5000
+    infinispan.client.hotrod.connect_timeout=3000

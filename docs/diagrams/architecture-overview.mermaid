@@ -1,0 +1,56 @@
+graph TB
+    subgraph RedSARA["Red SARA / NubeSARA (Air-Gapped)"]
+        subgraph BastionZone["Zona Bastión Interno"]
+            Quay["Mirror Registry Privado<br/>registro.nubesara.local:8443"]
+            Nexus["Sonatype Nexus (Raw Hosted)<br/>nexus.nubesara.local:8081"]
+        end
+
+        subgraph OCPCluster["Clúster Red Hat OpenShift 4.x"]
+            subgraph ControlPlane["Operadores / GitOps"]
+                ArgoCD["OpenShift GitOps (ArgoCD 1.19+)<br/>namespace: openshift-gitops"]
+                MCO["Machine Config Operator (MCO)<br/>IDMS / ITMS Registries Rewriting"]
+                DataGridOp["Red Hat Data Grid Operator"]
+            end
+
+            subgraph WorkloadNS["Namespace: maec-scsp-prod"]
+                Route["OpenShift Route (TLS Edge)<br/>scsp.apps.nubesara.local"]
+                Service["Service: scsp-frontend:8080"]
+                
+                subgraph AppPods["SCSP Pods (JBoss Web Server 5.4 - Tomcat 9)"]
+                    Pod1["SCSP Pod 1<br/>Heap: 70% (2.1GB) / G1GC<br/>Probes: 90s/60s"]
+                    Pod2["SCSP Pod 2<br/>Heap: 70% (2.1GB) / G1GC<br/>Probes: 90s/60s"]
+                end
+
+                subgraph CacheTier["Caché de Sesiones Distribuida (Infinispan)"]
+                    Infinispan1["Infinispan Replica 1<br/>HotRod :11222"]
+                    Infinispan2["Infinispan Replica 2<br/>HotRod :11222"]
+                end
+
+                subgraph NetworkSecurity["Seguridad y Abstracción"]
+                    Egress["EgressNetworkPolicy<br/>Allow: SQL Server + Services<br/>Deny: 0.0.0.0/0"]
+                    DBService["Service: scsp-database-gateway:1433<br/>(Sin Selectores)"]
+                    DBEndpoints["Endpoints: 10.50.25.105:1433"]
+                end
+            end
+        end
+
+        subgraph LegacyInfra["Infraestructura Externa (Red SARA)"]
+            SQLServer[("Microsoft SQL Server<br/>IP: 10.50.25.105:1433<br/>SCSP_PROD_NUBESARA")]
+        end
+    end
+
+    Route --> Service
+    Service --> Pod1
+    Service --> Pod2
+    Pod1 -.->|HotRod TCP| Infinispan1
+    Pod2 -.->|HotRod TCP| Infinispan2
+    Infinispan1 <--> Infinispan2
+    Pod1 -->|JDBC TDS| DBService
+    Pod2 -->|JDBC TDS| DBService
+    DBService --> DBEndpoints
+    DBEndpoints -->|Red SARA| SQLServer
+    Egress -.->|Filtro OVS| Pod1
+    Egress -.->|Filtro OVS| Pod2
+    ArgoCD -->|Reconcile| WorkloadNS
+    Quay -->|Pull Images| AppPods
+    Nexus -->|Fetch War & Driver| AppPods

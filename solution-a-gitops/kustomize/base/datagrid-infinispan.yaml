@@ -1,0 +1,24 @@
+---
+apiVersion: infinispan.org/v1
+kind: Infinispan
+metadata:
+  name: scsp-session-cache
+  namespace: maec-scsp-prod
+  labels:
+    app.kubernetes.io/name: scsp-session-cache
+    app.kubernetes.io/part-of: maec-scsp
+spec:
+  replicas: 2
+  service:
+    type: DataGrid
+  security:
+    endpointEncryption:
+      type: None
+  container:
+    memory: 2Gi
+    cpu: "1"
+    extraJvmOpts: "-XX:+UseG1GC -XX:MaxRAMPercentage=80.0"
+  logging:
+    categories:
+      org.infinispan: INFO
+      org.jgroups: WARN

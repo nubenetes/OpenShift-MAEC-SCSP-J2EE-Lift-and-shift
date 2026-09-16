@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: scsp-database-gateway
+  namespace: maec-scsp-prod
+  labels:
+    app.kubernetes.io/name: scsp-database-gateway
+spec:
+  ports:
+    - name: tds
+      protocol: TCP
+      port: 1433
+      targetPort: 1433

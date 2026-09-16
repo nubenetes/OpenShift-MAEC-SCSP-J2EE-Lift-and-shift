@@ -1,0 +1,25 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: scsp-production-sync
+  namespace: openshift-gitops
+  finalizers:
+    # Fuerza un borrado en cascada (destrucción de recursos) al eliminar la aplicación
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/nubenetes/OpenShift-MAEC-SCSP-J2EE-Lift-and-shift.git'
+    targetRevision: main
+    path: solution-a-gitops/kustomize/overlays/prod
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: maec-scsp-prod
+  syncPolicy:
+    automated:
+      prune: true     # Borra recursos en el clúster si se eliminan de Git
+      selfHeal: true  # Revierte cambios manuales (clickops) en el clúster
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
