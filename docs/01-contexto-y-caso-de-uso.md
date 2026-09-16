@@ -11,7 +11,7 @@
 ---
 
 > [!WARNING]
-> **Aviso:** Esta arquitectura de referencia y documentación técnica ha sido generada con **Gemini 3.8 Flash** como plantilla didáctica y de ingeniería conceptual. No ha sido validada ni depurada en un entorno real de producción de NubeSARA.
+> **Aviso:** Esta arquitectura de referencia y documentación técnica ha sido generada con **Gemini 3.8 Flash** como plantilla didáctica y de ingeniería conceptual, tomando como base técnica y de arquitectura la publicación en LinkedIn: [**"Despliegue de SCSP en OpenShift 4.x: Arquitecturas para Entornos Aislados"**](https://www.linkedin.com/pulse/despliegue-de-scsp-en-openshift-4x-arquitecturas-para-i%C3%B1aki-fernandez-hns6e/). No ha sido validada ni depurada en un entorno real de producción de NubeSARA.
 
 > [!IMPORTANT]
 > **Restricción de IA en Entornos ENS / Air-Gapped y Flujo de Trabajo "Outside-In":**  

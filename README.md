@@ -2,7 +2,7 @@
 
 > [!WARNING]
 > **⚠️ PLANTILLA DIDÁCTICA Y REFERENCIA ARQUITECTÓNICA CONCEPTUAL:**  
-> Este repositorio es un diseño de referencia conceptual generado con **Gemini 3.8 Flash**. **NO ha sido probado, validado ni depurado en un clúster OpenShift real en producción dentro de NubeSARA.**  
+> Este repositorio es un diseño de referencia conceptual generado con **Gemini 3.8 Flash**, tomando como base técnica y de arquitectura el artículo publicado en formato newsletter en LinkedIn: [**"Despliegue de SCSP en OpenShift 4.x: Arquitecturas para Entornos Aislados"**](https://www.linkedin.com/pulse/despliegue-de-scsp-en-openshift-4x-arquitecturas-para-i%C3%B1aki-fernandez-hns6e/). **NO ha sido probado, validado ni depurado en un clúster OpenShift real en producción dentro de NubeSARA.**  
 > Su propósito es servir como acelerador de ingeniería, guía de aprendizaje y plantilla de automatización para la migración estratégica de aplicaciones monolíticas heredadas Java Enterprise Edition (J2EE) hacia plataformas nativas de la nube en entornos aislados perimetralmente (**Air-Gapped**).
 
 > [!IMPORTANT]
@@ -232,7 +232,7 @@ Intentar embutir a la fuerza una aplicación monolítica heredada como el Client
 <a id="contexto-especifico-maec"></a>
 ## 📌 Contexto Específico del Proyecto Real: MAEC y Cliente Ligero SCSP
 
-Como materialización práctica y prueba de concepto avanzada de este arquetipo, el repositorio implementa la modernización del sistema tecnológico del **Ministerio de Asuntos Exteriores, Unión Europea y Cooperación (MAEC)** de España.
+Como materialización práctica y prueba de concepto avanzada de este arquetipo, el repositorio implementa con código operativo la arquitectura técnica expuesta originalmente en la publicación de LinkedIn: [**Despliegue de SCSP en OpenShift 4.x: Arquitecturas para Entornos Aislados**](https://www.linkedin.com/pulse/despliegue-de-scsp-en-openshift-4x-arquitecturas-para-i%C3%B1aki-fernandez-hns6e/), orientada a la modernización del sistema tecnológico del **Ministerio de Asuntos Exteriores, Unión Europea y Cooperación (MAEC)** de España.
 
 El proyecto responde a los mandatos de la **Ley 39/2015 del Procedimiento Administrativo Común**, que consagra en su artículo 28 el derecho de la ciudadanía a no aportar documentos ni certificados que ya obren en poder de la Administración Pública.
 
@@ -527,6 +527,11 @@ cp /ruta/al/mssql-jdbc-8.4.1.jre8.jar workspace-template/lib/
 <a id="documentacion-referencia"></a>
 ## 📚 Documentación Detallada de Referencia
 
+### 📰 Publicación Técnica Original de Referencia
+- [**Despliegue de SCSP en OpenShift 4.x: Arquitecturas para Entornos Aislados (LinkedIn Newsletter)**](https://www.linkedin.com/pulse/despliegue-de-scsp-en-openshift-4x-arquitecturas-para-i%C3%B1aki-fernandez-hns6e/)  
+  *Artículo de análisis técnico y divulgación que sirvió como referencia arquitectónica primaria empleada por Gemini para concebir, estructurar y generar este repositorio de código.*
+
+### 📑 Documentos Monográficos de Arquitectura
 - [01. Contexto Estratégico y Caso de Uso (MAEC / SCSP)](docs/01-contexto-y-caso-de-uso.md)
 - [02. Análisis Comparativo Profundo y Justificación](docs/02-comparativa-soluciones.md)
 - [03. Espejado Air-Gapped con oc-mirror v2 (IDMS/ITMS)](docs/03-espejado-airgapped-oc-mirror.md)
@@ -542,6 +547,7 @@ cp /ruta/al/mssql-jdbc-8.4.1.jre8.jar workspace-template/lib/
 Este proyecto se distribuye bajo la licencia **Apache 2.0**. Consulta el archivo [LICENSE](LICENSE) para más información.
 
 **Créditos y Mención de Autoría:**  
+- **Referencia Arquitectónica Original:** [Despliegue de SCSP en OpenShift 4.x: Arquitecturas para Entornos Aislados (LinkedIn Newsletter)](https://www.linkedin.com/pulse/despliegue-de-scsp-en-openshift-4x-arquitecturas-para-i%C3%B1aki-fernandez-hns6e/)
 - **Organización:** [nubenetes](https://github.com/nubenetes)
 - **Motor de Generación de Blueprint:** Gemini 3.8 Flash
 - **Aviso Legal:** Material didáctico y de ingeniería conceptual. Las marcas comerciales (Red Hat, OpenShift, Infinispan, Microsoft, Java) pertenecen a sus respectivos propietarios.
