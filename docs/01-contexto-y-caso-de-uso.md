@@ -27,7 +27,14 @@ La **Ley 39/2015, de 1 de octubre, del Procedimiento Administrativo Común de la
 
 Para materializar este mandato legal, la Secretaría General de Administración Digital (SGAD) impulsó la plataforma **SCSP (Sustitución de Certificados en Soporte Papel)**. El **Cliente Ligero SCSP** es una aplicación que permite a cualquier organismo interrogar los servicios de intermediación de datos del Estado (consultas de identidad en DGP, títulos universitarios en el Ministerio de Educación, antecedentes penales en Justicia, corrientes de pago en TGSS/AEAT, etc.) sin necesidad de requerir fotocopias físicas al administrado.
 
-### 1.1. La Dualidad de Arquitecturas en el MAEC: SINAVI / e-LINCE ("DOPE Framework") vs. Monolitos como SCSP
+### 1.1. Marco Temporal y Contexto Organizativo: La Transición Contractual en el MAEC (Segunda Mitad de 2026)
+
+Esta experiencia de arquitectura y migración se sitúa temporalmente en la **segunda mitad del año 2026**, coincidiendo con una compleja fase de transición de proveedores de servicios TI en el MAEC:
+- **La Consultora Saliente (4 Años de Pliego + 2 de Implantación):** Durante seis años continuados, la consultora adjudicataria principal saliente (**Minsait**, en coordinación con socios tecnológicos como **Telefónica** y **Altia**) había desplegado, operado y administrado tanto las **infraestructuras** (CPDs, virtualización, redes y clústeres OpenShift en NubeSARA) como el **software nuclear** del ministerio (el framework *DOPE* y la arquitectura de microservicios de *SINAVI*).
+- **Las Consultoras Entrantes y el Traspaso Operativo:** Con la nueva licitación ministerial desembarcó un nuevo conjunto de empresas integradoras: **Alten** (adjudicataria del lote especializado en **DevOps, automatización y QA**), **NTT Data** (responsable de la administración de bases de datos corporativas DBAs y soporte), **Teknei** (desarrollo e integración), entre otras firmas.
+- **El Desafío de la Transferencia de Conocimiento (*Handover*):** En este escenario de relevo, los equipos de las adjudicatarias entrantes afrontaron la difícil tarea de **hacerse con el conocimiento y gobierno operativo (*know-how*)** acumulado durante años por la consultora (en principio) saliente. Esta convivencia de múltiples actores en un entorno cerrado y de alta seguridad como NubeSARA condicionó la necesidad de abordar con rigor técnico el desacoplamiento y migración a OpenShift de aplicaciones monolíticas heredadas como SCSP.
+
+### 1.2. La Dualidad de Arquitecturas en el MAEC: SINAVI / e-LINCE ("DOPE Framework") vs. Monolitos como SCSP
 
 En el ecosistema tecnológico gobernado por la SUGICYR en NubeSARA coexisten dos realidades arquitectónicas que exigen estrategias de plataforma diferenciadas:
 
@@ -39,7 +46,7 @@ En el ecosistema tecnológico gobernado por la SUGICYR en NubeSARA coexisten dos
    - Intentar asimilar forzosamente estas aplicaciones de legado a los estándares, CRDs de Tekton y mecanismos del *DOPE framework* constituye un **antipatrón de sobre-ingeniería**: genera dependencias innecesarias, multiplica la superficie de fallo en redes desconectadas y paraliza la migración durante meses.
    - La solución idónea para este perfil no es el rediseño micro-modular ni pipelines complejos con TaskRuns efímeros sobre bastiones aislados, sino el **Lift-and-Shift declarativo pragmático** (S2I / BuildConfig nativo + Sonatype Nexus + GitOps) documentado en esta referencia.
 
-### 1.2. La Criticidad de un Monolito de 20 Años y la Gestión Prudente del Riesgo (Plan B vs. Fase 1)
+### 1.3. La Criticidad de un Monolito de 20 Años y la Gestión Prudente del Riesgo (Plan B vs. Fase 1)
 
 El Cliente Ligero SCSP es una aplicación con cerca de dos décadas de vida en el ecosistema de la administración pública española. Lejos de ser un sistema secundario, constituye una **pieza de infraestructura crítica de primer orden** para el MAEC:
 - **Impacto Operativo Global:** Al ser la pasarela obligatoria para consultar telemáticamente identidades (DGP), antecedentes penales y delitos sexuales (Justicia), titulaciones universitarias (Educación) y corrientes de pago (AEAT y Seguridad Social), cualquier caída o incompatibilidad técnica paralizaría de forma fulminante la actividad de los consulados y embajadas en todo el mundo (visados Schengen, expedientes de nacionalidad, pasaportes y notarías), obligando a los ciudadanos a recabar certificados en papel en España en flagrante vulneración de la Ley 39/2015.
