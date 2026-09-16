@@ -13,6 +13,10 @@
 > [!WARNING]
 > **Aviso:** Esta arquitectura de referencia y documentación técnica ha sido generada con **Gemini 3.8 Flash** como plantilla didáctica y de ingeniería conceptual. No ha sido validada ni depurada en un entorno real de producción de NubeSARA.
 
+> [!IMPORTANT]
+> **Restricción de IA en Entornos ENS / Air-Gapped y Flujo de Trabajo "Outside-In":**  
+> En perímetros aislados (Air-Gapped) bajo el **Esquema Nacional de Seguridad (ENS - Categoría Alta)** como NubeSARA, **no está permitido el uso de agentes de IA en la nube**. Sin embargo, los profesionales de ingeniería pueden diseñar y acelerar la creación de esta referencia de arquitectura desde un equipo o red personal externa utilizando herramientas avanzadas de IA, para luego exportar e incorporar el repositorio limpio al entorno corporativo desconectado, donde el equipo ministerial podrá evolucionar, validar, depurar e iterar sobre los clústeres reales de OpenShift (QA, PRE y PRO).
+
 ---
 
 ## 1. El Marco Institucional: MAEC y la Ley 39/2015
