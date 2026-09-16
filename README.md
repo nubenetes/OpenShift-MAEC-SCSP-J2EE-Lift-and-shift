@@ -40,6 +40,9 @@
    - [1.4. La Hoja de Ruta de Transición: De la Migración Rápida al Estado Meta](#4-la-hoja-de-ruta-de-transición-de-la-migración-rápida-al-estado-meta)
    - [1.5. Pragmatismo vs Sobre-Ingeniería: Por Qué Rechazar Pipelines de Microservicios (Tekton)](#pragmatismo-vs-tekton)
 2. [📌 Contexto Específico del Proyecto Real: MAEC y Cliente Ligero SCSP](#-contexto-específico-del-proyecto-real-maec-y-cliente-ligero-scsp)
+   - [2.1. El Rol de SUGICYR y el Ecosistema Tecnológico del MAEC](#21-el-rol-de-sugicyr-y-el-ecosistema-tecnológico-del-maec)
+   - [2.2. El Desafío del Software Heredado (Monolito J2EE)](#22-el-desafío-del-software-heredado-monolito-j2ee)
+   - [2.3. El Escenario de Ejecución: NubeSARA Air-Gapped](#23-el-escenario-de-ejecución-nubesara-air-gapped)
 3. [🏛️ Diagrama Global de la Arquitectura](#️-diagrama-global-de-la-arquitectura)
 4. [⚖️ Comparativa de Soluciones: GitOps vs S2I Binario Directo](#️-comparativa-de-soluciones-gitops-vs-s2i-binario-directo)
 5. [🏆 ¿Cuál de las Dos Soluciones es la Más Recomendable?](#-cuál-de-las-dos-soluciones-es-la-más-recomendable)
@@ -221,23 +224,38 @@ Intentar embutir a la fuerza una aplicación monolítica heredada como el Client
 
 Como materialización práctica y prueba de concepto avanzada de este arquetipo, el repositorio implementa la modernización del sistema tecnológico del **Ministerio de Asuntos Exteriores, Unión Europea y Cooperación (MAEC)** de España.
 
-El proyecto responde a los mandatos de la **Ley 39/2015 del Procedimiento Administrativo Común**, que consagra el derecho de los ciudadanos a no aportar documentos ni certificados que ya estén en poder de la Administración Pública.
+El proyecto responde a los mandatos de la **Ley 39/2015 del Procedimiento Administrativo Común**, que consagra en su artículo 28 el derecho de la ciudadanía a no aportar documentos ni certificados que ya obren en poder de la Administración Pública.
 
-Para hacer efectivo este derecho, la Secretaría General de Administración Digital (SGAD) articuló el estándar **SCSP (Sustitución de Certificados en Soporte Papel)**. El **Cliente Ligero SCSP** es la pieza de software que permite a las unidades administrativas tramitadoras interrogar los servicios de intermediación del Estado (consultas de identidad, antecedentes penales, títulos oficiales, corrientes de pago en la Agencia Tributaria y Seguridad Social, etc.).
+Para hacer efectivo este derecho, la Secretaría General de Administración Digital (SGAD) articuló el estándar **SCSP (Sustitución de Certificados en Soporte Papel)**. El **Cliente Ligero SCSP** es la pieza de software que permite a las unidades administrativas tramitadoras interrogar los servicios de intermediación del Estado (consultas de identidad en DGP, títulos universitarios en Educación, antecedentes penales en Justicia, corrientes de pago en la AEAT y Seguridad Social, etc.).
 
-### El Desafío del Software Heredado (Monolito J2EE)
+### 2.1. El Rol de SUGICYR y el Ecosistema Tecnológico del MAEC
+
+La **SUGICYR (Subdirección General de Informática, Comunicaciones y Redes)** es el órgano directivo del MAEC responsable de la gobernanza de las infraestructuras de telecomunicaciones, centros de proceso de datos, plataformas cloud y ciberseguridad, tanto para los Servicios Centrales como para la red de Embajadas y Consulados de España en el exterior.
+
+Bajo la supervisión de la SUGICYR en los clústeres de **Red Hat OpenShift en NubeSARA**, conviven distintas realidades funcionales y arquitectónicas:
+
+1. **SINAVI (Sistema de Información Nacional de Visados):**  
+   Plataforma crítica distribuida utilizada por las oficinas consulares en todo el mundo para la gestión, tramitación y resolución de visados nacionales y del espacio Schengen, integrada con el **VIS (Visa Information System)** a nivel europeo y con el portal público ciudadano **SuTRAMITE Consular** (`sutramiteconsular.maec.es`). Su ciclo de vida continuo se gestiona mediante el **"DOPE framework"** desarrollado por **Minsait**, orquestando cerca de **100 microservicios** independientes con **Tekton + ArgoCD**.
+2. **e-LINCE:**  
+   Sistema de información centralizado para la gestión económica, presupuestaria, contractual y control de las **Cajas Pagadoras** de las Representaciones de España en el exterior (Embajadas y Consulados).
+3. **Cliente Ligero SCSP:**  
+   La aplicación monolítica J2EE objeto de este repositorio, destinada a la intermediación automatizada de certificados con la Administración General del Estado. A diferencia de SINAVI o e-LINCE, no es una aplicación de microservicios in-house sujeta a compilaciones diarias commit a commit, sino un producto paquetizado entregado por adjudicatarias como un artefacto binario cerrado.
+
+### 2.2. El Desafío del Software Heredado (Monolito J2EE)
 Históricamente, el Cliente Ligero SCSP fue construido como un monolito bajo la especificación **Java Enterprise Edition (J2EE)**:
-- **Java 8 (OpenJDK 1.8):** Restricciones de compilación y librerías heredadas no actualizadas a Java 17+.
-- **Servidor de Aplicaciones:** Desplegado originalmente en instancias Apache Tomcat / JBoss sobre máquinas virtuales tradicionales. En OpenShift se traslada a la imagen oficial certificada **Red Hat JBoss Web Server 5.4 (Tomcat 9)**.
-- **Sesiones HTTP en Memoria RAM:** Fuerte dependencia de la `HttpSession` para mantener el contexto de tramitación del funcionario consular o administrativo (**antipatrón *Sticky Sessions***).
-- **Base de Datos Externa en Red SARA:** Registro de auditorías y trazabilidad de intermediaciones persistido en un servidor **Microsoft SQL Server** físico/virtualizado en la intranet ministerial (`10.50.25.105:1433`).
-- **Conectores Cerrados de Terceros:** Necesidad de incorporar el controlador JDBC oficial de Microsoft (`mssql-jdbc-8.4.1.jre8.jar`).
+- **Java 8 (OpenJDK 1.8):** Restricciones estrictas de compilación y librerías heredadas no actualizadas a runtimes modernos (Java 17/21).
+- **Servidor de Aplicaciones:** Diseñado originalmente para Apache Tomcat 7/8 sobre máquinas virtuales dedicadas. En OpenShift se traslada a la imagen oficial certificada **Red Hat JBoss Web Server 5.4 (Tomcat 9 sobre RHEL 8)**.
+- **Sesiones HTTP en Memoria RAM:** Fuerte dependencia de la `HttpSession` para almacenar el árbol de navegación y tramitación del funcionario consular (**antipatrón *Sticky Sessions***).
+- **Base de Datos Externa en Red SARA:** Registro de auditorías, firmas y trazabilidad de intermediaciones persistido en una instancia **Microsoft SQL Server** física/virtualizada en la intranet ministerial (`10.50.25.105:1433`).
+- **Conectores Propietarios Cerrados:** Exige incorporar el controlador JDBC oficial de Microsoft (`mssql-jdbc-8.4.1.jre8.jar`).
 
-### El Escenario de Ejecución: NubeSARA Air-Gapped
-El MAEC aloja estas cargas en **NubeSARA**, la infraestructura de nube híbrida de la Administración General del Estado. Por requerimientos del **Esquema Nacional de Seguridad (ENS - Nivel Alto)** y de la **SUGICYR**:
-- El clúster opera en **aislamiento perimetral absoluto (Air-Gapped)**, sin conectividad hacia Internet público ni hacia registros comerciales (`registry.redhat.io`, `quay.io`).
-- El tráfico saliente de los contenedores está bloqueado por defecto (*Zero-Trust Network Policy*).
-- Se prohíbe la gestión manual basada en consolas web (*No ClickOps*), exigiendo trazabilidad auditable de todos los cambios de infraestructura.
+### 2.3. El Escenario de Ejecución: NubeSARA Air-Gapped
+El MAEC aloja estas cargas en **NubeSARA**, la infraestructura de nube híbrida gubernamental. Por directrices del **CCN-CERT**, el **Esquema Nacional de Seguridad (ENS - Categoría Alta)** y la **SUGICYR**:
+- **Aislamiento Perimetral Estricto (Air-Gapped):** Ausencia total de resolución DNS pública y conectividad directa hacia Internet o registros comerciales (`registry.redhat.io`, `quay.io`).
+- **Espejado Certificado con `oc-mirror v2`:** Ingesta de catálogos y operadores mediante particionado en bloques TAR de 16 GB (`archiveSize: 16`), inyectando recursos `ImageDigestMirrorSet` (IDMS) e `ImageTagMirrorSet` (ITMS) que el **Machine Config Operator (MCO)** sincroniza en `/etc/containers/registries.conf` con reinicio secuencial de nodos.
+- **Segregación de Binarios en Sonatype Nexus:** Los artefactos `.war` y `.jar` se gobiernan en un repositorio *raw-hosted* interno (`nexus.nubesara.local:8081/repository/scsp-raw/`), preservando la limpieza del repositorio Git.
+- **Cero Confianza Saliente (Zero-Trust Egress):** Bloqueo total del tráfico saliente en OVN-Kubernetes (`EgressNetworkPolicy`), confinando los pods exclusivamente al puerto TDS 1433 de la base de datos SQL Server (`10.50.25.105/32`).
+- **Prohibición de ClickOps:** Todos los cambios en producción se aplican declarativamente mediante **OpenShift GitOps (ArgoCD 1.19+)** con finalizadores en cascada (`resources-finalizer.argocd.argoproj.io`) para una gestión limpia del ciclo de vida sin recursos huérfanos.
 
 ---
 
