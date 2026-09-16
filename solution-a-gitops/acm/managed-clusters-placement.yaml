@@ -1,0 +1,42 @@
+---
+# ==============================================================================
+# ACM Placement: Selección Dinámica de Clústeres Gestionados en NubeSARA
+# API: cluster.open-cluster-management.io/v1beta1
+# Permite a OpenShift ACM / ArgoCD orientar cargas según las etiquetas del clúster
+# ==============================================================================
+apiVersion: cluster.open-cluster-management.io/v1beta1
+kind: Placement
+metadata:
+  name: scsp-clusters-placement
+  namespace: openshift-gitops
+  labels:
+    app.kubernetes.io/name: scsp
+    app.kubernetes.io/part-of: maec-scsp
+spec:
+  predicates:
+    - requiredClusterSelector:
+        labelSelector:
+          matchExpressions:
+            - key: environment
+              operator: In
+              values:
+                - qa
+                - pre
+                - prod
+---
+apiVersion: cluster.open-cluster-management.io/v1beta1
+kind: Placement
+metadata:
+  name: scsp-production-cluster-only
+  namespace: openshift-gitops
+  labels:
+    app.kubernetes.io/name: scsp
+    environment: prod
+spec:
+  numberOfClusters: 1
+  predicates:
+    - requiredClusterSelector:
+        labelSelector:
+          matchLabels:
+            environment: prod
+            compliance.ens.gob.es/level: alta

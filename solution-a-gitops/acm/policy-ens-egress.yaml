@@ -1,0 +1,60 @@
+---
+# ==============================================================================
+# ACM Governance Policy: Verificación del Confinamiento Egress (ENS Nivel Alto)
+# API: policy.open-cluster-management.io/v1
+# Supervisa que ningún pod en maec-scsp-prod tenga tráfico saliente abierto
+# ==============================================================================
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: policy-scsp-egress-lockdown
+  namespace: openshift-gitops
+  annotations:
+    policy.open-cluster-management.io/standards: ENS-Alta, SUGICYR
+    policy.open-cluster-management.io/categories: SC Seguridad en las Comunicaciones
+    policy.open-cluster-management.io/controls: SC.1 Perímetro y Tráfico Saliente
+spec:
+  remediationAction: inform
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: check-scsp-egress-exists
+        spec:
+          remediationAction: inform
+          severity: high
+          namespaceSelector:
+            include: ["maec-scsp-prod"]
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: network.openshift.io/v1
+                kind: EgressNetworkPolicy
+                metadata:
+                  name: scsp-egress-lockdown
+                  namespace: maec-scsp-prod
+                spec:
+                  egress:
+                    - type: Allow
+                      to:
+                        cidrSelector: 10.50.25.105/32
+                    - type: Deny
+                      to:
+                        cidrSelector: 0.0.0.0/0
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: binding-policy-scsp-egress
+  namespace: openshift-gitops
+spec:
+  placementRef:
+    name: scsp-production-cluster-only
+    kind: Placement
+    apiGroup: cluster.open-cluster-management.io
+  subjects:
+    - name: policy-scsp-egress-lockdown
+      kind: Policy
+      apiGroup: policy.open-cluster-management.io

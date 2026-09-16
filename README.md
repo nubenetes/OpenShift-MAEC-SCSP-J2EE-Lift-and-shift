@@ -256,6 +256,7 @@ El MAEC aloja estas cargas en **NubeSARA**, la infraestructura de nube híbrida 
   - **Clúster OCP PRE:** Entorno de preproducción para pruebas de integración con el SCSP de pruebas en Red SARA, validación de certificados y pruebas de carga.
   - **Clúster OCP PRO:** Entorno de producción con réplicas de alta disponibilidad, cuotas garantizadas, operadores en confinamiento y auditoría ENS Alta.
   Esta segregación multi-clúster se gestiona con Kustomize mediante `overlays/qa/`, `overlays/pre/` y `overlays/prod/`, sincronizados centralizadamente desde ArgoCD (individualmente o mediante `ApplicationSet`).
+- **Gobernanza de Flota con OpenShift ACM (RHACM):** Existía un clúster Hub central con **Red Hat Advanced Cluster Management (ACM)** para la supervisión y control de la flota multiclúster (QA, PRE, PRO). Si bien su integración operativa con los pipelines de entrega continua estaba en proceso de maduración progresiva ("no totalmente integrada aún"), sentaba las bases para la gobernanza de políticas GRC (*Governance, Risk, Compliance* bajo ENS Nivel Alto) y la selección dinámica de clústeres (`Placement`).
 - **Espejado Certificado con `oc-mirror v2`:** Ingesta de catálogos y operadores mediante particionado en bloques TAR de 16 GB (`archiveSize: 16`), inyectando recursos `ImageDigestMirrorSet` (IDMS) e `ImageTagMirrorSet` (ITMS) que el **Machine Config Operator (MCO)** sincroniza en `/etc/containers/registries.conf` con reinicio secuencial de nodos.
 - **Segregación de Binarios en Sonatype Nexus:** Los artefactos `.war` y `.jar` se gobiernan en un repositorio *raw-hosted* interno (`nexus.nubesara.local:8081/repository/scsp-raw/`), preservando la limpieza del repositorio Git.
 - **Cero Confianza Saliente (Zero-Trust Egress):** Bloqueo total del tráfico saliente en OVN-Kubernetes (`EgressNetworkPolicy`), confinando los pods exclusivamente al puerto TDS 1433 de la base de datos SQL Server (`10.50.25.105/32`).
@@ -483,6 +484,11 @@ cp /ruta/al/mssql-jdbc-8.4.1.jre8.jar workspace-template/lib/
 │   ├── mirror-step2-internal-upload.sh       # Inyección a registro privado NubeSARA
 │   └── mirror-step3-apply-cluster-config.sh  # Aplicación de IDMS/ITMS
 ├── solution-a-gitops/                        # SOLUCIÓN A: OpenShift GitOps (ArgoCD) + Nexus
+│   ├── acm/                                  # Gobernanza de flota con OpenShift ACM (RHACM)
+│   │   ├── README.md                         # Guía de integración progresiva
+│   │   ├── managed-clusters-placement.yaml   # Placement dinámico (QA, PRE, PRO)
+│   │   ├── gitopscluster-binding.yaml        # Binding GitOpsCluster ArgoCD-ACM
+│   │   └── policy-ens-egress.yaml            # ACM Policy para auditar Egress ENS
 │   ├── argocd/                               # Manifiestos de ArgoCD, ApplicationSet y suscripción
 │   ├── nexus/                                # Scripts de provisión y carga de binarios
 │   ├── kustomize/                            # Declaración de recursos Kustomize (base y overlays)

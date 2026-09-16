@@ -20,11 +20,18 @@
 4. **Ciclo de Vida Limpio (Decommissioning en Cascada):**
    - El recurso maestro `Application` incluye el finalizador `resources-finalizer.argocd.argoproj.io`.
    - Cuando se retira la aplicación, ArgoCD orquesta un borrado en cascada en primer plano (*Foreground Cascading Deletion*), eliminando el clúster de Infinispan, despliegues, rutas, secretos y servicios sin dejar recursos zombis en el cómputo de NubeSARA.
+5. **Gobernanza Progresiva con OpenShift ACM (RHACM):**
+   - Aunque en el proyecto real el clúster central de **Red Hat Advanced Cluster Management (ACM)** no estaba plenamente integrado en todos los despliegues de aplicaciones, se proveen los manifiestos de enlace (`acm/`): `Placement`, `GitOpsCluster` y `Policy` para auditar el cumplimiento del ENS Nivel Alto y habilitar la transición gradual hacia el gobierno unificado de la flota.
 
 ## 📁 Estructura del Módulo
 
 ```text
 solution-a-gitops/
+├── acm/                                  # Gobernanza y enlace con OpenShift ACM (RHACM)
+│   ├── README.md                         # Guía de integración progresiva de flota
+│   ├── managed-clusters-placement.yaml   # Placement dinámico por etiquetas (qa, pre, prod)
+│   ├── gitopscluster-binding.yaml        # Binding entre ArgoCD y OpenShift ACM
+│   └── policy-ens-egress.yaml            # ACM Policy para auditar Egress ENS Nivel Alto
 ├── argocd/
 │   ├── gitops-operator-subscription.yaml # Suscripción OLM a OpenShift GitOps
 │   ├── scsp-application.yaml             # Manifiesto maestro ArgoCD (PRO) con finalizer

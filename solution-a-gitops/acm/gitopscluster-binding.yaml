@@ -1,0 +1,21 @@
+---
+# ==============================================================================
+# ACM GitOpsCluster: Enlace entre OpenShift GitOps (ArgoCD) y OpenShift ACM
+# API: apps.open-cluster-management.io/v1beta1
+# Permite que ArgoCD consuma decisiones de clúster generadas por ACM
+# ==============================================================================
+apiVersion: apps.open-cluster-management.io/v1beta1
+kind: GitOpsCluster
+metadata:
+  name: scsp-gitops-cluster-binding
+  namespace: openshift-gitops
+  labels:
+    app.kubernetes.io/name: scsp
+spec:
+  argoServer:
+    cluster: local-cluster
+    argoNamespace: openshift-gitops
+  placementRef:
+    kind: Placement
+    apiVersion: cluster.open-cluster-management.io/v1beta1
+    name: scsp-clusters-placement
