@@ -108,7 +108,13 @@ Este ejercicio de ingeniería abierta no puede desvincularse de la responsabilid
 
 Un año después de la experiencia en NubeSARA, la participación del profesional en el ecosistema de **IndraMind** (iniciativa estratégica de IA soberana lanzada por el Grupo Indra el 12 de marzo de 2025 para infraestructuras críticas y defensa) permitió contrastar dos enfoques de ingeniería de plataformas:
 
-- **Evolución Tecnológica de IDP:** Frente a la sobre-ingeniería de Tekton sobre OpenShift bare-metal en NubeSARA, la plataforma IDP en IndraMind adoptó un diseño más pragmático y estándar: portal de autoservicio con **Spotify Backstage**, integración continua con **Jenkins**, entrega continua declarativa con **ArgoCD** y orquestación sobre **Red Hat OpenShift en AWS**.
+- **Evolución Tecnológica del Stack IDP:** Frente a la sobre-ingeniería de Tekton sobre OpenShift bare-metal en NubeSARA, la plataforma IDP en IndraMind adoptó un diseño más pragmático y estándar basado en un stack integral DevSecOps:
+  - **Plataforma y Routing:** Red Hat OpenShift on AWS + Traefik OSS Ingress.
+  - **Portal y ALM:** Spotify Backstage (portal CNCF) + Forgejo (Git soberano) + Tuleap (gestión ágil y trazabilidad ALM).
+  - **Seguridad e Identidad:** Keycloak (SSO / IAM OIDC) + HashiCorp Vault (gestión de secretos).
+  - **CI/CD y Registry:** Jenkins (pipelines CI) + Red Hat OpenShift GitOps (ArgoCD) + Project Quay (registro OCI).
+  - **DevSecOps Continuo:** Grype (análisis de vulnerabilidades SBOM en sustitución de Trivy) + OWASP ZAP (DAST dinámico) + DefectDojo (orquestación y correlación ASPM).
+  - **Inteligencia Artificial:** Asistente con arquitectura RAG (Retrieval-Augmented Generation) para documentación interna.
 - **Dinámicas de Gestión y Lecciones de Onboarding:** Pese a la excelente sintonía con los compañeros de base, la contratación —marcada por dinámicas coyunturales de cobertura estival— evidenció los riesgos del liderazgo técnico tensionado por el desgaste profesional (*burnout* de un responsable que levantó la plataforma en solitario y abandonó la entidad poco después). Imponer prisas artificiales y autoritarismo a un recién llegado en lugar de facilitar la transferencia técnica constituye un antipatrón clásico de descarte previo, motivando la legítima queja formal en defensa de las buenas prácticas de acogida y el respeto profesional.
 
 ---

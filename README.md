@@ -462,13 +462,27 @@ Transcurrido un año desde la experiencia técnica en NubeSARA, la trayectoria d
 - **Naturaleza e Iniciativa Estratégica:** **IndraMind** fue presentada oficialmente por el **Grupo Indra** el **12 de marzo de 2025** como uno de los pilares tecnológicos centrales de su plan estratégico corporativo (*Leading the Future*).
 - **Misión y Capacidades:** Concebida como una plataforma y ecosistema integral de **Inteligencia Artificial (IA) soberana** y ciberresiliente, su objetivo es dotar a España y a la Unión Europea de capacidades estratégicas avanzadas para la defensa, la protección de infraestructuras críticas (físicas y digitales), la gestión integral de crisis y emergencias y la respuesta coordinada ante conflictos híbridos, bajo el lema institucional *"Protecting to empower"*.
 
-##### 2. Contraste Tecnológico: De la Hiper-Complejidad de DOPE a una Plataforma IDP Pragmática
-En el marco de IndraMind, el cometido técnico consistía en participar en el desarrollo y soporte de una **Internal Developer Platform (IDP)** corporativa, concebida para ofrecer autoservicio a los equipos de desarrollo e integración de modelos y microservicios:
-- **Arquitectura Comparativa Frente a DOPE:** Mientras que el framework *DOPE* en el MAEC se apoyaba en una arquitectura altamente personalizada sobre Kubernetes puro (Tekton Pipelines con decenas de CRDs nativos + ArgoCD GitOps en clústeres bare-metal Air-Gapped de NubeSARA), la plataforma IDP de IndraMind adoptaba un enfoque sensiblemente más estándar, accesible y pragmático:
-  - **Portal de Autoservicio con Spotify Backstage:** Adopción del estándar abierto de la CNCF para catalogación de servicios, documentación técnica centralizada (*TechDocs*) y plantillas reproducibles (*Software Templates*).
-  - **Tuberías de Integración Continua (CI) con Jenkins:** Uso de pipelines tradicionales y contrastados en Jenkins, reduciendo la curva de fricción operativa en comparación con los grafos DAG acoplados a pods efímeros de Tekton.
-  - **Entrega Continua Declarativa (CD) con Red Hat OpenShift GitOps (ArgoCD):** Mantenimiento de la inmutabilidad de estados mediante ArgoCD para el despliegue ordenado de cargas.
-  - **Infraestructura Cloud en Amazon Web Services (AWS):** Clústeres **Red Hat OpenShift** desplegados sobre la nube pública de **AWS**, beneficiándose de la agilidad de los servicios gestionados cloud en contraposición a las rigideces extremas del aislamiento perimetral estricto de NubeSARA.
+##### 2. Contraste Tecnológico: Desglose del Stack Tecnológico del IDP de IndraMind
+En el marco de IndraMind, el cometido técnico consistía en participar en el desarrollo, integración y soporte de una **Internal Developer Platform (IDP)** corporativa concebida para dotar de autoservicio a los equipos de ingeniería, acelerar la entrega continua y gobernar el ciclo de vida de los servicios con soberanía y seguridad integral:
+
+- **Desglose Exhaustivo del Stack del IDP de IndraMind:**
+  - **Infraestructura y Plataforma Base:** **Red Hat OpenShift on AWS (ROSA / IaaS)**, proporcionando una base Kubernetes empresarial robusta sobre la nube pública de Amazon Web Services.
+  - **Ingress Controller y Edge Routing:** **Traefik OSS**, actuando como reverse proxy y balanceador de tráfico perimetral ligero, dinámico y de alto rendimiento.
+  - **Portal de Autoservicio / Developer Portal:** **Spotify Backstage** (estándar abierto de facto de la CNCF) como interfaz unificada para el catálogo de software, documentación técnica viva (*TechDocs*) y plantillas de autoservicio (*Software Templates*).
+  - **Control de Versiones y Git Soberano:** **Forgejo** (fork comunitario independiente y libre de Gitea), garantizando la soberanía de los repositorios de código sin dependencias privativas externas.
+  - **Gestión del Ciclo de Vida Aplicativo (ALM) y Trazabilidad:** **Tuleap**, plataforma libre para la gestión ágil de proyectos, seguimiento de requisitos y trazabilidad integral del desarrollo, ampliamente adoptada en sectores críticos de defensa y aeroespacial en Europa.
+  - **Identidad, Autenticación y Autorización (IAM / SSO):** **Keycloak**, gestionando el control de identidades federadas, autenticación OIDC/SAML y control de acceso basado en roles (RBAC).
+  - **Gestión Segura de Secretos:** **HashiCorp Vault**, como almacén centralizado para el cifrado, inyección dinámica y rotación estricta de credenciales y certificados.
+  - **Motor de Integración Continua (CI):** **Jenkins**, sustentando pipelines contrastados y estables para la compilación, empaquetado y testing continuado.
+  - **Motor de Entrega Continua (CD) y GitOps:** **Red Hat OpenShift GitOps (ArgoCD)**, garantizando la inmutabilidad declarativa y reconciliación continua de estados entre Git y el clúster.
+  - **Registro de Imágenes y Artefactos OCI:** **Project Quay / Red Hat Quay**, como registry corporativo seguro para almacenamiento, escaneo y distribución de imágenes de contenedores.
+  - **Ecosistema DevSecOps y Análisis Continuo de Seguridad:**
+    - **Grype (Anchore):** Motor especializado de análisis de vulnerabilidades en imágenes OCI y sistemas de archivos (SBOM), seleccionado específicamente en lugar de Trivy por su precisión y adaptabilidad en el pipeline.
+    - **OWASP ZAP (Zed Attack Proxy):** Pruebas dinámicas de seguridad en aplicaciones web (DAST) automatizadas para la detección temprana de brechas en tiempo de despliegue.
+    - **DefectDojo:** Plataforma central de orquestación y gestión de la postura de seguridad de aplicaciones (ASPM), unificando y correlacionando los informes de escaneos estáticos, dinámicos y de dependencias.
+  - **Inteligencia Artificial y Aceleración Cognitiva:** Integración de capacidades de **IA soberana con arquitectura RAG (Retrieval-Augmented Generation)**, facilitando la consulta semántica contextual sobre documentación técnica interna y asistiendo a los desarrolladores en la resolución ágil de incidencias.
+
+- **Contraste de Arquitectura (DOPE vs. IDP IndraMind):** Mientras que el framework *DOPE* en el MAEC optó por la hiper-personalización extrema sobre CRDs nativos de Tekton en nodos físicos desconectados (Air-Gapped de NubeSARA) —lo cual provocó una severa sobrecarga de mantenimiento y dependencias en obsolescencia—, el IDP de IndraMind apostó por una combinación pragmática de estándares maduros de software libre (Backstage + Jenkins + ArgoCD + Vault + Keycloak + Quay), equilibrando soberanía tecnológica, agilidad cloud (AWS) y cobertura integral DevSecOps (Grype + ZAP + DefectDojo).
 
 ##### 3. El Factor Humano: Antipatrones de Liderazgo, Onboarding Coyuntural y Desgaste (*Burnout*)
 A pesar de la coherencia tecnológica de la plataforma, la realidad operativa en el seno del proyecto volvió a evidenciar disfunciones organizativas habituales en la contratación de servicios externos de IT:
