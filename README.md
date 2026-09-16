@@ -86,7 +86,7 @@ Cualquier arquitecto o ingeniero cloud que intente contenerizar una aplicación 
 ├────────────────────────────────┬───────────────────────────────────────┬───────────────────────────────┤
 │ BARRERA EN EL MONOLITO LEGADO  │ COMPORTAMIENTO NATIVO EN K8S / OCP    │ SOLUCIÓN PATRONIZADA EN REPO  │
 ├────────────────────────────────┼───────────────────────────────────────┼───────────────────────────────┤
-│ 1. Estado en HttpSession       │ Pods efímeros destruyen la sesión al   │ Red Hat Data Grid / Infinispan│
+│ 1. Estado en HttpSession       │ Pods efímeros destruyen la sesión al  │ Red Hat Data Grid / Infinispan│
 │    (Login, wizards, carritos)  │ escalar o reiniciar (Sticky Sessions) │ con protocolo HotRod en Tomcat│
 ├────────────────────────────────┼───────────────────────────────────────┼───────────────────────────────┤
 │ 2. Base de Datos Externa       │ Acoplamiento de IPs físicas en código │ Kubernetes Service sin        │
