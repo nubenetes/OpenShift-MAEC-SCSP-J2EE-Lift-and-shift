@@ -104,6 +104,13 @@ Este ejercicio de ingeniería abierta no puede desvincularse de la responsabilid
 - **La Mirada Cívica del Contribuyente:** La ciudadanía asume un notable esfuerzo tributario cotidiano (con ejemplos tan elocuentes como los gravámenes de entre el 6% y el 10% en ITP/AJD al adquirir una primera vivienda habitual) en un contexto tensionado por la inflación y el coste de vida. Este compromiso colectivo exige, como correlato ético e institucional, que los fondos públicos se gestionen con la máxima pulcritud, rigor técnico y orientación al resultado duradero, evitando que los presupuestos se diluyan en soluciones cosméticas o entregables de mera justificación formal.
 - **La Dignificación del Empleo Tecnológico y el Fin de la Precarización:** La proliferación de cadenas de subcontratación multinivel en las licitaciones públicas de consultoría IT devalúa con frecuencia las condiciones y salarios de los perfiles de ingeniería que asumen la responsabilidad técnica real en la infraestructura crítica del Estado. Fomentar la meritocracia, la contratación justa y la cultura de los hechos técnicos frente a la retórica comercial es indispensable para retener el talento tecnológico y asegurar la resiliencia de los sistemas públicos.
 
+### 1.5. Continuidad Profesional y Patrones IDP: El Caso IndraMind
+
+Un año después de la experiencia en NubeSARA, la participación del profesional en el ecosistema de **IndraMind** (iniciativa estratégica de IA soberana lanzada por el Grupo Indra el 12 de marzo de 2025 para infraestructuras críticas y defensa) permitió contrastar dos enfoques de ingeniería de plataformas:
+
+- **Evolución Tecnológica de IDP:** Frente a la sobre-ingeniería de Tekton sobre OpenShift bare-metal en NubeSARA, la plataforma IDP en IndraMind adoptó un diseño más pragmático y estándar: portal de autoservicio con **Spotify Backstage**, integración continua con **Jenkins**, entrega continua declarativa con **ArgoCD** y orquestación sobre **Red Hat OpenShift en AWS**.
+- **Dinámicas de Gestión y Lecciones de Onboarding:** Pese a la excelente sintonía con los compañeros de base, la contratación —marcada por dinámicas coyunturales de cobertura estival— evidenció los riesgos del liderazgo técnico tensionado por el desgaste profesional (*burnout* de un responsable que levantó la plataforma en solitario y abandonó la entidad poco después). Imponer prisas artificiales y autoritarismo a un recién llegado en lugar de facilitar la transferencia técnica constituye un antipatrón clásico de descarte previo, motivando la legítima queja formal en defensa de las buenas prácticas de acogida y el respeto profesional.
+
 ---
 
 ## 2. Naturaleza del Software Heredado (Legacy Monolith)
