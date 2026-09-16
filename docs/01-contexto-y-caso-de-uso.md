@@ -23,6 +23,18 @@ La **Ley 39/2015, de 1 de octubre, del Procedimiento Administrativo Común de la
 
 Para materializar este mandato legal, la Secretaría General de Administración Digital (SGAD) impulsó la plataforma **SCSP (Sustitución de Certificados en Soporte Papel)**. El **Cliente Ligero SCSP** es una aplicación que permite a cualquier organismo interrogar los servicios de intermediación de datos del Estado (consultas de identidad en DGP, títulos universitarios en el Ministerio de Educación, antecedentes penales en Justicia, corrientes de pago en TGSS/AEAT, etc.) sin necesidad de requerir fotocopias físicas al administrado.
 
+### 1.1. La Dualidad de Arquitecturas en el MAEC: SINAVI ("DOPE Framework") vs. Monolitos como SCSP
+
+En el ecosistema tecnológico del MAEC coexisten dos realidades arquitectónicas que exigen estrategias de plataforma diferenciadas:
+
+1. **Ecosistema de Microservicios Cloud-Native (DOPE Framework):**  
+   Para sistemas modernos de gran envergadura como **SINAVI (Sistema de Información Nacional de Visados)** —utilizado por la red consular española en todo el mundo para la tramitación y expedición de visados—, la adjudicataria **Minsait** desarrolló para el ministerio el **"DOPE framework"**. Se trata de un marco altamente personalizado diseñado para orquestar del orden de **100 microservicios** independientes con integración y entrega continua (*CI/CD*) intensiva basada en **Red Hat OpenShift Pipelines (Tekton) + ArgoCD**. Este stack responde perfectamente a ciclos de desarrollo continuo in-house, compilación de código fuente commit a commit, testing automatizado distribuido y despliegues atómicos de APIs desacopladas.
+
+2. **Monolitos Heredados de Terceros (Cliente Ligero SCSP):**  
+   En el extremo opuesto se sitúan aplicaciones críticas de intermediación como el **Cliente Ligero SCSP**, suministradas por contratistas como un único entregable binario cerrado (`.war` de Java 8 empaquetado para Tomcat).  
+   - Intentar asimilar forzosamente estas aplicaciones de legado a los estándares, CRDs de Tekton y mecanismos del *DOPE framework* constituye un **antipatrón de sobre-ingeniería**: genera dependencias innecesarias, multiplica la superficie de fallo en redes desconectadas y paraliza la migración durante meses.
+   - La solución idónea para este perfil no es el rediseño micro-modular ni pipelines complejos con TaskRuns efímeros sobre bastiones aislados, sino el **Lift-and-Shift declarativo pragmático** (S2I / BuildConfig nativo + Sonatype Nexus + GitOps) documentado en esta referencia.
+
 ---
 
 ## 2. Naturaleza del Software Heredado (Legacy Monolith)

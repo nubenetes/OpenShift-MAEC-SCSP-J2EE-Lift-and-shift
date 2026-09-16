@@ -51,6 +51,14 @@ Para cualquier entorno de **Producción** dentro de la Administración Pública 
 3. **Erradicación del Factor Humano en Despliegues Día 2:** En la Solución B, una versión incorrecta del archivo `context.xml` o un comando mal ejecutado en la consola puede tumbar el servicio. En la Solución A, el reconciliador de ArgoCD asegura que el estado real del clúster coincida al 100% con la especificación de Kustomize.
 4. **Ciclo de Vida Determinista con Finalizadores:** El uso de `resources-finalizer.argocd.argoproj.io` garantiza que, si el MAEC decide migrar o apagar el servicio, ArgoCD eliminará en cascada pods, servicios, políticas egress y clústeres de Infinispan, evitando facturación o consumo fantasma de memoria en la NubeSARA.
 
+### 3.1. ¿Por qué se descartó una "Opción C" basada en pipelines de microservicios (Tekton / DOPE Framework)?
+
+En el MAEC ya existía una potente plataforma CI/CD corporativa: el **"DOPE framework"** desarrollado por **Minsait**, concebido para orquestar los aproximadamente **100 microservicios** de la aplicación consular **SINAVI**. Sin embargo, plantear el despliegue de SCSP sobre ese marco de microservicios fue descartado como sobre-ingeniería por:
+
+- **Artefactos cerrados vs. fuentes:** SCSP es un monolito Java 8 entregado por integradoras como un binario `.war` ya homologado; no requiere compilaciones continuas, escaneos SonarQube por commit ni empaquetados multi-etapa en Tekton.
+- **Sobrecarga en Air-Gapped:** Mantener y espejar decenas de tareas e imágenes base de Tekton en NubeSARA para una aplicación que solo se actualiza semestralmente introduce un coste de mantenimiento desproporcionado.
+- **Operación en bastiones restringidos:** La depuración de fallos en volúmenes y tareas de Tekton a través de bastiones sin acceso CLI interactivo dificulta enormemente la operación frente al flujo atómico de la Solución B (S2I) o la reconciliación declarativa de la Solución A (GitOps + Nexus).
+
 ---
 
 ## 4. ¿Cuándo es Legítimo Usar la Solución B?
