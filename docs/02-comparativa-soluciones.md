@@ -54,11 +54,14 @@ Para cualquier entorno de **Producción** dentro de la Administración Pública 
 
 ### 3.1. ¿Por qué se descartó una "Opción C" basada en pipelines de microservicios (Tekton / DOPE Framework)?
 
-En el MAEC ya existía una potente plataforma CI/CD corporativa: el **"DOPE framework"** desarrollado por **Minsait**, concebido para orquestar los aproximadamente **100 microservicios** de la aplicación consular **SINAVI**. Sin embargo, plantear el despliegue de SCSP sobre ese marco de microservicios fue descartado como sobre-ingeniería por:
+En el MAEC ya existía una potente plataforma CI/CD corporativa: el **"DOPE framework"** (*DevOps Platform Ecosystem*) desarrollado e implantado por **Minsait**, concebido específicamente para articular la integración y entrega continua de los aproximadamente **100 microservicios** de la aplicación consular **SINAVI** y el sistema **e-LINCE**:
+- **El Stack de DOPE:** Combina **Red Hat OpenShift Pipelines (Tekton)** para la fase CI (compilación multi-etapa en pods efímeros, Quality Gates de SonarQube, análisis SCA y empaquetado OCI rootless con Buildah) con **Red Hat OpenShift GitOps (ArgoCD)** para la fase CD (reconciliación declarativa mediante patrones **ApplicationSet** / **App-of-Apps** multi-clúster en NubeSARA).
 
-- **Artefactos cerrados vs. fuentes:** SCSP es un monolito Java 8 entregado por integradoras como un binario `.war` ya homologado; no requiere compilaciones continuas, escaneos SonarQube por commit ni empaquetados multi-etapa en Tekton.
-- **Sobrecarga en Air-Gapped:** Mantener y espejar decenas de tareas e imágenes base de Tekton en NubeSARA para una aplicación que solo se actualiza semestralmente introduce un coste de mantenimiento desproporcionado.
-- **Operación en bastiones restringidos:** La depuración de fallos en volúmenes y tareas de Tekton a través de bastiones sin acceso CLI interactivo dificulta enormemente la operación frente al flujo atómico de la Solución B (S2I) o la reconciliación declarativa de la Solución A (GitOps + Nexus).
+Sin embargo, forzar el despliegue del Cliente Ligero SCSP sobre este entramado de microservicios fue descartado de plano como un grave antipatrón de sobre-ingeniería por los siguientes motivos objetivos:
+
+- **Artefactos cerrados vs. fuentes vivas:** SCSP es un monolito Java 8 entregado por adjudicatarias externas como un binario `.war` cerrado y homologado bajo garantía contractual; no requiere clonados Git continuos, compilaciones diarias commit a commit, escaneos SonarQube de código inexistente ni empaquetados multi-etapa en Tekton.
+- **Sobrecarga desproporcionada en perímetro Air-Gapped:** Mantener, auditar y espejar decenas de CRDs (Tasks, Pipelines, PipelineRuns), operadores y contenedores base de Tekton (maven, git-init, buildah, etc.) en NubeSARA para una aplicación de entrega semestral introduce un coste y una superficie de ataque desproporcionados.
+- **Operación en bastiones restringidos (sin acceso CLI):** La depuración de fallos en volúmenes persistentes (`PVC RWX`) y tareas intermedias de Tekton a través de bastiones sin acceso CLI interactivo dificulta enormemente la operación y el diagnóstico, frente al flujo atómico e inmediato de la **Solución B (S2I)** para pruebas o la reconciliación limpia y declarativa de la **Solución A (GitOps + Nexus)** para producción.
 
 ---
 

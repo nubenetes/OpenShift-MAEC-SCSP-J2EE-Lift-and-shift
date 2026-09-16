@@ -184,6 +184,58 @@ En muchas grandes empresas y organismos de la Administración Pública (como ocu
 
 Un ejemplo paradigmático en el propio MAEC es el **"DOPE framework"** desarrollado por **Minsait**: una plataforma interna con una elevada personalización (*customization*), concebida específicamente para gobernar grandes ecosistemas de microservicios como **SINAVI (Sistema de Información Nacional de Visados)** —la aplicación crítica utilizada por la red de consulados en todo el mundo—, que llega a orquestar del orden de **100 microservicios** independientes.
 
+#### Anatomía y Desglose del Stack Tecnológico del Framework DOPE (Minsait)
+
+El **"DOPE framework"** (acrónimo interno de *DevOps Platform Ecosystem* desarrollado e implantado por **Minsait**) fue concebido como una plataforma integral de CI/CD altamente automatizada para cubrir todo el ciclo de vida del software ministerial moderno (*cloud-native*). Su arquitectura desacopla y articula dos grandes capas de orquestación sobre Kubernetes:
+
+```text
+┌──────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                             ARQUITECTURA DEL FRAMEWORK DOPE (TEKTON + ARGOCD)                                    │
+├──────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                                                  │
+│  [ Desarrollador ]                                                                                               │
+│         │ git push                                                                                               │
+│         ▼                                                                                                        │
+│  ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────┐  │
+│  │ 1. CAPA CI: RED HAT OPENSHIFT PIPELINES (TEKTON ENGINE)                                                     │  │
+│  │                                                                                                            │  │
+│  │   • EventListeners & TriggerBindings: Captura de webhooks desde el Git corporativo interno (SARA)          │  │
+│  │   • PipelineRuns & TaskRuns (CRDs): Orquestación de grafos acíclicos dirigidos (DAG) en pods efímeros      │  │
+│  │   • Pipeline Tasks Secuenciales:                                                                           │  │
+│  │       ├── Task git-clone        -> Descarga segura de código fuente en workspace compartido                │  │
+│  │       ├── Task maven/npm-build  -> Compilación multi-módulo y ejecución de pruebas unitarias              │  │
+│  │       ├── Task sonarqube-scan   -> Análisis estático de código, deuda técnica y quality gates              │  │
+│  │       ├── Task dependency-check -> Análisis SCA de librerías y componentes vulnerables                     │  │
+│  │       ├── Task buildah-bud      -> Construcción de imágenes OCI rootless sin demonio Docker                │  │
+│  │       ├── Task image-scan       -> Escaneo de vulnerabilidades CVE en registros locales                    │  │
+│  │       └── Task push-registry    -> Publicación en Quay / Nexus interno y actualización de tag GitOps       │  │
+│  │   • Workspaces & Almacenamiento: Volúmenes persistentes ReadWriteMany (PVC RWX) para caché y artefactos    │  │
+│  └─────────────────────────────────────────────────────┬──────────────────────────────────────────────────────┘  │
+│                                                        │ commit automático con nuevo tag de imagen               │
+│                                                        ▼                                                         │
+│  ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────┐  │
+│  │ 2. REPOSITORIO GITOPS (MANIFIESTOS DECLARATIVOS)                                                           │  │
+│  │    Repositorio centralizado con definición Kustomize / Helm de los ~100 microservicios de SINAVI / e-LINCE │  │
+│  └─────────────────────────────────────────────────────┬──────────────────────────────────────────────────────┘  │
+│                                                        │ reconciliación continua                                 │
+│                                                        ▼                                                         │
+│  ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────┐  │
+│  │ 3. CAPA CD: RED HAT OPENSHIFT GITOPS (ARGOCD ENGINE)                                                        │  │
+│  │                                                                                                            │  │
+│  │   • ApplicationSet / App-of-Apps: Gobernanza jerárquica de dependencias entre la suite de 100 microservicios│  │
+│  │   • Reconciliación Declarativa: Detección de drift entre Git y el clúster con auto-sanación (selfHeal)    │  │
+│  │   • Despliegues Multi-Clúster: Despliegue progresivo automatizado en clústeres NubeSARA (QA -> PRE -> PRO) │  │
+│  │   • Sincronización Zero-Touch: Despliegue sin intervención manual ni comandos interactivos por bastión     │  │
+│  └────────────────────────────────────────────────────────────────────────────────────────────────────────────┘  │
+└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+- **Capa CI (Integración Continua) con Red Hat OpenShift Pipelines (Tekton):**  
+  Construida íntegramente sobre Custom Resource Definitions (CRDs) nativos de Kubernetes (`Tasks`, `ClusterTasks`, `Pipelines`, `PipelineRuns`). Permite que cada fase de compilación y empaquetado se ejecute en pods efímeros aislados (contenedores Maven, Node.js, SonarQube Scanner y Buildah). Los artefactos intermedios y las cachés de librerías se transfieren entre tareas mediante `Workspaces` montados sobre volúmenes persistentes multi-escritura (`PVC RWX`). En la última fase del pipeline, Tekton genera la imagen de contenedor OCI, la publica en el registro interno seguro (Quay / Nexus) y actualiza automáticamente el tag de imagen en el repositorio de manifiestos GitOps.
+
+- **Capa CD (Entrega Continua Declarativa) con Red Hat OpenShift GitOps (ArgoCD):**  
+  Implementa el paradigma GitOps como única fuente de verdad (*Single Source of Truth*). Para gobernar la complejidad de los cerca de 100 microservicios independientes de SINAVI y e-LINCE, utiliza generadores avanzados de **ApplicationSet** o el patrón **App-of-Apps**. ArgoCD monitoriza continuamente el estado real de los clústeres independientes de NubeSARA (**QA**, **PRE** y **PRO**) frente a la especificación declarada en Git, aplicando sincronizaciones automáticas desatendidas (`automated: prune: true`) y autorrecuperación inmediata ante desvíos de configuración (`selfHeal: true`).
+
 Intentar embutir a la fuerza una aplicación monolítica heredada como el Cliente Ligero SCSP dentro de ese entramado hiper-personalizado de microservicios (concebido para 100 componentes distribuidos) representa un **grave error de arquitectura y un antipatrón de sobre-ingeniería que paraliza los proyectos durante meses**.
 
 ```text
