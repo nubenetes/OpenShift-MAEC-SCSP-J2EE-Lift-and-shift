@@ -1,5 +1,15 @@
 # 🛡️ Seguridad Perimetral y Abstracción de Base de Datos Externa
 
+---
+
+<p align="center">
+  <b>Página Anterior:</b> <a href="04-gestion-sesiones-infinispan.md"><b>⬅️ 04. Gestión de Sesiones con Infinispan</b></a> &nbsp;|&nbsp;
+  <b><a href="../README.md">🏠 <b>Home / README</b></a></b> &nbsp;|&nbsp;
+  <b>Página Siguiente:</b> <a href="06-tuning-jvm-y-probes.md"><b>06. Tuning JVM y Probes ➡️</b></a>
+</p>
+
+---
+
 > [!WARNING]
 > **Aviso:** Documentación generada con **Gemini 3.8 Flash** como blueprint didáctico conceptual.
 
@@ -77,3 +87,13 @@ spec:
 ```
 
 Cualquier intento de conexión no autorizada, escaneo de puertos o vector de exfiltración lateral es descartado silenciosamente por el kernel de Linux a nivel de flujo de red virtual.
+
+---
+
+<p align="center">
+  <b>Página Anterior:</b> <a href="04-gestion-sesiones-infinispan.md"><b>⬅️ 04. Gestión de Sesiones con Infinispan</b></a> &nbsp;|&nbsp;
+  <b><a href="../README.md">🏠 <b>Home / README</b></a></b> &nbsp;|&nbsp;
+  <b>Página Siguiente:</b> <a href="06-tuning-jvm-y-probes.md"><b>06. Tuning JVM y Probes ➡️</b></a>
+</p>
+
+---

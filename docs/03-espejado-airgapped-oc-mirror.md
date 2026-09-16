@@ -1,5 +1,15 @@
 # 🔒 Ingeniería del Espejado Air-Gapped con oc-mirror v2
 
+---
+
+<p align="center">
+  <b>Página Anterior:</b> <a href="02-comparativa-soluciones.md"><b>⬅️ 02. Comparativa de Soluciones</b></a> &nbsp;|&nbsp;
+  <b><a href="../README.md">🏠 <b>Home / README</b></a></b> &nbsp;|&nbsp;
+  <b>Página Siguiente:</b> <a href="04-gestion-sesiones-infinispan.md"><b>04. Gestión de Sesiones con Infinispan ➡️</b></a>
+</p>
+
+---
+
 > [!WARNING]
 > **Aviso:** Documentación generada con **Gemini 3.8 Flash** como blueprint didáctico conceptual.
 
@@ -65,3 +75,13 @@ oc apply -f /mnt/usb-drive/oc-mirror-workspace/cluster-resources/imageTagMirrorS
 ```
 
 El **Machine Config Operator (MCO)** detecta el cambio, reescribe el archivo `/etc/containers/registries.conf` de CoreOS en los nodos maestros y de cómputo, y aplica un reinicio secuencial controlado (*graceful node reboot*). De esta forma, cualquier referencia interna en manifiestos hacia `registry.redhat.io/...` es redirigida transparentemente por CRI-O hacia `registro.nubesara.local:8443/...`.
+
+---
+
+<p align="center">
+  <b>Página Anterior:</b> <a href="02-comparativa-soluciones.md"><b>⬅️ 02. Comparativa de Soluciones</b></a> &nbsp;|&nbsp;
+  <b><a href="../README.md">🏠 <b>Home / README</b></a></b> &nbsp;|&nbsp;
+  <b>Página Siguiente:</b> <a href="04-gestion-sesiones-infinispan.md"><b>04. Gestión de Sesiones con Infinispan ➡️</b></a>
+</p>
+
+---

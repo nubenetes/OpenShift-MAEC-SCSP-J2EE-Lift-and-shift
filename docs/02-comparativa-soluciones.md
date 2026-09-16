@@ -1,5 +1,15 @@
 # ⚖️ Análisis Comparativo: Solución A (GitOps) vs Solución B (S2I Binario)
 
+---
+
+<p align="center">
+  <b>Página Anterior:</b> <a href="01-contexto-y-caso-de-uso.md"><b>⬅️ 01. Contexto y Caso de Uso</b></a> &nbsp;|&nbsp;
+  <b><a href="../README.md">🏠 <b>Home / README</b></a></b> &nbsp;|&nbsp;
+  <b>Página Siguiente:</b> <a href="03-espejado-airgapped-oc-mirror.md"><b>03. Espejado Air-Gapped con oc-mirror ➡️</b></a>
+</p>
+
+---
+
 > [!WARNING]
 > **Aviso:** Esta documentación ha sido generada con **Gemini 3.8 Flash** con fines didácticos y de referencia arquitectónica conceptual.
 
@@ -57,3 +67,13 @@ La **Solución B (S2I Binario Directo)** no debe considerarse un diseño descart
 Esta comparativa y estos patrones aplican directamente a cualquier empresa que afronte:
 - Migración de aplicaciones Java 6 / 7 / 8 (Spring Boot 1.x, Struts, JSF, EJBs) sobre WebLogic, WebSphere o JBoss hacia Kubernetes.
 - Entornos regulados con perímetros cerrados: normativas **PCI-DSS** (banca), **HIPAA/GDPR** (salud) o **infraestructuras críticas** (energía, transporte).
+
+---
+
+<p align="center">
+  <b>Página Anterior:</b> <a href="01-contexto-y-caso-de-uso.md"><b>⬅️ 01. Contexto y Caso de Uso</b></a> &nbsp;|&nbsp;
+  <b><a href="../README.md">🏠 <b>Home / README</b></a></b> &nbsp;|&nbsp;
+  <b>Página Siguiente:</b> <a href="03-espejado-airgapped-oc-mirror.md"><b>03. Espejado Air-Gapped con oc-mirror ➡️</b></a>
+</p>
+
+---

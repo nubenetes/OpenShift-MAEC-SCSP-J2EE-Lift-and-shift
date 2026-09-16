@@ -1,5 +1,15 @@
 # 🏛️ Contexto Estratégico y Caso de Uso: MAEC y Cliente Ligero SCSP
 
+---
+
+<p align="center">
+  <b>Página Anterior:</b> <span>⏮️ <i>(Inicio)</i></span> &nbsp;|&nbsp;
+  <b><a href="../README.md">🏠 <b>Home / README</b></a></b> &nbsp;|&nbsp;
+  <b>Página Siguiente:</b> <a href="02-comparativa-soluciones.md"><b>02. Comparativa de Soluciones ➡️</b></a>
+</p>
+
+---
+
 > [!WARNING]
 > **Aviso:** Esta arquitectura de referencia y documentación técnica ha sido generada con **Gemini 3.8 Flash** como plantilla didáctica y de ingeniería conceptual. No ha sido validada ni depurada en un entorno real de producción de NubeSARA.
 
@@ -48,3 +58,13 @@ La **Red SARA** (Sistemas de Aplicaciones y Redes para las Administraciones) int
 | **Incompatibilidad cgroups JVM** | Java 8 ignora límites de contenedores Linux cgroups v1/v2 por defecto. | La JVM consume la RAM del nodo físico y es aniquilada por el `OOMKiller`. |
 | **CrashLoopBackOff en Arranque** | Monolitos J2EE tardan 40-70 segundos en inicializar el pool JDBC y validar contextos. | Probes por defecto de Kubernetes matan el contenedor prematuramente creyendo que falló. |
 | **Seguridad Egress** | Los pods tienen red abierta saliente por defecto en clústeres no protegidos. | Incumplimiento de la política perimetral SUGICYR / ENS de Red SARA. |
+
+---
+
+<p align="center">
+  <b>Página Anterior:</b> <span>⏮️ <i>(Inicio)</i></span> &nbsp;|&nbsp;
+  <b><a href="../README.md">🏠 <b>Home / README</b></a></b> &nbsp;|&nbsp;
+  <b>Página Siguiente:</b> <a href="02-comparativa-soluciones.md"><b>02. Comparativa de Soluciones ➡️</b></a>
+</p>
+
+---

@@ -1,5 +1,15 @@
 # ⚙️ Calibración de la JVM Java 8 y Sondas de Resiliencia
 
+---
+
+<p align="center">
+  <b>Página Anterior:</b> <a href="05-seguridad-red-y-bd-externa.md"><b>⬅️ 05. Seguridad Red y BD Externa</b></a> &nbsp;|&nbsp;
+  <b><a href="../README.md">🏠 <b>Home / README</b></a></b> &nbsp;|&nbsp;
+  <b>Página Siguiente:</b> <a href="../README.md"><b>Finalizar / Volver a Inicio 🏠</b></a>
+</p>
+
+---
+
 > [!WARNING]
 > **Aviso:** Documentación generada con **Gemini 3.8 Flash** como blueprint didáctico conceptual.
 
@@ -74,3 +84,13 @@ readinessProbe:
 ### Comportamiento Operativo:
 - **Readiness (Preparación):** Concede **60 segundos** iniciales. Hasta que `/scsp/management/ready` no devuelva código HTTP 200, el pod no recibe tráfico del Service ni de la Route de OpenShift, evitando que peticiones ciudadanas caigan en un contenedor no inicializado.
 - **Liveness (Vitalidad):** Concede **90 segundos** de gracia. Si tras el arranque el contenedor sufre un interbloqueo (*deadlock*) y falla 4 comprobaciones consecutivas (60 segundos de fallos continuos), el orquestador reinicia el pod automáticamente.
+
+---
+
+<p align="center">
+  <b>Página Anterior:</b> <a href="05-seguridad-red-y-bd-externa.md"><b>⬅️ 05. Seguridad Red y BD Externa</b></a> &nbsp;|&nbsp;
+  <b><a href="../README.md">🏠 <b>Home / README</b></a></b> &nbsp;|&nbsp;
+  <b>Página Siguiente:</b> <a href="../README.md"><b>Finalizar / Volver a Inicio 🏠</b></a>
+</p>
+
+---

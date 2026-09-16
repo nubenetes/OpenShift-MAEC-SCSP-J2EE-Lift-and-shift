@@ -1,5 +1,15 @@
 # 🔄 Gestión Distribuida de Sesiones con Red Hat Data Grid (Infinispan)
 
+---
+
+<p align="center">
+  <b>Página Anterior:</b> <a href="03-espejado-airgapped-oc-mirror.md"><b>⬅️ 03. Espejado Air-Gapped</b></a> &nbsp;|&nbsp;
+  <b><a href="../README.md">🏠 <b>Home / README</b></a></b> &nbsp;|&nbsp;
+  <b>Página Siguiente:</b> <a href="05-seguridad-red-y-bd-externa.md"><b>05. Seguridad Red y BD Externa ➡️</b></a>
+</p>
+
+---
+
 > [!WARNING]
 > **Aviso:** Documentación generada con **Gemini 3.8 Flash** como blueprint didáctico conceptual.
 
@@ -56,3 +66,13 @@ infinispan.client.hotrod.marshaller=org.infinispan.commons.marshall.JavaSerializ
 1. Cuando un servlet de SCSP ejecuta `request.getSession().setAttribute("tramite", datos)`, la clase `HotRodManager` intercepta la mutación.
 2. Los objetos se serializan mediante `JavaSerializationMarshaller` y se transmiten por TCP binario ultrarrápido al puerto `11222` del clúster de Data Grid.
 3. Si el pod donde se inició la tramitación se destruye en ese preciso instante, el balanceador redirige la siguiente petición a otro pod. Este consulta a Infinispan con el identificador de sesión y recupera el contexto íntegro en milisegundos.
+
+---
+
+<p align="center">
+  <b>Página Anterior:</b> <a href="03-espejado-airgapped-oc-mirror.md"><b>⬅️ 03. Espejado Air-Gapped</b></a> &nbsp;|&nbsp;
+  <b><a href="../README.md">🏠 <b>Home / README</b></a></b> &nbsp;|&nbsp;
+  <b>Página Siguiente:</b> <a href="05-seguridad-red-y-bd-externa.md"><b>05. Seguridad Red y BD Externa ➡️</b></a>
+</p>
+
+---
