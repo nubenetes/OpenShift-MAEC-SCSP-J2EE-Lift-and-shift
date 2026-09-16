@@ -197,13 +197,13 @@ El **"DOPE framework"** (acrónimo interno de *DevOps Platform Ecosystem* desarr
 │         │ git push                                                                                               │
 │         ▼                                                                                                        │
 │  ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────┐  │
-│  │ 1. CAPA CI: RED HAT OPENSHIFT PIPELINES (TEKTON ENGINE)                                                     │  │
+│  │ 1. CAPA CI: RED HAT OPENSHIFT PIPELINES (TEKTON ENGINE)                                                    │  │
 │  │                                                                                                            │  │
 │  │   • EventListeners & TriggerBindings: Captura de webhooks desde el Git corporativo interno (SARA)          │  │
 │  │   • PipelineRuns & TaskRuns (CRDs): Orquestación de grafos acíclicos dirigidos (DAG) en pods efímeros      │  │
 │  │   • Pipeline Tasks Secuenciales:                                                                           │  │
 │  │       ├── Task git-clone        -> Descarga segura de código fuente en workspace compartido                │  │
-│  │       ├── Task maven/npm-build  -> Compilación multi-módulo y ejecución de pruebas unitarias              │  │
+│  │       ├── Task maven/npm-build  -> Compilación multi-módulo y ejecución de pruebas unitarias               │  │
 │  │       ├── Task sonarqube-scan   -> Análisis estático de código, deuda técnica y quality gates              │  │
 │  │       ├── Task dependency-check -> Análisis SCA de librerías y componentes vulnerables                     │  │
 │  │       ├── Task buildah-bud      -> Construcción de imágenes OCI rootless sin demonio Docker                │  │
@@ -220,10 +220,10 @@ El **"DOPE framework"** (acrónimo interno de *DevOps Platform Ecosystem* desarr
 │                                                        │ reconciliación continua                                 │
 │                                                        ▼                                                         │
 │  ┌────────────────────────────────────────────────────────────────────────────────────────────────────────────┐  │
-│  │ 3. CAPA CD: RED HAT OPENSHIFT GITOPS (ARGOCD ENGINE)                                                        │  │
+│  │ 3. CAPA CD: RED HAT OPENSHIFT GITOPS (ARGOCD ENGINE)                                                       │  │
 │  │                                                                                                            │  │
-│  │   • ApplicationSet / App-of-Apps: Gobernanza jerárquica de dependencias entre la suite de 100 microservicios│  │
-│  │   • Reconciliación Declarativa: Detección de drift entre Git y el clúster con auto-sanación (selfHeal)    │  │
+│  │   • ApplicationSet / App-of-Apps: Gobernanza y dependencias entre la suite de ~100 microservicios          │  │
+│  │   • Reconciliación Declarativa: Detección de drift entre Git y el clúster con auto-sanación (selfHeal)     │  │
 │  │   • Despliegues Multi-Clúster: Despliegue progresivo automatizado en clústeres NubeSARA (QA -> PRE -> PRO) │  │
 │  │   • Sincronización Zero-Touch: Despliegue sin intervención manual ni comandos interactivos por bastión     │  │
 │  └────────────────────────────────────────────────────────────────────────────────────────────────────────────┘  │
