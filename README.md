@@ -251,7 +251,11 @@ Históricamente, el Cliente Ligero SCSP fue construido como un monolito bajo la 
 
 ### 2.3. El Escenario de Ejecución: NubeSARA Air-Gapped
 El MAEC aloja estas cargas en **NubeSARA**, la infraestructura de nube híbrida gubernamental. Por directrices del **CCN-CERT**, el **Esquema Nacional de Seguridad (ENS - Categoría Alta)** y la **SUGICYR**:
-- **Aislamiento Perimetral Estricto (Air-Gapped):** Ausencia total de resolución DNS pública y conectividad directa hacia Internet o registros comerciales (`registry.redhat.io`, `quay.io`).
+- **Topología Multi-Clúster por Entorno (QA, PRE, PRO):** En NubeSARA, la segregación entre fases no es meramente lógica (namespaces en un mismo clúster), sino que existen **clústeres OpenShift físicos independientes para cada entorno**:
+  - **Clúster OCP QA:** Entorno de pruebas de calidad y validaciones técnicas tempranas. Al no disponerse aún de un clúster dedicado de desarrollo (`dev`), el clúster de QA asumía las funciones de banco de pruebas inicial para contrastar los empaquetados.
+  - **Clúster OCP PRE:** Entorno de preproducción para pruebas de integración con el SCSP de pruebas en Red SARA, validación de certificados y pruebas de carga.
+  - **Clúster OCP PRO:** Entorno de producción con réplicas de alta disponibilidad, cuotas garantizadas, operadores en confinamiento y auditoría ENS Alta.
+  Esta segregación multi-clúster se gestiona con Kustomize mediante `overlays/qa/`, `overlays/pre/` y `overlays/prod/`, sincronizados centralizadamente desde ArgoCD (individualmente o mediante `ApplicationSet`).
 - **Espejado Certificado con `oc-mirror v2`:** Ingesta de catálogos y operadores mediante particionado en bloques TAR de 16 GB (`archiveSize: 16`), inyectando recursos `ImageDigestMirrorSet` (IDMS) e `ImageTagMirrorSet` (ITMS) que el **Machine Config Operator (MCO)** sincroniza en `/etc/containers/registries.conf` con reinicio secuencial de nodos.
 - **Segregación de Binarios en Sonatype Nexus:** Los artefactos `.war` y `.jar` se gobiernan en un repositorio *raw-hosted* interno (`nexus.nubesara.local:8081/repository/scsp-raw/`), preservando la limpieza del repositorio Git.
 - **Cero Confianza Saliente (Zero-Trust Egress):** Bloqueo total del tráfico saliente en OVN-Kubernetes (`EgressNetworkPolicy`), confinando los pods exclusivamente al puerto TDS 1433 de la base de datos SQL Server (`10.50.25.105/32`).
@@ -334,7 +338,7 @@ Este repositorio incluye con código operativo las dos soluciones técnicas anal
 | **Gestión de Binarios (.war, .jar)** | **Sonatype Nexus:** Repositorio *raw-hosted* dedicado. Cero binarios en el repo Git. | **Directorio Local:** Archivos depositados manualmente en la carpeta del workspace S2I. |
 | **Control de Desviaciones (*Drift*)** | **Automático (Self-Healing):** Si alguien altera el despliegue a mano, ArgoCD lo revierte. | **Manual / Nulo:** OpenShift no detecta desviaciones frente al manifiesto inicial. |
 | **Auditoría y Trazabilidad ENS** | **Máxima:** Cada cambio corresponde a un commit/PR firmado en Git con aprobación obligatoria. | **Baja-Media:** Depende del historial de auditoría de la consola y logs temporales del clúster. |
-| **Estructuración Multi-Entorno** | **Kustomize Avanzado:** `base/` compartido y `overlays/prod/`, `overlays/dev/`. | **Variables / Ficheros duplicados:** Requiere parametrizar scripts y manifiestos a mano. |
+| **Estructuración Multi-Entorno** | **Kustomize Multi-Clúster:** `base/` compartido y `overlays/qa/`, `overlays/pre/`, `overlays/prod/` para cada clúster OCP independiente. | **Variables / Ficheros duplicados:** Requiere parametrizar scripts y manifiestos a mano. |
 | **Decommissioning (Tear Down)** | **Borrado en Cascada:** `resources-finalizer` garantiza destrucción limpia de todos los CRDs. | **Manual:** Requiere ejecutar `oc delete namespace`, con riesgo de recursos bloqueados. |
 | **Curva de Adopción** | Requiere conocimiento de ArgoCD, Kustomize y administración de Nexus. | Inmediata para ingenieros de sistemas con experiencia básica en `oc` CLI. |
 | **Dependencia de Componentes** | Requiere el operador OpenShift GitOps y el servidor Sonatype Nexus en NubeSARA. | Cero dependencias adicionales; utiliza únicamente las capacidades nativas de OCP. |
@@ -479,13 +483,14 @@ cp /ruta/al/mssql-jdbc-8.4.1.jre8.jar workspace-template/lib/
 │   ├── mirror-step2-internal-upload.sh       # Inyección a registro privado NubeSARA
 │   └── mirror-step3-apply-cluster-config.sh  # Aplicación de IDMS/ITMS
 ├── solution-a-gitops/                        # SOLUCIÓN A: OpenShift GitOps (ArgoCD) + Nexus
-│   ├── argocd/                               # Manifiestos de ArgoCD y suscripción
+│   ├── argocd/                               # Manifiestos de ArgoCD, ApplicationSet y suscripción
 │   ├── nexus/                                # Scripts de provisión y carga de binarios
 │   ├── kustomize/                            # Declaración de recursos Kustomize (base y overlays)
 │   │   ├── base/                             # Namespace, BuildConfig, Infinispan, DB, Egress, etc.
 │   │   └── overlays/
-│   │       ├── dev/                          # Patch de réplicas reducidas
-│   │       └── prod/                         # Patch de cuotas de producción
+│   │       ├── qa/                           # Patch para clúster OCP QA (pruebas / validación inicial)
+│   │       ├── pre/                          # Patch para clúster OCP PRE (staging / homologación)
+│   │       └── prod/                         # Patch para clúster OCP PRO (producción ENS Alta)
 │   └── scripts/                              # Scripts de despliegue, actualización Día 2 y borrado
 ├── solution-b-s2i-binary/                    # SOLUCIÓN B: S2I Binario Directo por CLI
 │   ├── manifests/                            # Manifiestos OpenShift declarativos

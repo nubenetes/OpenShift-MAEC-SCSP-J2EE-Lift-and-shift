@@ -1,0 +1,28 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: scsp-qa-sync
+  namespace: openshift-gitops
+  labels:
+    environment: qa
+    app.kubernetes.io/name: scsp
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/nubenetes/OpenShift-MAEC-SCSP-J2EE-Lift-and-shift.git'
+    targetRevision: main
+    path: solution-a-gitops/kustomize/overlays/qa
+  destination:
+    # En modelo multi-clúster, apunta a la API del clúster OCP de QA en NubeSARA
+    server: 'https://api.ocp-qa.nubesara.local:6443'
+    namespace: maec-scsp-qa
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true

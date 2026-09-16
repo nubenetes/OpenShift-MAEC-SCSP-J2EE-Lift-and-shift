@@ -1,0 +1,52 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: scsp-multicluster-workloads
+  namespace: openshift-gitops
+  labels:
+    app.kubernetes.io/name: scsp
+    app.kubernetes.io/part-of: maec-scsp
+spec:
+  generators:
+    - list:
+        elements:
+          - env: qa
+            clusterName: ocp-qa-nubesara
+            clusterServer: 'https://api.ocp-qa.nubesara.local:6443'
+            namespace: maec-scsp-qa
+            branch: main
+          - env: pre
+            clusterName: ocp-pre-nubesara
+            clusterServer: 'https://api.ocp-pre.nubesara.local:6443'
+            namespace: maec-scsp-pre
+            branch: main
+          - env: prod
+            clusterName: ocp-pro-nubesara
+            clusterServer: 'https://api.ocp-pro.nubesara.local:6443'
+            namespace: maec-scsp-prod
+            branch: main
+  template:
+    metadata:
+      name: 'scsp-{{env}}-sync'
+      labels:
+        environment: '{{env}}'
+        cluster: '{{clusterName}}'
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io
+    spec:
+      project: default
+      source:
+        repoURL: 'https://github.com/nubenetes/OpenShift-MAEC-SCSP-J2EE-Lift-and-shift.git'
+        targetRevision: '{{branch}}'
+        path: 'solution-a-gitops/kustomize/overlays/{{env}}'
+      destination:
+        server: '{{clusterServer}}'
+        namespace: '{{namespace}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ApplyOutOfSyncOnly=true

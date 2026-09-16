@@ -28,10 +28,13 @@ jobs:
       - name: Validate Solution A Kustomize Base
         run: kustomize build solution-a-gitops/kustomize/base > /dev/null
 
-      - name: Validate Solution A Kustomize Dev Overlay
-        run: kustomize build solution-a-gitops/kustomize/overlays/dev > /dev/null
+      - name: Validate Solution A Kustomize QA Overlay
+        run: kustomize build solution-a-gitops/kustomize/overlays/qa > /dev/null
 
-      - name: Validate Solution A Kustomize Prod Overlay
+      - name: Validate Solution A Kustomize PRE Overlay
+        run: kustomize build solution-a-gitops/kustomize/overlays/pre > /dev/null
+
+      - name: Validate Solution A Kustomize PRO Overlay
         run: kustomize build solution-a-gitops/kustomize/overlays/prod > /dev/null
 
       - name: Validate Bash Scripts Syntax
