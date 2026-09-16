@@ -30,6 +30,9 @@ En servidores físicos o máquinas virtuales tradicionales, el tráfico web se d
 
 Para convertir al Cliente Ligero SCSP en una carga de trabajo verdaderamente desacoplada e inmutable, el estado conversacional se externaliza hacia un clúster dedicado de **Red Hat Data Grid (Infinispan 8.4.x)**:
 
+<details>
+<summary><b>🔄 Ver Diagrama de Persistencia de Sesión con Infinispan HotRod</b> (clic para desplegar)</summary>
+
 ```mermaid
 graph LR
     Client[Ciudadano / Funcionario] -->|HTTP Request| Ingress[OpenShift Ingress Router]
@@ -42,6 +45,8 @@ graph LR
         DataGrid1 <-->|JGroups Replication| DataGrid2
     end
 ```
+
+</details>
 
 ---
 

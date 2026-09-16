@@ -156,6 +156,9 @@ Este repositorio sirve como plantilla directa de implementación en sectores alt
 
 Este repositorio no impone una única forma de operar, sino que ofrece a los equipos de arquitectura corporativa un **itinerario evolutivo maduro**:
 
+<details>
+<summary><b>🗺️ Ver Diagrama de Transición: De la Migración Rápida al Estado Meta</b> (clic para desplegar)</summary>
+
 ```mermaid
 flowchart LR
     subgraph Fase1["Fase 1: Migración Táctica Rápida"]
@@ -168,6 +171,8 @@ flowchart LR
 
     SolB ===>|Evolución progresiva<br/>sin reescribir la app| SolA
 ```
+
+</details>
 
 ---
 
@@ -272,6 +277,9 @@ El MAEC aloja estas cargas en **NubeSARA**, la infraestructura de nube híbrida 
 <a id="diagrama-arquitectura"></a>
 ## 🏛️ Diagrama Global de la Arquitectura
 
+<details>
+<summary><b>🏛️ Ver Diagrama Global de la Arquitectura (NubeSARA Air-Gapped)</b> (clic para desplegar)</summary>
+
 ```mermaid
 graph TB
     subgraph RedSARA["Red SARA / NubeSARA (Aislamiento Perimetral Air-Gapped)"]
@@ -330,6 +338,8 @@ graph TB
     Quay --->|Pull de imágenes<br/>base| AppPods
     Nexus --->|Inyección de binarios<br/>en build| AppPods
 ```
+
+</details>
 
 ---
 

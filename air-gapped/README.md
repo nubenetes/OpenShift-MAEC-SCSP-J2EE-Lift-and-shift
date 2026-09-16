@@ -13,6 +13,9 @@ En OpenShift 4.14 - 4.17, el estándar de la industria es **`oc-mirror v2`**, qu
 
 ## 🚀 Procedimiento Operativo en 3 Pasos
 
+<details>
+<summary><b>🔄 Ver Diagrama de Secuencia del Espejado Air-Gapped (oc-mirror v2)</b> (clic para desplegar)</summary>
+
 ```mermaid
 sequenceDiagram
     autonumber
@@ -34,6 +37,8 @@ sequenceDiagram
     Admin->>OCP: Ejecutar mirror-step3-apply-cluster-config.sh
     OCP->>OCP: MCO actualiza /etc/containers/registries.conf en nodos
 ```
+
+</details>
 
 ### Paso 1: Descarga en Bastión Externo
 ```bash
