@@ -1,6 +1,6 @@
 name: "CI Validation: Lints & Architecture Manifests"
 
-on:
+"on":
   push:
     branches: ["main"]
   pull_request:

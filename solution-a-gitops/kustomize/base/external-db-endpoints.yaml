@@ -6,7 +6,7 @@ metadata:
   namespace: maec-scsp-prod
 subsets:
   - addresses:
-      - ip: 10.50.25.105 # IP externa del MS SQL Server en Red SARA
+      - ip: 10.50.25.105  # IP externa del MS SQL Server en Red SARA
     ports:
       - name: tds
         port: 1433
