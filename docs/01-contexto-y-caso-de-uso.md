@@ -61,6 +61,19 @@ La **Red SARA** (Sistemas de Aplicaciones y Redes para las Administraciones) int
 
 ---
 
+## 5. El Arquetipo Común: De la Experiencia MAEC al Patrón Universal
+
+Aunque este documento se enmarca en la experiencia técnica real del **MAEC** y el **Cliente Ligero SCSP**, las restricciones descritas constituyen el **arquetipo idéntico al que se enfrentan los departamentos de arquitectura en la gran empresa**:
+
+1. **Banca Transaccional (PCI-DSS):** Aplicaciones core de créditos o pasarelas de pago que no pueden perder la sesión del cliente al escalar y deben conectarse de forma segura a Oracle RAC o mainframes DB2 externos.
+2. **Aseguradoras (Insurtech):** Tarifadores complejos multi-etapa con retención de presupuestos en `HttpSession`.
+3. **Sistemas Hospitalarios (HealthTech):** Estaciones clínicas y receta electrónica 24/7 donde un CrashLoopBackOff o un corte de sesión paraliza la atención sanitaria.
+4. **Telecomunicaciones y Utilities:** Portales de autoservicio y provisión masiva sobre redes restringidas.
+
+En todos estos casos, **este diseño de referencia proporciona la receta cloud-native probada para migrar el monolito sin reescribir código.**
+
+---
+
 <p align="center">
   <b>Página Anterior:</b> <span>⏮️ <i>(Inicio)</i></span> &nbsp;|&nbsp;
   <b><a href="../README.md">🏠 <b>Home / README</b></a></b> &nbsp;|&nbsp;
