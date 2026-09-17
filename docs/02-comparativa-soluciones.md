@@ -22,6 +22,66 @@ Este repositorio implementa con código funcional dos estrategias para la migrac
 - **Solución A (OpenShift GitOps + Sonatype Nexus + Kustomize):** Paradigma declarativo puro. Git almacena la configuración y el estado deseado; Nexus almacena los binarios heredados; ArgoCD reconcilia el clúster continuamente y aplica borrado en cascada mediante finalizadores.
 - **Solución B (Source-to-Image Binario Directo por CLI):** Paradigma pragmático y directo. Ensamblaje de contenedores con `oc new-build --binary=true` y `oc start-build --from-dir`, orquestado mediante scripts Bash secuenciales.
 
+### 1.1. Diagrama de Secuencia del Flujo GitOps (Solución A)
+
+<details>
+<summary><b>☸️ Ver Diagrama de Secuencia: Despliegue Declarativo GitOps (ArgoCD + Nexus)</b> (clic para desplegar)</summary>
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Dev as Equipo Desarrollo / Release
+    actor Admin as Administrador de Plataforma
+    participant Nexus as Sonatype Nexus (scsp-raw)
+    participant Git as Repositorio Git (scsp-gitops)
+    participant ArgoCD as OpenShift GitOps (ArgoCD)
+    participant OCP as OpenShift API / OLM
+    participant Build as Pod Constructor (BuildConfig)
+    participant Pods as Pods SCSP (JWS Tomcat 9)
+    participant DG as Infinispan Data Grid
+    participant DB as MS SQL Server (10.50.25.105)
+
+    Dev->>Nexus: 1. Sube scsp-v2.war y mssql-jdbc.jar vía REST
+    Admin->>Git: 2. Actualiza URL de binario en buildconfig.yaml y hace Push
+    ArgoCD->>Git: 3. Detecta cambio (Polling / Webhook) y concilia estado
+    ArgoCD->>OCP: 4. Aplica BuildConfig, Infinispan CR, Egress y Deployment
+    OCP->>Build: 5. Ejecuta build inmutable descargando binario de Nexus
+    Build->>OCP: 6. Publica nueva imagen en ImageStream (scsp-frontend:latest)
+    OCP->>Pods: 7. Ejecuta Rolling Update sin caída de servicio
+    Pods->>DG: 8. Conecta sesión a scsp-session-cache:11222 (HotRod)
+    Pods->>DB: 9. Conecta pool JDBC a scsp-database-gateway:1433
+    Note over ArgoCD,Pods: Con resources-finalizer, el borrado de Application destruye todo en cascada
+```
+
+</details>
+
+### 1.2. Diagrama de Secuencia del Flujo S2I Binario Directo (Solución B)
+
+<details>
+<summary><b>🚀 Ver Diagrama de Secuencia: Despliegue Imperativo S2I Binario CLI</b> (clic para desplegar)</summary>
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Admin as Administrador Bastión CLI
+    participant Workspace as Workspace Local (deployments, lib, conf)
+    participant OCP as OpenShift API
+    participant S2I as S2I Builder Pod
+    participant Registry as Registro Interno OCP
+    participant Pods as SCSP Frontend Pods
+
+    Admin->>Workspace: 1. Deposita scsp.war, mssql-jdbc.jar y context.xml
+    Admin->>OCP: 2. Ejecuta 01-setup-prerequisites.sh (ns, operator, infinispan, db, egress)
+    Admin->>OCP: 3. Ejecuta 02-build-s2i-binary.sh (oc new-build & oc start-build --from-dir)
+    OCP->>S2I: 4. Transfiere tar binario por HTTP POST al pod constructor
+    S2I->>Registry: 5. Ensambla y almacena scsp-app-core:latest
+    Admin->>OCP: 6. Ejecuta 03-deploy-app.sh (Deployment, Service, Route)
+    OCP->>Pods: 7. Despliega pods con JAVA_MAX_MEM_RATIO=70.0 y probes
+    Pods-->>OCP: 8. Supera Liveness (90s) y Readiness (60s) -> Enrutado en Route
+```
+
+</details>
+
 ---
 
 ## 2. Matriz Comparativa Multidimensional

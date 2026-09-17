@@ -24,6 +24,39 @@
 5. **Gobernanza Progresiva con OpenShift ACM (RHACM):**
    - Aunque en el proyecto real el clúster central de **Red Hat Advanced Cluster Management (ACM)** no estaba plenamente integrado en todos los despliegues de aplicaciones, se proveen los manifiestos de enlace (`acm/`): `Placement`, `GitOpsCluster` y `Policy` para auditar el cumplimiento del ENS Nivel Alto y habilitar la transición gradual hacia el gobierno unificado de la flota.
 
+## 🔄 Diagrama de Secuencia del Flujo GitOps
+
+<details>
+<summary><b>☸️ Ver Diagrama de Secuencia: Despliegue Declarativo GitOps (ArgoCD + Nexus)</b> (clic para desplegar)</summary>
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Dev as Equipo Desarrollo / Release
+    actor Admin as Administrador de Plataforma
+    participant Nexus as Sonatype Nexus (scsp-raw)
+    participant Git as Repositorio Git (scsp-gitops)
+    participant ArgoCD as OpenShift GitOps (ArgoCD)
+    participant OCP as OpenShift API / OLM
+    participant Build as Pod Constructor (BuildConfig)
+    participant Pods as Pods SCSP (JWS Tomcat 9)
+    participant DG as Infinispan Data Grid
+    participant DB as MS SQL Server (10.50.25.105)
+
+    Dev->>Nexus: 1. Sube scsp-v2.war y mssql-jdbc.jar vía REST
+    Admin->>Git: 2. Actualiza URL de binario en buildconfig.yaml y hace Push
+    ArgoCD->>Git: 3. Detecta cambio (Polling / Webhook) y concilia estado
+    ArgoCD->>OCP: 4. Aplica BuildConfig, Infinispan CR, Egress y Deployment
+    OCP->>Build: 5. Ejecuta build inmutable descargando binario de Nexus
+    Build->>OCP: 6. Publica nueva imagen en ImageStream (scsp-frontend:latest)
+    OCP->>Pods: 7. Ejecuta Rolling Update sin caída de servicio
+    Pods->>DG: 8. Conecta sesión a scsp-session-cache:11222 (HotRod)
+    Pods->>DB: 9. Conecta pool JDBC a scsp-database-gateway:1433
+    Note over ArgoCD,Pods: Con resources-finalizer, el borrado de Application destruye todo en cascada
+```
+
+</details>
+
 ## 📁 Estructura del Módulo
 
 ```text

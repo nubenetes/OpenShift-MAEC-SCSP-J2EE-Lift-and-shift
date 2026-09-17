@@ -13,6 +13,33 @@
 3. **Control Total por Scripts de Ciclo de Vida:**
    - Toda la operativa está encapsulada en scripts Bash deterministas numerados del `01` al `05`.
 
+## 🔄 Diagrama de Secuencia del Flujo S2I Binario Directo
+
+<details>
+<summary><b>🚀 Ver Diagrama de Secuencia: Despliegue Imperativo S2I Binario CLI</b> (clic para desplegar)</summary>
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Admin as Administrador Bastión CLI
+    participant Workspace as Workspace Local (deployments, lib, conf)
+    participant OCP as OpenShift API
+    participant S2I as S2I Builder Pod
+    participant Registry as Registro Interno OCP
+    participant Pods as SCSP Frontend Pods
+
+    Admin->>Workspace: 1. Deposita scsp.war, mssql-jdbc.jar y context.xml
+    Admin->>OCP: 2. Ejecuta 01-setup-prerequisites.sh (ns, operator, infinispan, db, egress)
+    Admin->>OCP: 3. Ejecuta 02-build-s2i-binary.sh (oc new-build & oc start-build --from-dir)
+    OCP->>S2I: 4. Transfiere tar binario por HTTP POST al pod constructor
+    S2I->>Registry: 5. Ensambla y almacena scsp-app-core:latest
+    Admin->>OCP: 6. Ejecuta 03-deploy-app.sh (Deployment, Service, Route)
+    OCP->>Pods: 7. Despliega pods con JAVA_MAX_MEM_RATIO=70.0 y probes
+    Pods-->>OCP: 8. Supera Liveness (90s) y Readiness (60s) -> Enrutado en Route
+```
+
+</details>
+
 ## 📁 Estructura del Módulo
 
 ```text
