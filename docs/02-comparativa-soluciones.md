@@ -55,6 +55,17 @@ sequenceDiagram
 
 </details>
 
+#### Traza del Flujo GitOps Declarativo (Pasos 1 al 9):
+1. **Publicación de Binario:** El equipo de entrega sube `scsp-v2.war` y el driver JDBC a Sonatype Nexus (*raw-hosted*) vía REST.
+2. **Commit en Git:** El administrador actualiza la URL y el hash SHA-256 en `buildconfig.yaml` en Git (SSOT).
+3. **Detección de Cambio:** ArgoCD detecta el commit mediante polling o webhook y marca la app como `OutOfSync`.
+4. **Reconciliación Declarativa:** ArgoCD sincroniza manifiestos con OpenShift API (BuildConfig, Infinispan, Egress, Deployment).
+5. **Construcción Inmutable:** El pod constructor descarga el binario desde Nexus vía HTTP interno y lo inyecta en la imagen JWS (Tomcat 9).
+6. **Publicación OCI:** Se genera y publica la nueva imagen inmutable en el ImageStream interno de OpenShift (`scsp-frontend:latest`).
+7. **Rolling Update:** OpenShift ejecuta actualización progresiva sin caída de servicio esperando sondas de resiliencia.
+8. **Malla de Sesiones:** Los pods conectan vía protocolo HotRod (`:11222`) al clúster de memoria Infinispan (cero sticky sessions).
+9. **Persistencia Corporativa:** Los pods enlazan su pool JDBC a `scsp-database-gateway:1433` alcanzando SQL Server en Red SARA.
+
 ### 1.2. Diagrama de Secuencia del Flujo S2I Binario Directo (Solución B)
 
 <details>
@@ -81,6 +92,16 @@ sequenceDiagram
 ```
 
 </details>
+
+#### Traza del Flujo S2I Binario CLI (Pasos 1 al 8):
+1. **Workspace Local:** El operador deposita `scsp.war`, `mssql-jdbc.jar` y `context.xml` en la estructura de carpetas local.
+2. **Infraestructura Base:** Se ejecuta `01-setup-prerequisites.sh` (namespace, operador Data Grid, Infinispan CR, DB service, Egress).
+3. **Disparo S2I:** Se ejecuta `02-build-s2i-binary.sh` (`oc new-build --binary=true` y `oc start-build --from-dir`).
+4. **Transferencia Segura:** El cliente `oc` comprime el directorio y lo envía por HTTP POST sobre TLS al pod constructor.
+5. **Ensamblado y Registry:** El pod constructor inyecta los binarios en Tomcat 9 y almacena la imagen en el registry interno de OCP.
+6. **Despliegue:** Se ejecuta `03-deploy-app.sh` aplicando Deployment, Service y Route.
+7. **Parametrización JVM:** OpenShift levanta pods con `JAVA_MAX_MEM_RATIO=70.0` y sondas de salud.
+8. **Activación de Tráfico:** Los pods superan Liveness (90s) y Readiness (60s), activándose el enrutamiento en la Route.
 
 ---
 
