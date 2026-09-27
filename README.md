@@ -38,6 +38,13 @@
 
 ## 📑 Tabla de Contenidos
 
+0. [🗺️ Mapa de Navegación Rápida (Quick Navigation Map)](#mapa-navegacion-rapida)
+   - [Estructura Funcional y Rutas del Repositorio](#resumen-estructura-funcional)
+   - [Guía Rápida de Decisión: Solución A vs Solución B](#guia-rapida-decision)
+   - [Aceleradores de Automatización y Pruebas](#aceleradores-automatizacion)
+0.1. [🤖 Serie Multimedia y Videos Técnicos en YouTube (NotebookLM & Deep Dives)](#serie-multimedia-youtube)
+   - [Episodios Largos de Análisis Arquitectónico](#videos-largos-youtube)
+   - [Shorts Técnicos Monográficos](#shorts-tecnicos-youtube)
 1. [🌐 El Patrón Arquitectónico Universal: Casos de Uso Empresariales para Apps de Legado](#patron-arquitectonico-universal)
    - [1.1. La Realidad del Software de Legado en el Tejido Empresarial](#realidad-software-legado)
      - [El Dilema de la Modernización Corporativa](#dilema-modernizacion-corporativa)
@@ -78,7 +85,110 @@
 9. [📚 Documentación Detallada de Referencia](#documentacion-referencia)
    - [Publicación Técnica Original de Referencia (LinkedIn Newsletter)](#publicacion-referencia-linkedin)
    - [Documentos Monográficos de Arquitectura (01 al 06)](#documentos-monograficos-arquitectura)
-10. [📄 Licencia y Créditos](#licencia-creditos)
+10. [🎬 Guías Técnicas en Video y Desglose Detallado (YouTube)](#guias-video-youtube)
+    - [10.1. Episodios Largos de Análisis Arquitectónico](#desglose-videos-largos)
+    - [10.2. Shorts Técnicos Monográficos](#desglose-shorts)
+11. [📄 Licencia y Créditos](#licencia-creditos)
+
+---
+
+<a id="mapa-navegacion-rapida"></a>
+## 🗺️ Mapa de Navegación Rápida (Quick Navigation Map)
+
+Este repositorio materializa una arquitectura de referencia completa, reproducible y de grado producción para migrar aplicaciones empresariales monolíticas Java heredadas (**J2EE / Java 8 / Tomcat 9 / JBoss Web Server**) hacia **Red Hat OpenShift 4.14 - 4.17+** en centros de datos con aislamiento perimetral estricto (**Air-Gapped / NubeSARA / ENS Categoría Alta**).
+
+<a id="resumen-estructura-funcional"></a>
+### 🗺️ Estructura Funcional y Rutas del Repositorio
+
+```text
+OpenShift-MAEC-SCSP-J2EE-Lift-and-shift/
+├── 📁 solution-a-gitops/                # ⭐️ RECOMENDADA PARA PRODUCCIÓN: Paradigma Declarativo Puro
+│   ├── 📁 acm/                          # Gobernanza de flota multiclúster con Red Hat Advanced Cluster Management (RHACM)
+│   ├── 📁 argocd/                       # Suscripción ArgoCD, ApplicationSet y Application con finalizadores en cascada
+│   ├── 📁 nexus/                        # Automatización de Sonatype Nexus OSS (repositorio raw para binarios WAR/JAR)
+│   ├── 📁 kustomize/                    # Manifiestos Kustomize con base común y parches por entorno
+│   │   ├── 📁 base/                     # Namespace, BuildConfig inmutable, Infinispan, Service BD, Egress, Deployment
+│   │   └── 📁 overlays/                 # Parches específicos para QA, PRE (homologación) y PROD (ENS Alta)
+│   └── 📁 scripts/                      # Scripts para provisión, Día 2 (actualización sin downtime) y teardown
+│
+├── 📁 solution-b-s2i-binary/            # ⚡ ACELERADOR TÁCTICO: Ensamblaje Binario Directo por CLI
+│   ├── 📁 manifests/                    # Definiciones YAML desacopladas (namespace, operator, db-service, egress)
+│   ├── 📁 workspace-template/           # Estructura local de artefactos (deployments/scsp.war, lib/mssql.jar, conf/context.xml)
+│   └── 📁 scripts/                      # Pipeline Bash secuencial automatizado (01-prereqs a 05-cleanup)
+│
+├── 📁 air-gapped/                       # 🔒 INGENIERÍA DE ESPEJADO DESCONECTADO (oc-mirror v2)
+│   ├── 📄 imageset-config.yaml          # ImageSetConfiguration (OCP 4.17, Data Grid 8.4, JWS 5.4, GitOps 1.19)
+│   ├── 📜 mirror-step1-bastion-download.sh # Descarga externa con particionado tar en bloques de 16 GB
+│   ├── 📜 mirror-step2-internal-upload.sh  # Inyección hacia registro interno corporativo (registro.nubesara.local)
+│   └── 📜 mirror-step3-apply-cluster-config.sh # Despliegue de IDMS, ITMS y reescritura criptográfica CoreOS (MCO)
+│
+├── 📁 mock-assets/                      # 🧪 ENTORNO DE PRUEBAS DIDÁCTICO Y AUTOCONTENIDO
+│   ├── 📁 scsp-sample-war/              # Código fuente Servlet Java 8 simulando endpoints SCSP (/health, /ready, /consulta)
+│   └── 📜 build-mock-war.sh             # Script de compilación sin dependencias externas para generar scsp-mock.war
+│
+└── 📁 docs/                             # 📚 ANÁLISIS TÉCNICO, CASO DE USO Y MONOGRÁFICOS DE ARQUITECTURA
+    ├── 📄 01-contexto-y-caso-de-uso.md  # Marco normativo SGAD/SCSP, MAEC, NubeSARA y auditoría contractual
+    ├── 📄 02-comparativa-soluciones.md  # Comparativa exhaustiva: GitOps vs S2I Binario Directo
+    ├── 📄 03-espejado-airgapped-oc-mirror.md # oc-mirror v2, IDMS, ITMS y caché SQLite local
+    ├── 📄 04-gestion-sesiones-infinispan.md  # Erradicación de Sticky Sessions vía HotRod en Tomcat 9
+    ├── 📄 05-seguridad-red-y-bd-externa.md   # Service sin selector + Endpoints y EgressNetworkPolicy OVN
+    └── 📄 06-tuning-jvm-y-probes.md     # JAVA_MAX_MEM_RATIO=70.0, G1GC y sondas asimétricas de resiliencia
+```
+
+<a id="guia-rapida-decision"></a>
+### ⚖️ Guía Rápida de Decisión: ¿Qué Enfoque Adoptar?
+
+| Dimensión Técnica | Solución A: GitOps Declarativo (ArgoCD + Nexus) | Solución B: S2I Binario Directo (CLI + Scripts) |
+| :--- | :--- | :--- |
+| **Público Objetivo** | Equipos de Plataforma, SRE y Entornos Productivos | Ingenieros Cloud en fases iniciales, Labs y PoCs |
+| **Madurez Requerida** | Alta (operadores ArgoCD y Sonatype Nexus desplegados) | Mínima (únicamente acceso CLI `oc` al clúster) |
+| **Control de Versiones** | Git como Única Fuente de Verdad (SSOT) | Gestión manual de binarios en workspace local |
+| **Multi-Entorno** | Kustomize overlays estandarizados (`qa`, `pre`, `prod`) | Re-ejecución de scripts con variables de entorno |
+| **Tiempo de Validación** | ~1 - 2 días de configuración inicial | **< 2 horas para obtener un pod operativo** |
+| **Recomendación** | ⭐️ **Estándar definitivo para QA, PRE y PROD** | 💡 **Acelerador táctico para validar viabilidad técnica** |
+
+<a id="aceleradores-automatizacion"></a>
+### 🚀 Aceleradores de Automatización y Pruebas Inmediatas
+
+1. **¿Deseas probar la solución sin binarios del MAEC?**  
+   Ejecuta [`mock-assets/build-mock-war.sh`](mock-assets/build-mock-war.sh) para generar un artefacto WAR Java 8 funcional con endpoints `/scsp/management/health` y `/scsp/management/ready`.
+2. **¿Necesitas validar el despliegue binario rápido?**  
+   Sigue el flujo de 5 pasos en [`solution-b-s2i-binary/scripts/`](solution-b-s2i-binary/scripts/) (`01-setup-prerequisites.sh` a `05-cleanup.sh`).
+3. **¿Preparando la migración a producción desconectada?**  
+   Revisa los manifiestos GitOps en [`solution-a-gitops/`](solution-a-gitops/) y la guía de espejado en [`air-gapped/`](air-gapped/).
+
+---
+
+<a id="serie-multimedia-youtube"></a>
+## 🤖 Serie Multimedia y Videos Técnicos en YouTube (NotebookLM & Deep Dives)
+
+Este repositorio cuenta con una serie didáctica y formativa integral generada con **Gemini NotebookLM** basada íntegramente en las especificaciones de arquitectura, comparativas técnicas, manifiestos GitOps y lecciones aprendidas de este proyecto. Todo el contenido está disponible en abierto en el canal de YouTube [**@nubenetes**](https://youtube.com/@nubenetes).
+
+> [!NOTE]
+> **Experiencia de Aprendizaje Multilingüe**:  
+> El audio original de las sesiones ha sido sintetizado en **Inglés 🇺🇸**, incorporando subtítulos automáticos en **Español 🇪🇸 y más de 20 idiomas** (francés, alemán, italiano, portugués, japonés, etc.) para facilitar la transferencia técnica global.
+
+<a id="videos-largos-youtube"></a>
+### 🎬 Episodios Largos de Análisis Arquitectónico (Videos y Masterclasses)
+
+| # | Formato | Título del Video / Masterclass | Enfoque Técnico y Temas Clave | Idioma Original | Duración | Enlace Directo |
+|---|:---:|---|---|:---:|:---:|---|
+| 1 | 📽️ Video Guía | [**OpenShift 4 Air Gapped**](https://www.youtube.com/watch?v=QT-a2Fm8GH4) | Arquitectura bare metal UPI, espejado con oc-mirror v2, IDMS/ITMS y NubeSARA | 🇺🇸 English *(CC 20+)* | `8:17` | [▶️ Ver Video](https://www.youtube.com/watch?v=QT-a2Fm8GH4) |
+| 2 | 📽️ Video Guía | [**Air Gapped OpenShift Lift**](https://www.youtube.com/watch?v=hmbNFCgjjvk) | Caso real MAEC/SCSP, reescritura vs lift-and-shift y lecciones de gobernanza | 🇺🇸 English *(CC 20+)* | `9:04` | [▶️ Ver Video](https://www.youtube.com/watch?v=hmbNFCgjjvk) |
+| 3 | 📽️ Video Guía | [**J2EE Lift and Shift**](https://www.youtube.com/watch?v=gcrlFQJN4zA) | Resolución de los 5 bloqueantes universales: sesiones, BD, egress, JVM y air-gap | 🇺🇸 English *(CC 20+)* | `7:16` | [▶️ Ver Video](https://www.youtube.com/watch?v=gcrlFQJN4zA) |
+| 4 | 📽️ Video Guía | [**OpenShift Lift and Shift**](https://www.youtube.com/watch?v=l2j1Mdw03XI) | Comparativa GitOps (ArgoCD + Nexus) vs S2I Binario CLI y despliegue sin caída | 🇺🇸 English *(CC 20+)* | `8:04` | [▶️ Ver Video](https://www.youtube.com/watch?v=l2j1Mdw03XI) |
+
+<a id="shorts-tecnicos-youtube"></a>
+### ⚡ Shorts Técnicos Monográficos (Píldoras de Ingeniería Rápida)
+
+| # | Formato | Título del Short | Dominio Técnico y Solución Cloud-Native | Idioma Original | Duración | Enlace Directo |
+|---|:---:|---|---|:---:|:---:|---|
+| 1 | ⚡ Short | [**How Microservices Scale Without Forgetting**](https://www.youtube.com/shorts/h6XG8sowTEk) | Erradicación de Sticky Sessions con Red Hat Data Grid / Infinispan HotRod | 🇺🇸 English *(CC 20+)* | `1:13` | [▶️ Ver Short](https://www.youtube.com/shorts/h6XG8sowTEk) |
+| 2 | ⚡ Short | [**Zero Trust Database Routing in OpenShift**](https://www.youtube.com/shorts/h5RH8g-th1k) | Service sin selector + Endpoints y firewall perimetral Egress en OVN | 🇺🇸 English *(CC 20+)* | `1:07` | [▶️ Ver Short](https://www.youtube.com/shorts/h5RH8g-th1k) |
+| 3 | ⚡ Short | [**How Kubernetes Saves Legacy Java Apps**](https://www.youtube.com/shorts/op9aKgs9fC8) | JVM en cgroups (JAVA_MAX_MEM_RATIO=70.0) y sondas asimétricas de resiliencia | 🇺🇸 English *(CC 20+)* | `1:23` | [▶️ Ver Short](https://www.youtube.com/shorts/op9aKgs9fC8) |
+| 4 | ⚡ Short | [**Migrating Legacy Java in Air Gapped Kubernetes**](https://www.youtube.com/shorts/fIhcmirvxmY) | S2I Binario Directo como acelerador táctico para validar PoCs en horas | 🇺🇸 English *(CC 20+)* | `1:12` | [▶️ Ver Short](https://www.youtube.com/shorts/fIhcmirvxmY) |
+
+*Para consultar los desgloses temáticos detallados y enlaces de referencia, consulta la [Sección 10: Guías Técnicas en Video y Desglose Detallado](#guias-video-youtube).*
 
 ---
 
@@ -688,8 +798,82 @@ cp /ruta/al/mssql-jdbc-8.4.1.jre8.jar workspace-template/lib/
 
 ---
 
+<a id="guias-video-youtube"></a>
+## 🎬 10. Guías Técnicas en Video y Desglose Detallado (YouTube)
+
+Esta sección proporciona el desglose conceptual y los temas clave abordados en cada uno de los videos y píldoras técnicas de la serie audiovisual de este repositorio, disponible en el canal de YouTube [**@nubenetes**](https://youtube.com/@nubenetes).
+
+<a id="desglose-videos-largos"></a>
+### 📽️ 10.1. Episodios Largos de Análisis Arquitectónico
+
+#### 1. [OpenShift 4 Air Gapped](https://www.youtube.com/watch?v=QT-a2Fm8GH4) `(8:17)`
+- **Enfoque Técnico:** Despliegue de Red Hat OpenShift 4 en infraestructuras bare metal UPI y operación de cargas de trabajo críticas en aislamiento perimetral estricto (*Air-Gapped / NubeSARA*).
+- **Temas Clave Analizados:**
+  - Desafíos de instalar clústeres OpenShift 4 sin salida directa a Internet (`0.0.0.0/0`).
+  - Espejado determinista con el plugin `oc-mirror v2` y definición de `ImageSetConfiguration`.
+  - Reemplazo del obsoleto ICSP por `ImageDigestMirrorSet` (IDMS) e `ImageTagMirrorSet` (ITMS).
+  - Reescritura criptográfica de `/etc/containers/registries.conf` gestionada por el Machine Config Operator (MCO) con reinicios ordenados de nodos.
+  - Verificación del registro corporativo interno (`registro.nubesara.local:8443`) y resolución DNS segura.
+- **Enlace directo:** [Ver Video en YouTube](https://www.youtube.com/watch?v=QT-a2Fm8GH4) | [Editar en YouTube Studio](https://studio.youtube.com/video/QT-a2Fm8GH4/edit)
+
+#### 2. [Air Gapped OpenShift Lift](https://www.youtube.com/watch?v=hmbNFCgjjvk) `(9:04)`
+- **Enfoque Técnico:** Modernización de monolitos Java de misión crítica en grandes organizaciones públicas y corporativas bajo normativas de alta seguridad (ENS Categoría Alta).
+- **Temas Clave Analizados:**
+  - El dilema de la modernización: el riesgo operativo y sobrecoste de reescrituras completas (*Greenfield*) frente al pragmatismo del *Lift-and-Shift* nativo en contenedores.
+  - Caso de uso real en la Administración Pública: el Ministerio de Asuntos Exteriores (MAEC) y el Cliente Ligero SCSP (Ley 39/2015).
+  - Impacto de caída en servicios diplomáticos y consulares en más de 200 Embajadas y Consulados.
+  - Lecciones de gobernanza, relevo de proveedores tecnológicos (transición de pliegos) y soberanía técnica.
+  - Metodología "Outside-In": diseño con IA en entornos externos y ejecución aislada en NubeSARA.
+- **Enlace directo:** [Ver Video en YouTube](https://www.youtube.com/watch?v=hmbNFCgjjvk) | [Editar en YouTube Studio](https://studio.youtube.com/video/hmbNFCgjjvk/edit)
+
+#### 3. [J2EE Lift and Shift](https://www.youtube.com/watch?v=gcrlFQJN4zA) `(7:16)`
+- **Enfoque Técnico:** Resolución exhaustiva de los 5 bloqueantes técnicos universales al migrar aplicaciones Java heredadas a contenedores sin modificar su código fuente.
+- **Temas Clave Analizados:**
+  - **Bloqueante 1 (Sesiones HTTP):** Desacoplamiento de `HttpSession` mediante Red Hat Data Grid / Infinispan HotRod.
+  - **Bloqueante 2 (Persistencia Externa):** Abstracción de bases de datos on-premise (MS SQL Server / Oracle) mediante Service sin selector + Endpoints.
+  - **Bloqueante 3 (Aislamiento Perimetral):** Transferencia offline determinista con `oc-mirror v2` y particionado tar de 16 GB.
+  - **Bloqueante 4 (Seguridad de Red Saliente):** Confinamiento estricto de tráfico Egress con `EgressNetworkPolicy` en OVN-Kubernetes (filtrado a IP/32).
+  - **Bloqueante 5 (Gestión de Memoria Java 8):** Prevención del OOMKiller con `JAVA_MAX_MEM_RATIO=70.0` y sondas asimétricas (Readiness 60s / Liveness 90s).
+- **Enlace directo:** [Ver Video en YouTube](https://www.youtube.com/watch?v=gcrlFQJN4zA) | [Editar en YouTube Studio](https://studio.youtube.com/video/gcrlFQJN4zA/edit)
+
+#### 4. [OpenShift Lift and Shift](https://www.youtube.com/watch?v=l2j1Mdw03XI) `(8:04)`
+- **Enfoque Técnico:** Comparativa profunda entre las dos soluciones implementadas en el repositorio: GitOps declarativo vs S2I binario directo por CLI.
+- **Temas Clave Analizados:**
+  - **Solución A (OpenShift GitOps + Sonatype Nexus + Kustomize):** Git como fuente única de verdad, desacoplamiento de binarios en Nexus raw-hosted, parches por entorno (`qa`, `pre`, `prod`) y borrado en cascada con `resources-finalizer`.
+  - **Solución B (S2I Binario Directo por CLI):** Inyección de WARs y JDBC drivers mediante `oc new-build --binary=true` y `oc start-build --from-dir` para validación rápida en menos de 2 horas.
+  - Comparativa de ciclo de vida, trazabilidad de auditoría, gobernanza de seguridad y rollback automatizado.
+  - Por qué la Solución A es el estándar de producción definitivo y cuándo usar la Solución B como acelerador táctico.
+- **Enlace directo:** [Ver Video en YouTube](https://www.youtube.com/watch?v=l2j1Mdw03XI) | [Editar en YouTube Studio](https://studio.youtube.com/video/l2j1Mdw03XI/edit)
+
+---
+
+<a id="desglose-shorts"></a>
+### ⚡ 10.2. Shorts Técnicos Monográficos
+
+#### 1. [How Microservices Scale Without Forgetting](https://www.youtube.com/shorts/h6XG8sowTEk) `(1:13)`
+- **Categoría:** Desacoplamiento de Estado & Escalabilidad Horizontal
+- **Resumen:** Explica cómo el antipatrón de *Sticky Sessions* destruye la resiliencia en Kubernetes cuando los pods se destruyen o escalan. Demuestra cómo externalizar el estado de sesión hacia Red Hat Data Grid / Infinispan vía protocolo HotRod (`HotRodManager` en Tomcat 9 / JWS 5.4) elimina la pérdida de datos sin alterar una sola línea de código Java.
+- **Enlace directo:** [Ver Short en YouTube](https://www.youtube.com/shorts/h6XG8sowTEk) | [Editar en YouTube Studio](https://studio.youtube.com/video/h6XG8sowTEk/edit)
+
+#### 2. [Zero Trust Database Routing in OpenShift](https://www.youtube.com/shorts/h5RH8g-th1k) `(1:07)`
+- **Categoría:** Seguridad Perimetral, DNS & Confinamiento Egress
+- **Resumen:** Demuestra el riesgo de acoplar direcciones IP físicas en descriptores de despliegue o código fuente. Muestra cómo desacoplar la base de datos externa (MS SQL Server) usando un `Service` sin selectores emparejado con un objeto `Endpoints` (`10.50.25.105:1433`) y blindarlo con un cortafuegos `EgressNetworkPolicy` en OVN-Kubernetes que descarta cualquier intento de exfiltración de datos.
+- **Enlace directo:** [Ver Short en YouTube](https://www.youtube.com/shorts/h5RH8g-th1k) | [Editar en YouTube Studio](https://studio.youtube.com/video/h5RH8g-th1k/edit)
+
+#### 3. [How Kubernetes Saves Legacy Java Apps](https://www.youtube.com/shorts/op9aKgs9fC8) `(1:23)`
+- **Categoría:** Calibración JVM en cgroups & Sondas de Resiliencia
+- **Resumen:** Explica la causa raíz por la que aplicaciones Java 8 heredadas sufren caídas por `OOMKilled` dentro de contenedores Linux (la JVM lee la RAM del host en lugar de los límites cgroup). Detalla la configuración de `JAVA_MAX_MEM_RATIO=70.0` para reservar un colchón del 30% para memoria off-heap y la calibración asimétrica de sondas de arranque (Readiness 60s / Liveness 90s) para evitar bucles de `CrashLoopBackOff`.
+- **Enlace directo:** [Ver Short en YouTube](https://www.youtube.com/shorts/op9aKgs9fC8) | [Editar en YouTube Studio](https://studio.youtube.com/video/op9aKgs9fC8/edit)
+
+#### 4. [Migrating Legacy Java in Air Gapped Kubernetes](https://www.youtube.com/shorts/fIhcmirvxmY) `(1:12)`
+- **Categoría:** S2I Binario Directo & Aceleración Táctica
+- **Resumen:** Plantea cómo trasladar un monolito Java de 20 años de antigüedad hacia clústeres OpenShift desconectados sin paralizar la organización esperando meses por tuberías CI/CD complejas. Demuestra el valor táctico de Source-to-Image (S2I) binario (`oc new-build --binary=true` y `oc start-build --from-dir`) para inyectar el archivo WAR en imágenes base certificadas y obtener una PoC funcional en pocas horas.
+- **Enlace directo:** [Ver Short en YouTube](https://www.youtube.com/shorts/fIhcmirvxmY) | [Editar en YouTube Studio](https://studio.youtube.com/video/fIhcmirvxmY/edit)
+
+---
+
 <a id="licencia-creditos"></a>
-## 📄 Licencia y Créditos
+## 📄 11. Licencia y Créditos
 
 Este proyecto se distribuye bajo la licencia **Apache 2.0**. Consulta el archivo [LICENSE](LICENSE) para más información.
 
