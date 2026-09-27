@@ -160,35 +160,35 @@ OpenShift-MAEC-SCSP-J2EE-Lift-and-shift/
 ---
 
 <a id="serie-multimedia-youtube"></a>
-## 🤖 Serie Multimedia y Videos Técnicos en YouTube (NotebookLM & Deep Dives)
+## 🤖 AI-Generated Multimedia & Video Series (NotebookLM & YouTube)
 
-Este repositorio cuenta con una serie didáctica y formativa integral generada con **Gemini NotebookLM** basada íntegramente en las especificaciones de arquitectura, comparativas técnicas, manifiestos GitOps y lecciones aprendidas de este proyecto. Todo el contenido está disponible en abierto en el canal de YouTube [**@nubenetes**](https://youtube.com/@nubenetes).
+This repository includes a comprehensive multi-format educational series synthesized with **Gemini NotebookLM** based directly on the architectural blueprints, technical comparisons, GitOps manifests, and lessons learned from this project. All videos and shorts are freely accessible on YouTube on the [**@nubenetes**](https://youtube.com/@nubenetes) channel.
 
 > [!NOTE]
-> **Experiencia de Aprendizaje Multilingüe**:  
-> El audio original de las sesiones ha sido sintetizado en **Inglés 🇺🇸**, incorporando subtítulos automáticos en **Español 🇪🇸 y más de 20 idiomas** (francés, alemán, italiano, portugués, japonés, etc.) para facilitar la transferencia técnica global.
+> **Multilingual Learning Experience**:  
+> Content features native spoken audio in **English 🇺🇸**, with automated YouTube closed captions (CC) translated into **Spanish 🇪🇸 and 20+ languages** (French, German, Portuguese, Italian, Japanese, Arabic, etc.) for global knowledge sharing.
 
 <a id="videos-largos-youtube"></a>
-### 🎬 Episodios Largos de Análisis Arquitectónico (Videos y Masterclasses)
+### 🎬 Full-Length Technical Deep Dives (Videos & Masterclasses)
 
-| # | Formato | Título del Video / Masterclass | Enfoque Técnico y Temas Clave | Idioma Original | Duración | Enlace Directo |
+| # | Format | Video / Masterclass Title | Technical Domain & Key Themes | Origin Language | Duration | Direct YouTube Link |
 |---|:---:|---|---|:---:|:---:|---|
-| 1 | 📽️ Video Guía | [**OpenShift 4 Air Gapped**](https://www.youtube.com/watch?v=QT-a2Fm8GH4) | Arquitectura bare metal UPI, espejado con oc-mirror v2, IDMS/ITMS y NubeSARA | 🇺🇸 English *(CC 20+)* | `8:17` | [▶️ Ver Video](https://www.youtube.com/watch?v=QT-a2Fm8GH4) |
-| 2 | 📽️ Video Guía | [**Air Gapped OpenShift Lift**](https://www.youtube.com/watch?v=hmbNFCgjjvk) | Caso real MAEC/SCSP, reescritura vs lift-and-shift y lecciones de gobernanza | 🇺🇸 English *(CC 20+)* | `9:04` | [▶️ Ver Video](https://www.youtube.com/watch?v=hmbNFCgjjvk) |
-| 3 | 📽️ Video Guía | [**J2EE Lift and Shift**](https://www.youtube.com/watch?v=gcrlFQJN4zA) | Resolución de los 5 bloqueantes universales: sesiones, BD, egress, JVM y air-gap | 🇺🇸 English *(CC 20+)* | `7:16` | [▶️ Ver Video](https://www.youtube.com/watch?v=gcrlFQJN4zA) |
-| 4 | 📽️ Video Guía | [**OpenShift Lift and Shift**](https://www.youtube.com/watch?v=l2j1Mdw03XI) | Comparativa GitOps (ArgoCD + Nexus) vs S2I Binario CLI y despliegue sin caída | 🇺🇸 English *(CC 20+)* | `8:04` | [▶️ Ver Video](https://www.youtube.com/watch?v=l2j1Mdw03XI) |
+| 1 | 📽️ Video Guide | [**OpenShift 4 Air Gapped**](https://www.youtube.com/watch?v=QT-a2Fm8GH4) | Bare-metal UPI, oc-mirror v2, IDMS/ITMS & NubeSARA air-gap | 🇺🇸 English *(CC 20+)* | `8:17` | [▶️ Watch Video](https://www.youtube.com/watch?v=QT-a2Fm8GH4) |
+| 2 | 📽️ Video Guide | [**Air Gapped OpenShift Lift**](https://www.youtube.com/watch?v=hmbNFCgjjvk) | MAEC/SCSP case study, Greenfield rewrite vs Lift-and-Shift | 🇺🇸 English *(CC 20+)* | `9:04` | [▶️ Watch Video](https://www.youtube.com/watch?v=hmbNFCgjjvk) |
+| 3 | 📽️ Video Guide | [**J2EE Lift and Shift**](https://www.youtube.com/watch?v=gcrlFQJN4zA) | Solving the 5 universal blockers: sessions, DB, egress, JVM & air-gap | 🇺🇸 English *(CC 20+)* | `7:16` | [▶️ Watch Video](https://www.youtube.com/watch?v=gcrlFQJN4zA) |
+| 4 | 📽️ Video Guide | [**OpenShift Lift and Shift**](https://www.youtube.com/watch?v=l2j1Mdw03XI) | GitOps (ArgoCD + Nexus) vs S2I Binary CLI zero-downtime comparison | 🇺🇸 English *(CC 20+)* | `8:04` | [▶️ Watch Video](https://www.youtube.com/watch?v=l2j1Mdw03XI) |
 
 <a id="shorts-tecnicos-youtube"></a>
-### ⚡ Shorts Técnicos Monográficos (Píldoras de Ingeniería Rápida)
+### ⚡ Topic-Focused Technical Shorts
 
-| # | Formato | Título del Short | Dominio Técnico y Solución Cloud-Native | Idioma Original | Duración | Enlace Directo |
+| # | Format | Short Title | Technical Domain & Cloud-Native Pattern | Origin Language | Duration | Direct YouTube Link |
 |---|:---:|---|---|:---:|:---:|---|
-| 1 | ⚡ Short | [**How Microservices Scale Without Forgetting**](https://www.youtube.com/shorts/h6XG8sowTEk) | Erradicación de Sticky Sessions con Red Hat Data Grid / Infinispan HotRod | 🇺🇸 English *(CC 20+)* | `1:13` | [▶️ Ver Short](https://www.youtube.com/shorts/h6XG8sowTEk) |
-| 2 | ⚡ Short | [**Zero Trust Database Routing in OpenShift**](https://www.youtube.com/shorts/h5RH8g-th1k) | Service sin selector + Endpoints y firewall perimetral Egress en OVN | 🇺🇸 English *(CC 20+)* | `1:07` | [▶️ Ver Short](https://www.youtube.com/shorts/h5RH8g-th1k) |
-| 3 | ⚡ Short | [**How Kubernetes Saves Legacy Java Apps**](https://www.youtube.com/shorts/op9aKgs9fC8) | JVM en cgroups (JAVA_MAX_MEM_RATIO=70.0) y sondas asimétricas de resiliencia | 🇺🇸 English *(CC 20+)* | `1:23` | [▶️ Ver Short](https://www.youtube.com/shorts/op9aKgs9fC8) |
-| 4 | ⚡ Short | [**Migrating Legacy Java in Air Gapped Kubernetes**](https://www.youtube.com/shorts/fIhcmirvxmY) | S2I Binario Directo como acelerador táctico para validar PoCs en horas | 🇺🇸 English *(CC 20+)* | `1:12` | [▶️ Ver Short](https://www.youtube.com/shorts/fIhcmirvxmY) |
+| 1 | ⚡ Short | [**How Microservices Scale Without Forgetting**](https://www.youtube.com/shorts/h6XG8sowTEk) | Eradicating Sticky Sessions via Red Hat Data Grid / Infinispan HotRod | 🇺🇸 English *(CC 20+)* | `1:13` | [▶️ Watch Short](https://www.youtube.com/shorts/h6XG8sowTEk) |
+| 2 | ⚡ Short | [**Zero Trust Database Routing in OpenShift**](https://www.youtube.com/shorts/h5RH8g-th1k) | Selectorless Service + Endpoints & OVN EgressNetworkPolicy firewall | 🇺🇸 English *(CC 20+)* | `1:07` | [▶️ Watch Short](https://www.youtube.com/shorts/h5RH8g-th1k) |
+| 3 | ⚡ Short | [**How Kubernetes Saves Legacy Java Apps**](https://www.youtube.com/shorts/op9aKgs9fC8) | JVM memory in cgroups (JAVA_MAX_MEM_RATIO=70.0) & resilience probes | 🇺🇸 English *(CC 20+)* | `1:23` | [▶️ Watch Short](https://www.youtube.com/shorts/op9aKgs9fC8) |
+| 4 | ⚡ Short | [**Migrating Legacy Java in Air Gapped Kubernetes**](https://www.youtube.com/shorts/fIhcmirvxmY) | S2I Binary Direct builds as a tactical accelerator for rapid PoCs | 🇺🇸 English *(CC 20+)* | `1:12` | [▶️ Watch Short](https://www.youtube.com/shorts/fIhcmirvxmY) |
 
-*Para consultar los desgloses temáticos detallados y enlaces de referencia, consulta la [Sección 10: Guías Técnicas en Video y Desglose Detallado](#guias-video-youtube).*
+*For complete descriptions, technical outlines, and chapters, see [Section 10: Technical Video Guides & Architecture Walkthroughs](#guias-video-youtube).*
 
 ---
 
@@ -799,76 +799,76 @@ cp /ruta/al/mssql-jdbc-8.4.1.jre8.jar workspace-template/lib/
 ---
 
 <a id="guias-video-youtube"></a>
-## 🎬 10. Guías Técnicas en Video y Desglose Detallado (YouTube)
+## 🎬 10. Technical Video Guides & Architecture Walkthroughs (YouTube)
 
-Esta sección proporciona el desglose conceptual y los temas clave abordados en cada uno de los videos y píldoras técnicas de la serie audiovisual de este repositorio, disponible en el canal de YouTube [**@nubenetes**](https://youtube.com/@nubenetes).
+This section provides the conceptual breakdown and core technical themes covered in each video and engineering short of this repository's multimedia series, freely available on the YouTube channel [**@nubenetes**](https://youtube.com/@nubenetes).
 
 <a id="desglose-videos-largos"></a>
-### 📽️ 10.1. Episodios Largos de Análisis Arquitectónico
+### 📽️ 10.1. Full-Length Architecture Deep Dives
 
 #### 1. [OpenShift 4 Air Gapped](https://www.youtube.com/watch?v=QT-a2Fm8GH4) `(8:17)`
-- **Enfoque Técnico:** Despliegue de Red Hat OpenShift 4 en infraestructuras bare metal UPI y operación de cargas de trabajo críticas en aislamiento perimetral estricto (*Air-Gapped / NubeSARA*).
-- **Temas Clave Analizados:**
-  - Desafíos de instalar clústeres OpenShift 4 sin salida directa a Internet (`0.0.0.0/0`).
-  - Espejado determinista con el plugin `oc-mirror v2` y definición de `ImageSetConfiguration`.
-  - Reemplazo del obsoleto ICSP por `ImageDigestMirrorSet` (IDMS) e `ImageTagMirrorSet` (ITMS).
-  - Reescritura criptográfica de `/etc/containers/registries.conf` gestionada por el Machine Config Operator (MCO) con reinicios ordenados de nodos.
-  - Verificación del registro corporativo interno (`registro.nubesara.local:8443`) y resolución DNS segura.
-- **Enlace directo:** [Ver Video en YouTube](https://www.youtube.com/watch?v=QT-a2Fm8GH4) | [Editar en YouTube Studio](https://studio.youtube.com/video/QT-a2Fm8GH4/edit)
+- **Engineering Domain:** Red Hat OpenShift 4 deployment on bare-metal UPI and mission-critical workload operations in strictly air-gapped / disconnected enclaves (*NubeSARA / ENS High Category*).
+- **Core Topics Covered:**
+  - Challenges of installing OpenShift 4 clusters with zero default internet routing (`0.0.0.0/0`).
+  - Deterministic offline mirroring using the `oc-mirror v2` plugin and `ImageSetConfiguration`.
+  - Upgrading legacy ICSP to `ImageDigestMirrorSet` (IDMS) and `ImageTagMirrorSet` (ITMS).
+  - Machine Config Operator (MCO) managing cryptographic rewrites of `/etc/containers/registries.conf` on Red Hat Enterprise Linux CoreOS with graceful node reboots.
+  - Private in-cluster registry validation (`registro.nubesara.local:8443`) and internal DNS routing.
+- **Direct Links:** [Watch Video on YouTube](https://www.youtube.com/watch?v=QT-a2Fm8GH4) | [Edit in YouTube Studio](https://studio.youtube.com/video/QT-a2Fm8GH4/edit)
 
 #### 2. [Air Gapped OpenShift Lift](https://www.youtube.com/watch?v=hmbNFCgjjvk) `(9:04)`
-- **Enfoque Técnico:** Modernización de monolitos Java de misión crítica en grandes organizaciones públicas y corporativas bajo normativas de alta seguridad (ENS Categoría Alta).
-- **Temas Clave Analizados:**
-  - El dilema de la modernización: el riesgo operativo y sobrecoste de reescrituras completas (*Greenfield*) frente al pragmatismo del *Lift-and-Shift* nativo en contenedores.
-  - Caso de uso real en la Administración Pública: el Ministerio de Asuntos Exteriores (MAEC) y el Cliente Ligero SCSP (Ley 39/2015).
-  - Impacto de caída en servicios diplomáticos y consulares en más de 200 Embajadas y Consulados.
-  - Lecciones de gobernanza, relevo de proveedores tecnológicos (transición de pliegos) y soberanía técnica.
-  - Metodología "Outside-In": diseño con IA en entornos externos y ejecución aislada en NubeSARA.
-- **Enlace directo:** [Ver Video en YouTube](https://www.youtube.com/watch?v=hmbNFCgjjvk) | [Editar en YouTube Studio](https://studio.youtube.com/video/hmbNFCgjjvk/edit)
+- **Engineering Domain:** Modernizing mission-critical legacy Java monoliths in large public sector institutions and enterprises under stringent security regulations.
+- **Core Topics Covered:**
+  - The modernization dilemma: operational risks and budget overruns of multi-year Greenfield rewrites vs the pragmatism of cloud-native Lift-and-Shift.
+  - Real-world ministerial case study: Spanish Ministry of Foreign Affairs (MAEC) and the SCSP paperless verification client (Law 39/2015).
+  - High blast radius of downtime across 200+ Embassies and Consulates worldwide (visas, nationality, legal registries).
+  - IT governance lessons, vendor transitions, pliego contracts, and technical sovereignty.
+  - "Outside-In" methodology: designing with AI on external developer machines and deploying into disconnected NubeSARA enclaves.
+- **Direct Links:** [Watch Video on YouTube](https://www.youtube.com/watch?v=hmbNFCgjjvk) | [Edit in YouTube Studio](https://studio.youtube.com/video/hmbNFCgjjvk/edit)
 
 #### 3. [J2EE Lift and Shift](https://www.youtube.com/watch?v=gcrlFQJN4zA) `(7:16)`
-- **Enfoque Técnico:** Resolución exhaustiva de los 5 bloqueantes técnicos universales al migrar aplicaciones Java heredadas a contenedores sin modificar su código fuente.
-- **Temas Clave Analizados:**
-  - **Bloqueante 1 (Sesiones HTTP):** Desacoplamiento de `HttpSession` mediante Red Hat Data Grid / Infinispan HotRod.
-  - **Bloqueante 2 (Persistencia Externa):** Abstracción de bases de datos on-premise (MS SQL Server / Oracle) mediante Service sin selector + Endpoints.
-  - **Bloqueante 3 (Aislamiento Perimetral):** Transferencia offline determinista con `oc-mirror v2` y particionado tar de 16 GB.
-  - **Bloqueante 4 (Seguridad de Red Saliente):** Confinamiento estricto de tráfico Egress con `EgressNetworkPolicy` en OVN-Kubernetes (filtrado a IP/32).
-  - **Bloqueante 5 (Gestión de Memoria Java 8):** Prevención del OOMKiller con `JAVA_MAX_MEM_RATIO=70.0` y sondas asimétricas (Readiness 60s / Liveness 90s).
-- **Enlace directo:** [Ver Video en YouTube](https://www.youtube.com/watch?v=gcrlFQJN4zA) | [Editar en YouTube Studio](https://studio.youtube.com/video/gcrlFQJN4zA/edit)
+- **Engineering Domain:** Exhaustive resolution of the 5 universal technical blockers when migrating monolithic legacy Java applications to Kubernetes without touching source code.
+- **Core Topics Covered:**
+  - **Blocker 1 (HTTP Session State):** Eradicating sticky sessions via Red Hat Data Grid / Infinispan HotRod protocol in Tomcat 9.
+  - **Blocker 2 (External Persistence):** Decoupling physical on-premises databases (MS SQL Server / Oracle) with Kubernetes headless/selectorless Services + Endpoints.
+  - **Blocker 3 (Perimeter Isolation):** Deterministic offline transfer with `oc-mirror v2` and 16 GB archive tar chunking.
+  - **Blocker 4 (Outbound Network Security):** Strict egress lockdown with `EgressNetworkPolicy` in OVN-Kubernetes (limiting to IP/32).
+  - **Blocker 5 (Java 8 Memory in cgroups):** Eliminating OOMKills with `JAVA_MAX_MEM_RATIO=70.0` and asymmetric health probes (Readiness 60s / Liveness 90s).
+- **Direct Links:** [Watch Video on YouTube](https://www.youtube.com/watch?v=gcrlFQJN4zA) | [Edit in YouTube Studio](https://studio.youtube.com/video/gcrlFQJN4zA/edit)
 
 #### 4. [OpenShift Lift and Shift](https://www.youtube.com/watch?v=l2j1Mdw03XI) `(8:04)`
-- **Enfoque Técnico:** Comparativa profunda entre las dos soluciones implementadas en el repositorio: GitOps declarativo vs S2I binario directo por CLI.
-- **Temas Clave Analizados:**
-  - **Solución A (OpenShift GitOps + Sonatype Nexus + Kustomize):** Git como fuente única de verdad, desacoplamiento de binarios en Nexus raw-hosted, parches por entorno (`qa`, `pre`, `prod`) y borrado en cascada con `resources-finalizer`.
-  - **Solución B (S2I Binario Directo por CLI):** Inyección de WARs y JDBC drivers mediante `oc new-build --binary=true` y `oc start-build --from-dir` para validación rápida en menos de 2 horas.
-  - Comparativa de ciclo de vida, trazabilidad de auditoría, gobernanza de seguridad y rollback automatizado.
-  - Por qué la Solución A es el estándar de producción definitivo y cuándo usar la Solución B como acelerador táctico.
-- **Enlace directo:** [Ver Video en YouTube](https://www.youtube.com/watch?v=l2j1Mdw03XI) | [Editar en YouTube Studio](https://studio.youtube.com/video/l2j1Mdw03XI/edit)
+- **Engineering Domain:** In-depth architectural comparison between the two deployment pathways in the repository: Declarative GitOps vs Imperative S2I Binary CLI.
+- **Core Topics Covered:**
+  - **Solution A (OpenShift GitOps + Sonatype Nexus + Kustomize):** Git as Single Source of Truth (SSOT), immutable binary decoupling in Nexus raw-hosted repositories, multi-environment overlays (`qa`, `pre`, `prod`), and automated cascading deletions with `resources-finalizer`.
+  - **Solution B (Source-to-Image Binary Direct CLI):** Injecting legacy WAR files and JDBC drivers via `oc new-build --binary=true` and `oc start-build --from-dir` for rapid PoC validation in under 2 hours.
+  - Comparative analysis: lifecycle management, audit traceability, security governance, and automated rollbacks.
+  - When to adopt Solution A as the enterprise production standard vs Solution B as a tactical accelerator.
+- **Direct Links:** [Watch Video on YouTube](https://www.youtube.com/watch?v=l2j1Mdw03XI) | [Edit in YouTube Studio](https://studio.youtube.com/video/l2j1Mdw03XI/edit)
 
 ---
 
 <a id="desglose-shorts"></a>
-### ⚡ 10.2. Shorts Técnicos Monográficos
+### ⚡ 10.2. Topic-Focused Technical Shorts
 
 #### 1. [How Microservices Scale Without Forgetting](https://www.youtube.com/shorts/h6XG8sowTEk) `(1:13)`
-- **Categoría:** Desacoplamiento de Estado & Escalabilidad Horizontal
-- **Resumen:** Explica cómo el antipatrón de *Sticky Sessions* destruye la resiliencia en Kubernetes cuando los pods se destruyen o escalan. Demuestra cómo externalizar el estado de sesión hacia Red Hat Data Grid / Infinispan vía protocolo HotRod (`HotRodManager` en Tomcat 9 / JWS 5.4) elimina la pérdida de datos sin alterar una sola línea de código Java.
-- **Enlace directo:** [Ver Short en YouTube](https://www.youtube.com/shorts/h6XG8sowTEk) | [Editar en YouTube Studio](https://studio.youtube.com/video/h6XG8sowTEk/edit)
+- **Category:** Session State Decoupling & Horizontal Pod Autoscaling
+- **Summary:** Explains how legacy sticky sessions cause data loss in Kubernetes when pods crash or scale. Demonstrates how externalizing session state to an in-memory distributed data grid (Red Hat Data Grid / Infinispan) using the HotRod protocol (`HotRodManager` in Tomcat 9 / JWS 5.4) achieves zero-loss failover without modifying a single line of Java code.
+- **Direct Links:** [Watch Short on YouTube](https://www.youtube.com/shorts/h6XG8sowTEk) | [Edit in YouTube Studio](https://studio.youtube.com/video/h6XG8sowTEk/edit)
 
 #### 2. [Zero Trust Database Routing in OpenShift](https://www.youtube.com/shorts/h5RH8g-th1k) `(1:07)`
-- **Categoría:** Seguridad Perimetral, DNS & Confinamiento Egress
-- **Resumen:** Demuestra el riesgo de acoplar direcciones IP físicas en descriptores de despliegue o código fuente. Muestra cómo desacoplar la base de datos externa (MS SQL Server) usando un `Service` sin selectores emparejado con un objeto `Endpoints` (`10.50.25.105:1433`) y blindarlo con un cortafuegos `EgressNetworkPolicy` en OVN-Kubernetes que descarta cualquier intento de exfiltración de datos.
-- **Enlace directo:** [Ver Short en YouTube](https://www.youtube.com/shorts/h5RH8g-th1k) | [Editar en YouTube Studio](https://studio.youtube.com/video/h5RH8g-th1k/edit)
+- **Category:** Perimeter Security, DNS Abstraction & Egress Confinement
+- **Summary:** Warns against hardcoding physical IP addresses into container descriptors or application code. Demonstrates the cloud-native pattern: pairing a selectorless Kubernetes `Service` with an `Endpoints` object (`10.50.25.105:1433`) and hardening the pod with an `EgressNetworkPolicy` in OVN-Kubernetes to block all data exfiltration under ENS High compliance.
+- **Direct Links:** [Watch Short on YouTube](https://www.youtube.com/shorts/h5RH8g-th1k) | [Edit in YouTube Studio](https://studio.youtube.com/video/h5RH8g-th1k/edit)
 
 #### 3. [How Kubernetes Saves Legacy Java Apps](https://www.youtube.com/shorts/op9aKgs9fC8) `(1:23)`
-- **Categoría:** Calibración JVM en cgroups & Sondas de Resiliencia
-- **Resumen:** Explica la causa raíz por la que aplicaciones Java 8 heredadas sufren caídas por `OOMKilled` dentro de contenedores Linux (la JVM lee la RAM del host en lugar de los límites cgroup). Detalla la configuración de `JAVA_MAX_MEM_RATIO=70.0` para reservar un colchón del 30% para memoria off-heap y la calibración asimétrica de sondas de arranque (Readiness 60s / Liveness 90s) para evitar bucles de `CrashLoopBackOff`.
-- **Enlace directo:** [Ver Short en YouTube](https://www.youtube.com/shorts/op9aKgs9fC8) | [Editar en YouTube Studio](https://studio.youtube.com/video/op9aKgs9fC8/edit)
+- **Category:** JVM Memory in Linux cgroups & Resilience Probes
+- **Summary:** Unpacks why legacy Java 8 applications get killed by the Linux `OOMKiller` inside containers (the JVM reads the physical host's RAM instead of cgroup limits). Details how configuring `JAVA_MAX_MEM_RATIO=70.0` reserves a 30% off-heap cushion, while asymmetric resilience probes (Readiness 60s / Liveness 90s) prevent `CrashLoopBackOff` during heavy warmups.
+- **Direct Links:** [Watch Short on YouTube](https://www.youtube.com/shorts/op9aKgs9fC8) | [Edit in YouTube Studio](https://studio.youtube.com/video/op9aKgs9fC8/edit)
 
 #### 4. [Migrating Legacy Java in Air Gapped Kubernetes](https://www.youtube.com/shorts/fIhcmirvxmY) `(1:12)`
-- **Categoría:** S2I Binario Directo & Aceleración Táctica
-- **Resumen:** Plantea cómo trasladar un monolito Java de 20 años de antigüedad hacia clústeres OpenShift desconectados sin paralizar la organización esperando meses por tuberías CI/CD complejas. Demuestra el valor táctico de Source-to-Image (S2I) binario (`oc new-build --binary=true` y `oc start-build --from-dir`) para inyectar el archivo WAR en imágenes base certificadas y obtener una PoC funcional en pocas horas.
-- **Enlace directo:** [Ver Short en YouTube](https://www.youtube.com/shorts/fIhcmirvxmY) | [Editar en YouTube Studio](https://studio.youtube.com/video/fIhcmirvxmY/edit)
+- **Category:** S2I Binary Direct Builds & Tactical Acceleration
+- **Summary:** Demonstrates how to lift a 20-year-old mission-critical Java monolith into an air-gapped OpenShift cluster without getting stuck waiting months for complex CI/CD pipeline approvals. Highlights the tactical power of Source-to-Image (S2I) binary builds (`oc new-build --binary=true` and `oc start-build --from-dir`) to inject WAR archives into certified base images and validate a functional PoC in hours.
+- **Direct Links:** [Watch Short on YouTube](https://www.youtube.com/shorts/fIhcmirvxmY) | [Edit in YouTube Studio](https://studio.youtube.com/video/fIhcmirvxmY/edit)
 
 ---
 
